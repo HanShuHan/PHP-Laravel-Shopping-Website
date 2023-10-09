@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_best_seller')->nullable('true')->default(0);
             $table->boolean('is_new_release')->nullable('true')->default(0);
             $table->boolean('is_todays_deal')->nullable('true')->default(0);
-            $table->foreignId('category_id')->references('id')->on('product_category');
+            $table->foreignId('category_id')->references('id')->on('product_categories');
             $table->timestamps();
         });
     }
