@@ -1,7 +1,7 @@
 <x-layout>
     <div class="content">
         <div class="form-parent col center">
-            <form action="/auth" class="form-container">
+            <form action="/auth" class="form-container" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="username_login">Username:</label>
