@@ -17,9 +17,10 @@
                     <button type="submit">Sign In</button>
                 </div>
             </form>
+
             <section class="form-footer">
                 <p><a href="/recover">Forgot your password?</a></p>
-                <p>Don't have an account? <a href="/register">Register.</a></p>
+                <p>Don't have an account? <a href="/signup">Register.</a></p>
             </section>
         </div>
     </div>
