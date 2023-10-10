@@ -1,7 +1,7 @@
 <x-new-layout>
     <x-navbar
-        :categories="$categories"
         cartItemsCount="{{$cartItemsCount}}">
+
     </x-navbar>
     @if (session('success'))
         <div class="alert alert-success">

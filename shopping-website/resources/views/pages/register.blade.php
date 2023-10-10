@@ -7,7 +7,7 @@
                     <label for="username_register">Username:</label>
                     <input type="text" name="user_name" id="username_register" value="{{old('user_name')}}"/>
                     @error('user_name')
-                        <p class="validation-error">{{$message}}</p>
+                    <p class="validation-error">{{$message}}</p>
                     @enderror
                 </div>
 
@@ -15,7 +15,7 @@
                     <label for="email_register">Email: </label>
                     <input type="email" name="email" id="email_register" value="{{old('email')}}">
                     @error('email')
-                        <p class="validation-error">{{$message}}</p>
+                    <p class="validation-error">{{$message}}</p>
                     @enderror
                 </div>
 
@@ -23,7 +23,7 @@
                     <label for="pass_register">Password: </label>
                     <input type="password" name="password" id="pass_register">
                     @error('password')
-                        <p class="validation-error">{{$message}}</p>
+                    <p class="validation-error">{{$message}}</p>
                     @enderror
                 </div>
 
@@ -31,7 +31,23 @@
                     <label for="pass_confirm_register">Confirm Password: </label>
                     <input type="password" name="password_confirmation" id="pass_confirm_register">
                     @error('password_confirmation')
-                        <p class="validation-error">{{$message}}</p>
+                    <p class="validation-error">{{$message}}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name_register">First Name:</label>
+                    <input type="text" name="first_name" id="first_name_register" value="{{old('first_name')}}"/>
+                    @error('first_name')
+                    <p class="validation-error">{{$message}}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name_register">Last Name:</label>
+                    <input type="text" name="last_name" id="last_name_register" value="{{old('last_name')}}"/>
+                    @error('last_name')
+                    <p class="validation-error">{{$message}}</p>
                     @enderror
                 </div>
 

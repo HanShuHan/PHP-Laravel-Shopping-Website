@@ -34,6 +34,9 @@ Route::get('/signup', function() {
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/auth', [UserController::class, 'login']);
+Route::get('/profile', [UserController::class, 'showProfile']);
+Route::post('/profile/update', [UserController::class, 'updateProfile']);
+Route::post('/profile/updatePicture', [UserController::class, 'updatePicture']);
 
 //PRODUCT CONTROLLER
 Route::get('/product/{product_id}', [\App\Http\Controllers\ProductController::class, 'index'])->name('product.index');
