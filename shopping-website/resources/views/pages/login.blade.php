@@ -1,4 +1,4 @@
-<x-layout>
+<x-new-layout>
     <div class="content">
         <div class="form-parent col center">
             <form action="/auth" class="form-container" method="POST">
@@ -24,4 +24,4 @@
             </section>
         </div>
     </div>
-</x-layout>
+</x-new-layout>

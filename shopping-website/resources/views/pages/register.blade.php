@@ -1,4 +1,4 @@
-<x-layout>
+<x-new-layout>
     <div class="content">
         <div class="form-parent col center">
             <form action="/register" method="POST" id="registrationForm">
@@ -46,4 +46,4 @@
 
         </div>
     </div>
-</x-layout>
+</x-new-layout>

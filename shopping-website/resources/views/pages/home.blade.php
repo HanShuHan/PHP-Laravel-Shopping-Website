@@ -1,4 +1,4 @@
-<x-layout>
+<x-new-layout>
     <x-navbar
         :categories="$categories"
         cartItemsCount="{{$cartItemsCount}}">
@@ -46,4 +46,4 @@
             @endfor
         </div>
     </div>
-</x-layout>
+</x-new-layout>
