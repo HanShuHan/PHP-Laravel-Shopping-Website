@@ -22,26 +22,31 @@
                         <div class="col-md-3 mb-4">
                             <div class="card h-100">
                                 <img class="card-img-top" src="{{ asset('images/place-holder.png') }}" alt="{{ $product->name }}">
-                                <div class="card-body">
+                                <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">{{ $product->name }}</h5>
-                                    <p class="card-text" style="font-size: 0.9em;">{{ $product->description }}</p>
-                                    <p class="price">Price: ${{ $product->price }}</p>
-                                    <a href="{{ url('/product/'.$product->id) }}" class="btn btn-dark mb-2">More Info</a>
-                                    <form action="/cart/add/{{$product->id}}" method="POST" class="d-inline-block">
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary d-flex align-items-center">
-                                            <span class="material-icons-sharp text-white me-2">shopping_cart</span>
-                                        </button>
-                                    </form>
+                                    <p class="card-text mb-3" style="font-size: 0.6em;">{{ $product->description }}</p>
+                                    <p class="price mb-3">Price: ${{ $product->price }}</p>
+                                    <div class="d-flex align-items-center mt-auto">
+                                        <a href="{{ url('/product/'.$product->id) }}" class="btn btn-dark mb-2 me-2">More Info</a>
+                                        @auth
+                                            <form action="/cart/add/{{$product->id}}" method="POST" class="d-inline-block mb-2">
+                                                @csrf
+                                                <button type="submit" class="btn btn-dark d-flex align-items-center">
+                                                    <span class="material-icons-sharp text-white me-2">shopping_cart</span>
+                                                </button>
+                                            </form>
+                                        @endauth
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
+
                 </div>
 
                 <!-- Add pagination -->
                 <div class="d-flex justify-content-center mt-4">
-                    {{ $products->links() }}
+                    {{ $products->links('vendor.pagination.pagination') }}
                 </div>
             </div>
         </div>

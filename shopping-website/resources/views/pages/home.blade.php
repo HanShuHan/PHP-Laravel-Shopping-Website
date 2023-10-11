@@ -11,7 +11,7 @@
         <div class="product-home-container container my-5">
             <h1 class="mb-4">{{ $section['title'] }}</h1>
             <div class="product-container row">
-                @for($i = 0; $i < 10; $i++)
+                @for($i = 0; $i < 9; $i++)
                     <x-home-products
                         itemPrice="{{$section['products'][$i]->price}}"
                         itemName="{{$section['products'][$i]->name}}"

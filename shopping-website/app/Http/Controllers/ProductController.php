@@ -19,10 +19,10 @@ class ProductController extends Controller
             $cartItemsCount = CartItem::where('cart_id', $cartId)->sum('quantity');
         }
         if($categoryName === 'all') {
-            $products = DB::table('products')->paginate(12);
+            $products = DB::table('products')->paginate(8);
         } else {
             $categoryId = DB::table('product_categories')->where('name', $categoryName)->value('id');
-            $products = DB::table('products')->where('category_id', $categoryId)->paginate(12);
+            $products = DB::table('products')->where('category_id', $categoryId)->paginate(8);
         }
 
         return view('pages/product-listing', [

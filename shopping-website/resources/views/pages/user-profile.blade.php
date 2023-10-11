@@ -148,15 +148,14 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 d-flex justify-content-between">
+                        <div class="mt-4 d-flex justify-content-between mb-3">
                             <!-- Submit Button -->
                             <button class="btn btn-dark" type="submit">Save Profile</button>
-
-                            <!-- Logout Button -->
-                            <form action="/logout" method="POST">
-                                <button type="submit" class="btn btn-danger">Logout</button>
-                            </form>
                         </div>
+                    </form>
+                    <form action="/logout" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Logout</button>
                     </form>
                 </div>
             </div>

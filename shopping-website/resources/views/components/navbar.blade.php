@@ -17,10 +17,10 @@
                         Shop
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">All Products</a></li>
-                        <li><a class="dropdown-item" href="#">Electronics</a></li>
-                        <li><a class="dropdown-item" href="#">Fashion</a></li>
-                        <li><a class="dropdown-item" href="#">Accessories</a></li>
+                        <li><a class="dropdown-item" href="/products/all">All Products</a></li>
+                        <li><a class="dropdown-item" href="/products/Electronics">Electronics</a></li>
+                        <li><a class="dropdown-item" href="/products/Fashion">Fashion</a></li>
+                        <li><a class="dropdown-item" href="/products/Jewellery">Accessories</a></li>
                         <li><a class="dropdown-item" href="#">Home & Decor</a></li>
                     </ul>
                 </li>
