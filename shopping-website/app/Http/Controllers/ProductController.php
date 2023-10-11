@@ -11,6 +11,27 @@ use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
+    public function listItems($categoryName) {
+        $categories = DB::table('product_categories')->get();
+        $cartItemsCount = 0;
+        if (session()->has('cart_id')) {
+            $cartId = session('cart_id');
+            $cartItemsCount = CartItem::where('cart_id', $cartId)->sum('quantity');
+        }
+        if($categoryName === 'all') {
+            $products = DB::table('products')->paginate(12);
+        } else {
+            $categoryId = DB::table('product_categories')->where('name', $categoryName)->value('id');
+            $products = DB::table('products')->where('category_id', $categoryId)->paginate(12);
+        }
+
+        return view('pages/product-listing', [
+            'categories' => $categories,
+            'products' => $products,
+            'cartItemsCount' => $cartItemsCount
+        ]);
+    }
+
     public function index($product_id) {
         $product = DB::table('products')->where('id', '=', $product_id)->first();
         $categories = DB::table('product_categories')->get();

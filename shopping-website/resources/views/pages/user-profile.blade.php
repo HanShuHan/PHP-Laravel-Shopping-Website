@@ -1,12 +1,11 @@
 <x-new-layout>
-    <x-navbar
-        cartItemsCount="{{$cartItemsCount}}">
-
+    <x-navbar cartItemsCount="{{$cartItemsCount}}">
     </x-navbar>
     <div class="container rounded bg-white mt-5 mb-5">
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
                 {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
         <div class="row">
@@ -16,8 +15,7 @@
                     <span class="font-weight-bold">{{ $user->first_name }}:</span>
                     <span class="text-black-50">{{ $user->email }}</span>
                     <form action="/profile/updatePicture" method="POST">
-                        @csrf
-                        <button type="submit">Edit Profile Picture</button>
+                        <button type="submit" class="btn btn-dark mt-3">Edit Profile Picture</button>
                     </form>
                     <span> </span>
                 </div>
@@ -150,19 +148,19 @@
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="mt-5 text-center">
-                            <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
-                        </div>
-                    </form>
+                        <div class="mt-4 d-flex justify-content-between">
+                            <!-- Submit Button -->
+                            <button class="btn btn-dark" type="submit">Save Profile</button>
 
-                    <br>
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <button type="submit">Logout</button>
+                            <!-- Logout Button -->
+                            <form action="/logout" method="POST">
+                                <button type="submit" class="btn btn-danger">Logout</button>
+                            </form>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </x-new-layout>
+

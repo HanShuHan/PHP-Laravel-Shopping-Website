@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NavigationController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,9 +38,11 @@ Route::post('/auth', [UserController::class, 'login']);
 Route::get('/profile', [UserController::class, 'showProfile']);
 Route::post('/profile/update', [UserController::class, 'updateProfile']);
 Route::post('/profile/updatePicture', [UserController::class, 'updatePicture']);
+Route::get('/recover', [UserController::class, 'recover']);
 
 //PRODUCT CONTROLLER
-Route::get('/product/{product_id}', [\App\Http\Controllers\ProductController::class, 'index'])->name('product.index');
+Route::get('/product/{product_id}', [ProductController::class, 'index'])->name('product.index');
+Route::get('/products/{categoryName}', [ProductController::class, 'listItems'])->name('product.listItems');
 
 //CART CONTROLLER
 Route::post('/cart/remove/{item_id}', [\App\Http\Controllers\CartController::class, 'removeFromCart']);

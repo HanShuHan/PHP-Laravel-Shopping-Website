@@ -31,6 +31,9 @@ class UserController extends Controller
         ]);
     }
 
+    public function recover() {
+        return redirect('/login')->with('warning', 'Feature not yet implemented');
+    }
     public function updatePicture() {
         return redirect('/profile')->with('success', 'Feature not yet implemented');
     }

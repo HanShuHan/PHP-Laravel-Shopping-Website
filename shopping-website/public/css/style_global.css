@@ -6,15 +6,14 @@ body {
     width: 100% !important;
 }
 
-.top-nav {
-
+.product-link:hover {
+    color: #007bff !important;
 }
-.top-nav .nav {
-    clip-path: polygon(0 0, 100% 0, 96% 100%, 3% 100%) !important;
-    height: auto;
-    justify-content: center !important;
-    align-items: center !important;
-    width: auto;
-    display: flex;
-    flex-direction: row;
+
+.cart-button:hover .material-icons-sharp,
+.account-button:hover .material-icons-sharp,
+.login-button:hover .material-icons-sharp,
+.register-button:hover .material-icons-sharp {
+    color: #212529 !important; /* Replace with your actual color */
+    transition: color 0.3s;
 }

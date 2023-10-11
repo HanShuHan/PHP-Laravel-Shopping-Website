@@ -1,48 +1,25 @@
 <x-new-layout>
     <x-navbar
         cartItemsCount="{{$cartItemsCount}}">
-
     </x-navbar>
+    <x-searchbar></x-searchbar>
     <x-carousel></x-carousel>
-    <div class="product-home-container">
-        <h1>Newest in Fashion</h1>
-        <div class="product-container">
-            @for($i = 0; $i < 10; $i++)
-                <x-home-products
-                    itemPrice="{{$latestFashion[$i]->price}}"
-                    itemName="{{$latestFashion[$i]->name}}"
-                    itemDescription="{{$latestFashion[$i]->description}}"
-                    itemId="{{$latestFashion[$i]->id}}"
-                ></x-home-products>
-            @endfor
+    @foreach ([['title' => 'Newest in Fashion', 'products' => $latestFashion],
+              ['title' => 'Newest in Electronics', 'products' => $latestElectronic],
+              ['title' => 'Newest in Jewellery', 'products' => $latestJewellery]]
+              as $section)
+        <div class="product-home-container container my-5">
+            <h1 class="mb-4">{{ $section['title'] }}</h1>
+            <div class="product-container row">
+                @for($i = 0; $i < 10; $i++)
+                    <x-home-products
+                        itemPrice="{{$section['products'][$i]->price}}"
+                        itemName="{{$section['products'][$i]->name}}"
+                        itemDescription="{{$section['products'][$i]->description}}"
+                        itemId="{{$section['products'][$i]->id}}"
+                    ></x-home-products>
+                @endfor
+            </div>
         </div>
-    </div>
-
-    <div class="product-home-container">
-        <h1>Newest in Electronic</h1>
-        <div class="product-container">
-            @for($i = 0; $i < 10; $i++)
-                <x-home-products
-                    itemPrice="{{$latestElectronic[$i]->price}}"
-                    itemName="{{$latestElectronic[$i]->name}}"
-                    itemDescription="{{$latestElectronic[$i]->description}}"
-                    itemId="{{$latestElectronic[$i]->id}}"
-                ></x-home-products>
-            @endfor
-        </div>
-    </div>
-
-    <div class="product-home-container">
-        <h1>Newest in Jewellery</h1>
-        <div class="product-container">
-            @for($i = 0; $i < 10; $i++)
-                <x-home-products
-                    itemPrice="{{$latestJewellery[$i]->price}}"
-                    itemName="{{$latestJewellery[$i]->name}}"
-                    itemDescription="{{$latestJewellery[$i]->description}}"
-                    itemId="{{$latestJewellery[$i]->id}}"
-                ></x-home-products>
-            @endfor
-        </div>
-    </div>
+    @endforeach
 </x-new-layout>

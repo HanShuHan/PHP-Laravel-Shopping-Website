@@ -1,27 +1,42 @@
 <x-new-layout>
-    <div class="content">
-        <div class="form-parent col center">
-            <form action="/auth" class="form-container" method="POST">
+    <div class="content d-flex justify-content-center align-items-center min-vh-100" style="background-color: #343a40;">
+
+        <a href="/" class="position-absolute top-0 start-0 p-4 text-white" style="font-size: 24px;">
+            <span class="material-icons-sharp">
+                chevron_left
+            </span>
+        </a>
+        <div class="form-parent col center p-5 rounded" style="max-width: 500px; background-color: white;">
+            @if (session('warning'))
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ session('warning') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            <form action="/auth" class="form-container text-dark" method="POST">
                 @csrf
-                <div class="form-group">
-                    <label for="username_login">Username:</label>
-                    <input type="text" name="user_name" id="username_login">
+                <div class="mb-3">
+                    <label for="username_login" class="form-label">Username:</label>
+                    <input type="text" name="user_name" id="username_login" class="form-control">
                 </div>
 
-                <div class="form-group">
-                    <label for="password_login">Password:</label>
-                    <input type="password" name="password" id="password_login">
+                <div class="mb-3">
+                    <label for="password_login" class="form-label">Password:</label>
+                    <input type="password" name="password" id="password_login" class="form-control">
                 </div>
 
-                <div class="form-button" id="formButton">
-                    <button type="submit">Sign In</button>
+                <div class="d-grid gap-2 mb-3">
+                    <button type="submit" class="btn btn-outline-dark">Sign In</button>
                 </div>
             </form>
 
-            <section class="form-footer">
-                <p><a href="/recover">Forgot your password?</a></p>
-                <p>Don't have an account? <a href="/signup">Register.</a></p>
+            <section class="form-footer text-dark">
+                <p><a href="/recover" class="text-dark">Forgot your password?</a></p>
+                <p>Don't have an account? <a href="/signup" class="text-dark">Register.</a></p>
+                <br>
+                <p style="font-size: 12px">PRODUCTION NOTE: THIS IS A TEMPORARY FORM AND WILL BE A MODAL IN FINAL VERSION.</p>
             </section>
         </div>
     </div>
 </x-new-layout>
+
