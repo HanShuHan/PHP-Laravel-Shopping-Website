@@ -11,9 +11,10 @@ class NavigationController extends Controller
 {
     public function index() {
         $categories = DB::table('product_categories')->get();
-        $latestFashion = DB::table('products')->where('category_id', '=', 1)->get();
-        $latestElectronic = DB::table('products')->where('category_id', '=', 2)->get();
-        $latestJewellery = DB::table('products')->where('category_id', '=', 3)->get();
+        $highestRate = DB::table('products')->where('rating', '>=', 4)->get();
+        $latestDryGoods = DB::table('products')->where('category_id', '=', 2)->get();
+        $latestSupplies = DB::table('products')->whereIn('category_id', [3, 4])->get();
+        $under20 = DB::table('products')->where('price', '<=', 20)->get();
         $cartItemsCount = 0;
         if (session()->has('cart_id')) {
             $cartId = session('cart_id');
@@ -21,9 +22,10 @@ class NavigationController extends Controller
         }
         return view('pages/home', [
             'categories' => $categories,
-            'latestFashion' => $latestFashion,
-            'latestElectronic' => $latestElectronic,
-            'latestJewellery' => $latestJewellery,
+            'under20' => $under20,
+            'highestRated' => $highestRate,
+            'latestDryGoods' => $latestDryGoods,
+            'latestSupplies' => $latestSupplies,
             'cartItemsCount' => $cartItemsCount
         ]);
     }

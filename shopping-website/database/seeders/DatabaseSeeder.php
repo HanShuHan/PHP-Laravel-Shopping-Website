@@ -21,14 +21,24 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         ProductCategory::factory()->create([
-            'name' => 'Fashion'
+            'name' => 'Produce'
         ]);
         ProductCategory::factory()->create([
-            'name' => 'Electronics'
+            'name' => 'Dry Goods'
         ]);
         ProductCategory::factory()->create([
-            'name' => 'Jewellery'
+            'name' => 'Baking Supplies'
         ]);
+        ProductCategory::factory()->create([
+            'name' => 'Cooking Supplies'
+        ]);
+        ProductCategory::factory()->create([
+            'name' => 'Treats'
+        ]);
+        ProductCategory::factory()->create([
+            'name' => 'Coffee and Teas'
+        ]);
+        Product::factory(200)->create();
         Product::factory(50)->create();
     }
 }

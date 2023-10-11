@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable('false');
             $table->text('description')->nullable('false');
             $table->decimal('price')->nullable('true');
+            $table->integer('rating')->default(0)->unsigned()->comment('Rating from 0 to 5');
+            $table->integer('rating_count')->default(0)->unsigned();
             $table->boolean('is_on_sale')->nullable('true')->default(0);
             $table->boolean('is_best_seller')->nullable('true')->default(0);
             $table->boolean('is_new_release')->nullable('true')->default(0);

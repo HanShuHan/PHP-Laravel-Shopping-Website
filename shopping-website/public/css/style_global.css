@@ -6,14 +6,6 @@ body {
     width: 100% !important;
 }
 
-.product-link:hover {
-    color: #007bff !important;
-}
 
-.cart-button:hover .material-icons-sharp,
-.account-button:hover .material-icons-sharp,
-.login-button:hover .material-icons-sharp,
-.register-button:hover .material-icons-sharp {
-    color: #212529 !important; /* Replace with your actual color */
-    transition: color 0.3s;
-}
+
+

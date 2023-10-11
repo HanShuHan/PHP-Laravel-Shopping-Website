@@ -18,10 +18,11 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="/products/all">All Products</a></li>
-                        <li><a class="dropdown-item" href="/products/Electronics">Electronics</a></li>
-                        <li><a class="dropdown-item" href="/products/Fashion">Fashion</a></li>
-                        <li><a class="dropdown-item" href="/products/Jewellery">Accessories</a></li>
-                        <li><a class="dropdown-item" href="#">Home & Decor</a></li>
+                        <li><a class="dropdown-item" href="/products/Produce">Produce</a></li>
+                        <li><a class="dropdown-item" href="/products/Dry%20Goods">Dry Goods</a></li>
+                        <li><a class="dropdown-item" href="/products/Baking%20Supplies">Baking Supplies</a></li>
+                        <li><a class="dropdown-item" href="/products/Cooking%20Supplies">Cooking Supplies</a></li>
+                        <li><a class="dropdown-item" href="/products/Coffees%20And%20Teas">Coffee & Teas</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
