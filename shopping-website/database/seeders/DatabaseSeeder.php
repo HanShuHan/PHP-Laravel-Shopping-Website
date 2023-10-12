@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +20,25 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        ProductCategory::factory()->create([
+            'name' => 'Produce'
+        ]);
+        ProductCategory::factory()->create([
+            'name' => 'Dry Goods'
+        ]);
+        ProductCategory::factory()->create([
+            'name' => 'Baking Supplies'
+        ]);
+        ProductCategory::factory()->create([
+            'name' => 'Cooking Supplies'
+        ]);
+        ProductCategory::factory()->create([
+            'name' => 'Treats'
+        ]);
+        ProductCategory::factory()->create([
+            'name' => 'Coffee and Teas'
+        ]);
+        Product::factory(200)->create();
+        Product::factory(50)->create();
     }
 }
