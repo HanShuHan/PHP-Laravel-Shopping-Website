@@ -26,7 +26,7 @@ Route::get('/comp', function() {
 Route::get('/login', function() {
     return view('pages.login');
 });
-
+//TEST!!!
 Route::get('/signup', function() {
     return view('pages.register');
 });
