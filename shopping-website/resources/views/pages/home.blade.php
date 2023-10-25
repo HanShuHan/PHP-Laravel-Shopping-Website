@@ -4,6 +4,7 @@
     </x-navbar>
     <x-searchbar></x-searchbar>
     <x-carousel></x-carousel>
+
     @foreach ([['title' => 'Under $20', 'products' => $under20],
               ['title' => 'Highest Rated', 'products' => $highestRated],
               ['title' => 'Newest in Dry Goods', 'products' => $latestDryGoods],
@@ -20,6 +21,8 @@
                         itemId="{{$section['products'][$i]->id}}"
                         itemRating="{{$section['products'][$i]->rating}}"
                         itemRatingCount="{{$section['products'][$i]->rating_count}}"
+                        test="Hello World!"
+
                     ></x-home-products>
                 @endfor
 

@@ -31,6 +31,10 @@ Route::get('/signup', function() {
     return view('pages.register');
 });
 
+Route::get('/test', function() {
+    return view('pages.test');
+});
+
 //USER CONTROLLER
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/register', [UserController::class, 'register']);
