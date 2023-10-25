@@ -35,7 +35,7 @@
                     <li class="nav-item me-3">
                         <a href="/cart" class="btn btn-outline-light d-flex align-items-center cart-button">
                             <span class="material-icons-sharp text-white me-2">shopping_cart</span>
-                            Cart <span class="badge bg-secondary ms-2">{{$cartItemsCount}}</span>
+                            Cart <span id="cart-items-count" class="badge bg-secondary ms-2">{{$cartItemsCount}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
