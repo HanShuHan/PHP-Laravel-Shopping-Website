@@ -31,6 +31,9 @@ Route::get('/signup', function() {
     return view('pages.register');
 });
 
+//SEARCH ROUTE 
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
 //USER CONTROLLER
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/register', [UserController::class, 'register']);
