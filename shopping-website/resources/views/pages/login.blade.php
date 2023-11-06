@@ -1,12 +1,12 @@
 <x-new-layout>
-    <div class="content d-flex justify-content-center align-items-center min-vh-100" style="background-color: #343a40;">
+    <div class="login content d-flex justify-content-center align-items-center min-vh-100">
 
         <a href="/" class="position-absolute top-0 start-0 p-4 text-white" style="font-size: 24px;">
             <span class="material-icons-sharp">
                 chevron_left
             </span>
         </a>
-        <div class="form-parent col center p-5 rounded" style="max-width: 500px; background-color: white;">
+        <div class="mt-4 mb-4 form-parent col center p-5 rounded" style="max-width: 500px; background-color: white;">
             @if (session('warning'))
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     {{ session('warning') }}
@@ -17,12 +17,12 @@
                 @csrf
                 <div class="mb-3">
                     <label for="username_login" class="form-label">Username:</label>
-                    <input type="text" name="user_name" id="username_login" class="form-control">
+                    <input type="text" name="user_name" id="username_login" class="form-control" placeholder="Username...">
                 </div>
 
                 <div class="mb-3">
                     <label for="password_login" class="form-label">Password:</label>
-                    <input type="password" name="password" id="password_login" class="form-control">
+                    <input type="password" name="password" id="password_login" class="form-control" placeholder="password...">
                 </div>
 
                 <div class="d-grid gap-2 mb-3">
@@ -34,7 +34,7 @@
                 <p><a href="/recover" class="text-dark">Forgot your password?</a></p>
                 <p>Don't have an account? <a href="/signup" class="text-dark">Register.</a></p>
                 <br>
-                <p style="font-size: 12px">PRODUCTION NOTE: THIS IS A TEMPORARY FORM AND WILL BE A MODAL IN FINAL VERSION.</p>
+                <!-- <p style="font-size: 12px"><span class="note">PRODUCTION NOTE:</span> THIS IS A TEMPORARY FORM AND WILL BE A MODAL IN FINAL VERSION.</p> -->
             </section>
         </div>
     </div>
