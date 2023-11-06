@@ -3,6 +3,7 @@
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +32,7 @@ Route::get('/signup', function() {
     return view('pages.register');
 });
 
-//SEARCH ROUTE 
+//SEARCH BAR 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 //USER CONTROLLER
