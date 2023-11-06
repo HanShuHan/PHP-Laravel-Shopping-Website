@@ -13,7 +13,7 @@
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row my-auto">
             <div class="col-md-6 text-center">
-                <img src="/images/place-holder.png" class="img-fluid" alt="{{$product->name}}">
+                <img src="{{asset('storage/' . $product->photo)}}" class="img-fluid" alt="{{$product->name}}">
             </div>
 
             <div class="col-md-6">

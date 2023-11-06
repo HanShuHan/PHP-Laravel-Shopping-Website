@@ -99,7 +99,7 @@ class ProductController extends Controller
             'price' => 'nullable|numeric',
             'rating' => 'integer|between:0,5',
             'rating_count' => 'integer|min:0',
-            'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'photo' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
             // Add validation rules for other fields here
         ]);
         $data['category_id'] = $request->category_id;

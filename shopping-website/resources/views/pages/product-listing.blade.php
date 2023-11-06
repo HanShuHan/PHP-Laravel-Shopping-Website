@@ -8,9 +8,12 @@
             <div class="col-md-3">
                 <div class="list-group">
                     <h2 class="menu-header">Categories</h2>
-                    <a href="{{ route('product.listItems', 'all') }}" class="list-group-item list-group-item-action category-link {{ request()->segment(2) == 'all' ? 'active-category' : '' }}">All Products</a>
+                    <a href="{{ route('product.listItems', 'all') }}"
+                       class="list-group-item list-group-item-action category-link {{ request()->segment(2) == 'all' ? 'active-category' : '' }}">All
+                        Products</a>
                     @foreach($categories as $category)
-                        <a href="{{ route('product.listItems', $category->name) }}" class="list-group-item list-group-item-action category-link {{ request()->segment(2) == $category->name ? 'active-category' : '' }}">{{ $category->name }}</a>
+                        <a href="{{ route('product.listItems', $category->name) }}"
+                           class="list-group-item list-group-item-action category-link {{ request()->segment(2) == $category->name ? 'active-category' : '' }}">{{ $category->name }}</a>
                     @endforeach
                 </div>
             </div>
@@ -21,7 +24,8 @@
                     @foreach($products as $product)
                         <div class="col-md-3 mb-4">
                             <div class="card h-100 d-flex flex-column">
-                                <img class="card-img-top" src="{{ asset('storage/' . $product->photo) }}" alt="{{ $product->name }}">
+                                <img class="card-img-top" src="{{ asset('storage/' . $product->photo) }}"
+                                     alt="{{ $product->name }}">
                                 <div class="card-body flex-grow-1">
                                     <h5 class="card-title">{{ $product->name }}</h5>
                                     <p class="card-text mb-3" style="font-size: 0.6em;">{{ $product->description }}</p>
@@ -41,12 +45,15 @@
                                         <p><em>({{$product->rating_count}})</em></p>
                                     </div>
                                     <div class="d-flex justify-content-start">
-                                        <a href="{{ url('/product/'.$product->id) }}" class="btn btn-dark mb-2 me-2">More Info</a>
+                                        <a href="{{ url('/product/'.$product->id) }}" class="btn btn-dark mb-2 me-2">More
+                                            Info</a>
                                         @auth
-                                            <form action="/cart/add/{{$product->id}}" method="POST" class="d-inline-block mb-2">
+                                            <form action="/cart/add/{{$product->id}}" method="POST"
+                                                  class="d-inline-block mb-2">
                                                 @csrf
                                                 <button type="submit" class="btn btn-dark d-flex align-items-center">
-                                                    <span class="material-icons-sharp text-white me-2">shopping_cart</span>
+                                                    <span
+                                                        class="material-icons-sharp text-white me-2">shopping_cart</span>
                                                 </button>
                                             </form>
                                         @endauth
@@ -55,7 +62,6 @@
                             </div>
                         </div>
                     @endforeach
-
 
 
                 </div>
