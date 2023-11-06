@@ -12,6 +12,7 @@ class CartController extends Controller
 {
     public function showCart()
     {
+        $categories = DB::table('product_categories')->get();
         $cartId = Session::get('cart_id');
         $cartItems = CartItem::where('cart_id', $cartId)->with('product')->get();
         $cartItemsCount = CartItem::where('cart_id', $cartId)->sum('quantity');
@@ -25,7 +26,8 @@ class CartController extends Controller
         return view('pages/cart', [
             'cartItems' => $cartItems,
             'total' => $total,
-            'cartItemsCount' => $cartItemsCount
+            'cartItemsCount' => $cartItemsCount,
+            'categories' => $categories
         ]);
     }
 

@@ -1,6 +1,6 @@
 {{--WRITTEN BY DAVID CURREY, MODIFIED FOR LARAVEL BY MICHAEL BOISVENU-LANDRY--}}
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}"></x-navbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
 
     <div class="container-fluid mt-5 pt-5">
         <div class="row">

@@ -1,7 +1,6 @@
 <x-new-layout>
-    <x-navbar
-        cartItemsCount="{{$cartItemsCount}}">
-    </x-navbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
+
     <x-searchbar></x-searchbar>
     <x-carousel></x-carousel>
     @foreach ([['title' => 'Under $20', 'products' => $under20],

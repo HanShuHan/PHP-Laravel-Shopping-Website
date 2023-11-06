@@ -1,6 +1,5 @@
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}">
-    </x-navbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
     <div class="container rounded bg-white mt-5 mb-5">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
