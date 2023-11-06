@@ -1,3 +1,4 @@
+{{--WRITTEN BY DAVID CURREY--}}
 <x-new-layout>
     <x-navbar cartItemsCount="{{ $cartItemsCount }}"></x-navbar>
     <x-searchbar></x-searchbar>

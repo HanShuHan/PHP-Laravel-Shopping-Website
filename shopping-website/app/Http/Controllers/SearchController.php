@@ -1,5 +1,7 @@
 <?php
 
+//Written by David Currey
+
 namespace App\Http\Controllers;
 
 use App\Models\Product;
