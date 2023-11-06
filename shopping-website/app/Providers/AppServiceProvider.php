@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            if (auth()->check()) {
+                $cartItemsCount = auth()->user()->cart->count();
+            } else {
+                $cartItemsCount = 0;
+            }
+
+            $view->with('cartItemsCount', $cartItemsCount);
+        });
     }
 }

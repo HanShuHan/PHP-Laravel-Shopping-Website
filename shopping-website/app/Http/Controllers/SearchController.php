@@ -12,16 +12,10 @@ class SearchController extends Controller
         // Get the search query from the request
         $query = $request->input('query');
 
-        // Search the products table for a matching item
-        $product = Product::where('name', 'like', '%' . $query . '%')->first();
+        // Search the products table for matching items and paginate the results
+        $products = Product::where('name', 'like', '%' . $query . '%')->paginate(12);
 
-        // Check if a product was found
-        if ($product) {
-            // Redirect to the product page with the product's id
-            return redirect('/product/' . $product->id);
-        } else {
-            // No product found, handle accordingly, maybe redirect back with a message
-            return redirect('/search')->with('error', 'No products found.');
-        }
+        // Return the search results view with the products
+        return view('pages.search-results', compact('products'));
     }
 }
