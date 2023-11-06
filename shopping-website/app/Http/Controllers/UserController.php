@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function logout() {
         auth()->logout();
-        return redirect('/')->with('success', __('messages.logged_out'));
+        return redirect('/')->with('success', __('Logged out successfully'));
     }
 
     public function showProfile(Request $request)
@@ -70,10 +70,13 @@ class UserController extends Controller
 
         if(auth()->attempt(['user_name' => $fields['user_name'], 'password' => $fields['password']])) {
             $request->session()->regenerate();
-            return redirect('/');
+            $request->session()->put(['username' => 'user_name']);
+            return redirect('/')->with('success', 'Welcome back ' . auth()->user()->user_name . '!');
         }
         else {
-            return redirect('/login')->with('failure', __('messages.login_fail'));
+            return redirect('/login')->withErrors([
+                'user_name' => ['Password and username do not match.']
+            ]);
         }
     }
 

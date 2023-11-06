@@ -2,6 +2,14 @@
     <x-navbar
         cartItemsCount="{{$cartItemsCount}}">
     </x-navbar>
+    @if (session('success'))
+        <div class="container d-flex justify-content-center align-items-center mt-5">
+            <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
     <x-searchbar></x-searchbar>
     <x-carousel></x-carousel>
 

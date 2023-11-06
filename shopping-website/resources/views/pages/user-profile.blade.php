@@ -12,7 +12,7 @@
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <img class="rounded-circle mt-5" width="150px" src="https://i.pinimg.com/736x/7f/43/03/7f4303ad3716465ed058ed44a6f64369.jpg">
-                    <span class="font-weight-bold">{{ $user->first_name }}:</span>
+                    <span class="font-weight-bold">{{ $user->user_name }}:</span>
                     <span class="text-black-50">{{ $user->email }}</span>
                     <form action="/profile/updatePicture" method="POST">
                         <button type="submit" class="btn btn-dark mt-3">Edit Profile Picture</button>
