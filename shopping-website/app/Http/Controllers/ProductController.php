@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -81,5 +83,34 @@ class ProductController extends Controller
         }
 
         return redirect()->route('product.index', $product_id)->with('success', 'Added to cart succesfully');
+    }
+
+    public function create()
+    {
+        $categories = ProductCategory::all();
+        return view('pages/product-create', compact('categories'));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'nullable|numeric',
+            'rating' => 'integer|between:0,5',
+            'rating_count' => 'integer|min:0',
+            'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            // Add validation rules for other fields here
+        ]);
+        $data['category_id'] = $request->category_id;
+        // Handle file upload
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $path = $file->store('photos', 'public');
+            $data['photo'] = $path;
+        }
+        $product = Product::create($data);
+
+        return redirect()->route('product.create')->with('success', 'Product added successfully');
     }
 }

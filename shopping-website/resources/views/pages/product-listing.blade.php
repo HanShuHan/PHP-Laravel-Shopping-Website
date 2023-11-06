@@ -21,7 +21,7 @@
                     @foreach($products as $product)
                         <div class="col-md-3 mb-4">
                             <div class="card h-100 d-flex flex-column">
-                                <img class="card-img-top" src="{{ asset('images/place-holder.png') }}" alt="{{ $product->name }}">
+                                <img class="card-img-top" src="{{ asset('storage/' . $product->photo) }}" alt="{{ $product->name }}">
                                 <div class="card-body flex-grow-1">
                                     <h5 class="card-title">{{ $product->name }}</h5>
                                     <p class="card-text mb-3" style="font-size: 0.6em;">{{ $product->description }}</p>

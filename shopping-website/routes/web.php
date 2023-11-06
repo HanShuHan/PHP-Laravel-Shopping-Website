@@ -43,6 +43,8 @@ Route::get('/recover', [UserController::class, 'recover']);
 //PRODUCT CONTROLLER
 Route::get('/product/{product_id}', [ProductController::class, 'index'])->name('product.index');
 Route::get('/products/{categoryName}', [ProductController::class, 'listItems'])->name('product.listItems');
+Route::get('/create/products', [ProductController::class, 'create'])->name('product.create');
+Route::post('/products', [ProductController::class, 'store'])->name('product.store');
 
 //CART CONTROLLER
 Route::post('/cart/add/{product_id}', [\App\Http\Controllers\ProductController::class, 'addToCart']);
