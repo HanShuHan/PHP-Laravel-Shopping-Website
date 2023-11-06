@@ -26,7 +26,7 @@ Route::get('/comp', function() {
 Route::get('/login', function() {
     return view('pages.login');
 });
-//TEST!!!
+
 Route::get('/signup', function() {
     return view('pages.register');
 });
@@ -34,6 +34,7 @@ Route::get('/signup', function() {
 Route::get('/test', function() {
     return view('pages.test');
 });
+
 
 //USER CONTROLLER
 Route::post('/logout', [UserController::class, 'logout']);
