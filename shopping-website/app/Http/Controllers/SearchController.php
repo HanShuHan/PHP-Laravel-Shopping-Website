@@ -4,8 +4,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class SearchController extends Controller
 {
@@ -16,8 +20,14 @@ class SearchController extends Controller
 
         // Search the products table for matching items and paginate the results
         $products = Product::where('name', 'like', '%' . $query . '%')->paginate(12);
-
+        $cart = Cart::where('id', Session::get('cart_id'));
+        $cartItemCount = CartItem::where('cart_id', $cart->value('id'))->sum('quantity');
+        $categories = DB::table('product_categories')->get();
         // Return the search results view with the products
-        return view('pages.search-results', compact('products'));
+        return view('pages.search-results', [
+            'products' => $products,
+            'cartItemsCount' => $cartItemCount,
+            'categories' => $categories
+        ]);
     }
 }

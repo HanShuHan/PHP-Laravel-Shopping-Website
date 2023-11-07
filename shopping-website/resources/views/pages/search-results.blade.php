@@ -1,6 +1,6 @@
 {{--WRITTEN BY DAVID CURREY--}}
 <x-new-layout>
-    <x-navbar cartItemsCount="{{ $cartItemsCount }}"></x-navbar>
+    <x-navbar cartItemsCount="{{ $cartItemsCount }}" :categories="$categories"></x-navbar>
     <x-searchbar></x-searchbar>
 
     <div class="container-fluid mt-5 pt-5">
@@ -11,7 +11,7 @@
                     @forelse ($products as $product)
                         <div class="col-md-3 mb-4">
                             <div class="card h-100 d-flex flex-column">
-                                <img class="card-img-top" src="{{ asset('images/place-holder.png') }}"
+                                <img class="card-img-top" src="{{ asset('storage/' . $product->photo) }}"
                                     alt="{{ $product->name }}">
                                 <div class="card-body flex-grow-1">
                                     <h5 class="card-title">{{ $product->name }}</h5>
@@ -52,7 +52,7 @@
                             <p>No results.</p>
                         </div>
                     @endforelse
-                    
+
                     <!-- Add pagination -->
                     <div class="d-flex justify-content-center mt-4">
                         {{ $products->links('vendor.pagination.pagination') }}
