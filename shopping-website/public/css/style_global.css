@@ -22,6 +22,10 @@ nav.bg-dark {
         margin-bottom: 10px!important;
     }    
 }
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: #7fad39 !important;
+    color: white !important;
+  }
 /* Login page */
 .login button[type="submit"],
 .register button[type="submit"] {
