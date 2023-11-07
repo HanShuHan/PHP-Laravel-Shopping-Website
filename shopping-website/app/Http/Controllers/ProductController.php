@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 
 class ProductController extends Controller
 {
@@ -80,6 +81,14 @@ class ProductController extends Controller
             $cartItem->save();
         }
 
-        return redirect()->route('product.index', $product_id)->with('success', 'Added to cart succesfully');
+        $previousUrl = URL::previous();
+        $productPageUrl = route('product.index', $product_id);
+
+        if($previousUrl == $productPageUrl) {
+            return redirect($productPageUrl)->with('success', 'Added to cart succesfully');
+        }
+        else {
+            return redirect($previousUrl)->with('success', 'Added to cart succesfully');
+        }
     }
 }
