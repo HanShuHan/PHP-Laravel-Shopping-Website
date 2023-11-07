@@ -4,7 +4,7 @@
             <form action="/search" method="GET">
                 @csrf
                 <div class="input-group input-group-lg">
-                    <input type="text" class="form-control" name="query" placeholder="Search not yet implemented" aria-label="Search" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control" name="query" placeholder="Search products" aria-label="Search" aria-describedby="basic-addon1">
                     <button class="input-group-text" id="basic-addon1" type="submit"><span class="material-icons-sharp">search</span></button>
                 </div>
             </form>
