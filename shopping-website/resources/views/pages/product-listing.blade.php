@@ -1,16 +1,19 @@
 {{--WRITTEN BY DAVID CURREY, MODIFIED FOR LARAVEL BY MICHAEL BOISVENU-LANDRY--}}
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}"></x-navbar>
-<x-searchbar></x-searchbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
+
     <div class="container-fluid mt-5 pt-5">
         <div class="row">
             <!-- Sidebar with product categories -->
             <div class="col-md-3">
                 <div class="list-group">
                     <h2 class="menu-header">Categories</h2>
-                    <a href="{{ route('product.listItems', 'all') }}" class="list-group-item list-group-item-action category-link {{ request()->segment(2) == 'all' ? 'active-category' : '' }}">All Products</a>
+                    <a href="{{ route('product.listItems', 'all') }}"
+                       class="list-group-item list-group-item-action category-link {{ request()->segment(2) == 'all' ? 'active-category' : '' }}">All
+                        Products</a>
                     @foreach($categories as $category)
-                        <a href="{{ route('product.listItems', $category->name) }}" class="list-group-item list-group-item-action category-link {{ request()->segment(2) == $category->name ? 'active-category' : '' }}">{{ $category->name }}</a>
+                        <a href="{{ route('product.listItems', $category->name) }}"
+                           class="list-group-item list-group-item-action category-link {{ request()->segment(2) == $category->name ? 'active-category' : '' }}">{{ $category->name }}</a>
                     @endforeach
                 </div>
             </div>
@@ -21,7 +24,8 @@
                     @foreach($products as $product)
                         <div class="col-md-3 mb-4">
                             <div class="card h-100 d-flex flex-column">
-                                <img class="card-img-top" src="{{ asset('images/place-holder.png') }}" alt="{{ $product->name }}">
+                                <img class="card-img-top" src="{{ asset('storage/' . $product->photo) }}"
+                                     alt="{{ $product->name }}">
                                 <div class="card-body flex-grow-1">
                                     <h5 class="card-title">{{ $product->name }}</h5>
                                     <p class="card-text mb-3" style="font-size: 0.6em;">{{ $product->description }}</p>
@@ -55,7 +59,6 @@
                             </div>
                         </div>
                     @endforeach
-
 
 
                 </div>

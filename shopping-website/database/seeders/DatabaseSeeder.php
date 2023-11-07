@@ -20,23 +20,32 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+//        ProductCategory::factory()->create([
+//            'name' => 'Produce'
+//        ]);
+//        ProductCategory::factory()->create([
+//            'name' => 'Dry Goods'
+//        ]);
+//        ProductCategory::factory()->create([
+//            'name' => 'Baking Supplies'
+//        ]);
+//        ProductCategory::factory()->create([
+//            'name' => 'Cooking Supplies'
+//        ]);
+//        ProductCategory::factory()->create([
+//            'name' => 'Treats'
+//        ]);
+//        ProductCategory::factory()->create([
+//            'name' => 'Coffee and Teas'
+//        ]);
         ProductCategory::factory()->create([
-            'name' => 'Produce'
+            'name' => 'Drinks'
         ]);
         ProductCategory::factory()->create([
-            'name' => 'Dry Goods'
+            'name' => 'Cookies'
         ]);
         ProductCategory::factory()->create([
-            'name' => 'Baking Supplies'
-        ]);
-        ProductCategory::factory()->create([
-            'name' => 'Cooking Supplies'
-        ]);
-        ProductCategory::factory()->create([
-            'name' => 'Treats'
-        ]);
-        ProductCategory::factory()->create([
-            'name' => 'Coffee and Teas'
+            'name' => 'Soups'
         ]);
         Product::factory(200)->create();
         Product::factory(50)->create();
