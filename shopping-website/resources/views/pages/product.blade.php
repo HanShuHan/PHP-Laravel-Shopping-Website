@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    <a href="/" class="position-absolute top-0 start-0 mt-5 ms-4 text-dark" style="transition: color 0.3s;">
+    <a href="{{url($backURL)}}" class="position-absolute top-0 start-0 mt-5 ms-4 text-dark" style="transition: color 0.3s;">
         <span class="material-icons-sharp mt-5 fs-1">
             chevron_left
         </span>

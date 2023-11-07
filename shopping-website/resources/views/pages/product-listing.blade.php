@@ -45,7 +45,8 @@
                                         <p><em>({{$product->rating_count}})</em></p>
                                     </div>
                                     <div class="d-flex justify-content-start">
-                                        <a href="{{ url('/product/'.$product->id) }}" class="btn btn-dark mb-2 me-2">More
+                                        <a href="{{ route('product.index', ['product_id' => $product->id, 'searching_category' => Str::afterLast(request()->url(), '/'), 'page' => $products->currentPage() ]) }}"
+                                           class="btn btn-dark mb-2 me-2">More
                                             Info</a>
                                         @auth
                                             <form action="/cart/add/{{$product->id}}" method="POST"
@@ -53,7 +54,7 @@
                                                 @csrf
                                                 <button type="submit" class="btn btn-dark d-flex align-items-center">
                                                     <span
-                                                        class="material-icons-sharp text-white me-2">shopping_cart</span>
+                                                            class="material-icons-sharp text-white me-2">shopping_cart</span>
                                                 </button>
                                             </form>
                                         @endauth

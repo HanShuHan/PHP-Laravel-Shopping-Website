@@ -41,7 +41,7 @@ Route::post('/profile/updatePicture', [UserController::class, 'updatePicture']);
 Route::get('/recover', [UserController::class, 'recover']);
 
 //PRODUCT CONTROLLER
-Route::get('/product/{product_id}', [ProductController::class, 'index'])->name('product.index');
+Route::get('/product/{product_id}/{searching_category}/{page}', [ProductController::class, 'index'])->name('product.index');
 Route::get('/products/{categoryName}', [ProductController::class, 'listItems'])->name('product.listItems');
 Route::get('/create/products', [ProductController::class, 'create'])->name('product.create');
 Route::post('/products', [ProductController::class, 'store'])->name('product.store');
