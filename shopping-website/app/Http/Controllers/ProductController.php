@@ -14,14 +14,15 @@ use Illuminate\Support\Facades\URL;
 
 class ProductController extends Controller
 {
-    public function listItems($categoryName) {
+    public function listItems($categoryName)
+    {
         $categories = DB::table('product_categories')->get();
         $cartItemsCount = 0;
         if (session()->has('cart_id')) {
             $cartId = session('cart_id');
             $cartItemsCount = CartItem::where('cart_id', $cartId)->sum('quantity');
         }
-        if($categoryName === 'all') {
+        if ($categoryName === 'all') {
             $products = DB::table('products')->paginate(8);
         } else {
             $categoryId = DB::table('product_categories')->where('name', $categoryName)->value('id');
@@ -35,11 +36,16 @@ class ProductController extends Controller
         ]);
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $product = DB::table('products')->where('id', '=', $request->route('product_id'))->first();
         $categories = DB::table('product_categories')->get();
         $category = DB::table('product_categories')->where('id', '=', $product->category_id)->value('name');
         $cartItemsCount = 0;
+        $backURL = (string) $request->input('url');
+        if ($request->input('page')) {
+            $backURL = 'products/' . $request->input('searching_category') . '?page=' . $request->input('page');
+        }
         if (session()->has('cart_id')) {
             $cartId = session('cart_id');
             $cartItemsCount = CartItem::where('cart_id', $cartId)->sum('quantity');
@@ -49,21 +55,21 @@ class ProductController extends Controller
             'categories' => $categories,
             'category' => $category,
             'cartItemsCount' => $cartItemsCount,
-            'backURL' => 'products/' . $request->input('searching_category') . '?page=' . $request->input('page')
+            'backURL' => $backURL
         ]);
     }
 
-    public function addToCart($product_id) {
+    public function addToCart($product_id)
+    {
         $cartId = Session::get('cart_id');
-        if(!$cartId) {
+        if (!$cartId) {
             $cart = new Cart;
             $cart->id = fake()->uuid();
             $cart->user_id = Auth::id();
             $cart->total_cost = 0;
             $cart->save();
             Session::put('cart_id', $cart->id);
-        }
-        else {
+        } else {
             $cart = Cart::find($cartId);
         }
 
@@ -71,11 +77,10 @@ class ProductController extends Controller
             ->where('product_id', $product_id)
             ->first();
 
-        if($cartItem) {
+        if ($cartItem) {
             $cartItem->quantity += 1;
             $cartItem->save();
-        }
-        else {
+        } else {
             $cartItem = new CartItem;
             $cartItem->id = fake()->uuid();
             $cartItem->cart_id = $cart->id;
@@ -87,10 +92,9 @@ class ProductController extends Controller
         $previousUrl = URL::previous();
         $productPageUrl = route('product.index', $product_id);
 
-        if($previousUrl == $productPageUrl) {
+        if ($previousUrl == $productPageUrl) {
             return redirect($productPageUrl)->with('success', 'Added to cart succesfully');
-        }
-        else {
+        } else {
             return redirect($previousUrl)->with('success', 'Added to cart succesfully');
         }
     }

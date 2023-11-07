@@ -20,7 +20,7 @@
                 <p><em>({{$ratingCount}})</em></p>
             </div>
             <div class="d-flex justify-content-start">
-                <a href="{{ route('product.index', ['product_id' => $id, 'searching_category' => Str::afterLast(request()->url(), '/'), 'page' => $page ]) }}" class="btn btn-dark mb-2 me-2">More Info</a>
+                <a href="{{ route('product.index', ['product_id' => $id, 'searching_category' => Str::afterLast(request()->url(), '/'), 'page' => $page, 'url' => request()->getRequestUri() ]) }}" class="btn btn-dark mb-2 me-2">More Info</a>
                 @auth
                     <form action="/cart/add/{{$id}}" method="POST" class="d-inline-block mb-2">
                         @csrf
