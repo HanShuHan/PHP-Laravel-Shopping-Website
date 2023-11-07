@@ -1,8 +1,17 @@
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
+  <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
+    @if (session('success'))
+        <div class="container d-flex justify-content-center align-items-center mt-5">
+            <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
 
     <x-searchbar></x-searchbar>
     <x-carousel></x-carousel>
+
     @foreach ([['title' => 'Under $20', 'products' => $under20],
               ['title' => 'Highest Rated', 'products' => $highestRated],
               ['title' => 'Newest in Dry Goods', 'products' => $latestDryGoods],
@@ -19,6 +28,8 @@
                         itemId="{{$section['products'][$i]->id}}"
                         itemRating="{{$section['products'][$i]->rating}}"
                         itemRatingCount="{{$section['products'][$i]->rating_count}}"
+                        test="Hello World!"
+
                     ></x-home-products>
                 @endfor
 

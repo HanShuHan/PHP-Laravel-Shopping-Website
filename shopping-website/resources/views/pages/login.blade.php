@@ -18,11 +18,17 @@
                 <div class="mb-3">
                     <label for="username_login" class="form-label">Username:</label>
                     <input type="text" name="user_name" id="username_login" class="form-control">
+                    @error('user_name')
+                    <p class="validation-error text-danger">{{$message}}</p>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="password_login" class="form-label">Password:</label>
                     <input type="password" name="password" id="password_login" class="form-control">
+                    @error('password')
+                    <p class="validation-error text-danger">{{$message}}</p>
+                    @enderror
                 </div>
 
                 <div class="d-grid gap-2 mb-3">
@@ -33,8 +39,6 @@
             <section class="form-footer text-dark">
                 <p><a href="/recover" class="text-dark">Forgot your password?</a></p>
                 <p>Don't have an account? <a href="/signup" class="text-dark">Register.</a></p>
-                <br>
-                <p style="font-size: 12px">PRODUCTION NOTE: THIS IS A TEMPORARY FORM AND WILL BE A MODAL IN FINAL VERSION.</p>
             </section>
         </div>
     </div>

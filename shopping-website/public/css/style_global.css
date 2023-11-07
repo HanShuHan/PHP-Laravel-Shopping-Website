@@ -6,6 +6,21 @@ body {
     width: 100% !important;
 }
 
+.my-h1 {
+    color: green;
+}
+
+.my-h2 {
+    color: red;
+}
+
+.my-p1 {
+    color: blue;
+}
+
+.my-p2 {
+    color: #0c5460;
+}
 
 
 
