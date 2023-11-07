@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // re-autenticates cart items every time a view is called
         View::composer('*', function ($view) {
             if (auth()->check()) {
                 $cartItemsCount = auth()->user()->cart->count();

@@ -52,6 +52,7 @@
                             <p>No results.</p>
                         </div>
                     @endforelse
+                    
                     <!-- Add pagination -->
                     <div class="d-flex justify-content-center mt-4">
                         {{ $products->links('vendor.pagination.pagination') }}
