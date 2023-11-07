@@ -70,4 +70,7 @@
         </div>
     </div>
 </nav>
+<div class="pt-2">
+    <x-searchbar></x-searchbar>
+</div>
 

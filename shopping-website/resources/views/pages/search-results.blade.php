@@ -1,8 +1,6 @@
 {{--WRITTEN BY DAVID CURREY--}}
 <x-new-layout>
     <x-navbar cartItemsCount="{{ $cartItemsCount }}" :categories="$categories"></x-navbar>
-    <x-searchbar></x-searchbar>
-
     <div class="container-fluid mt-5 pt-5">
         <div class="row">
             <!-- Product container -->
