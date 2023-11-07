@@ -49,9 +49,10 @@ Route::get('/product/{product_id}', [ProductController::class, 'index'])->name('
 Route::get('/products/{categoryName}', [ProductController::class, 'listItems'])->name('product.listItems');
 
 //CART CONTROLLER
-Route::post('/cart/remove/{item_id}', [\App\Http\Controllers\CartController::class, 'removeFromCart']);
 Route::post('/cart/add/{product_id}', [\App\Http\Controllers\ProductController::class, 'addToCart']);
-Route::get('/cart', [\App\Http\Controllers\CartController::class, 'showCart']);
+Route::get('/cart', [\App\Http\Controllers\CartController::class, 'showCart'])->name('cart.index');
+Route::post('/cart/edit/{product_id}', [\App\Http\Controllers\CartController::class, 'editItemFromCart']);
+Route::post('/cart/remove/{item_id}', [\App\Http\Controllers\CartController::class, 'removeFromCart']);
 Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'clearCart']);
 
 
