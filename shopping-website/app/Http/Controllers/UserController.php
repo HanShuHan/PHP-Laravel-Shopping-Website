@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -34,8 +36,20 @@ class UserController extends Controller
     public function recover() {
         return redirect('/login')->with('warning', 'Feature not yet implemented');
     }
-    public function updatePicture() {
-        return redirect('/profile')->with('success', 'Feature not yet implemented');
+    public function updatePicture(Request $request) {
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        $user = Auth::user();
+        $user->profile_picture = file_get_contents($request->file('profile_picture')->getRealPath());
+        try {
+            $user->save();
+            return redirect('/profile')->with('success', 'Profile picture updated successfully');
+        } catch (QueryException $e) {
+            dd($e);
+        }
+
     }
     public function updateProfile(Request $request)
     {

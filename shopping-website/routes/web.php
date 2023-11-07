@@ -44,6 +44,7 @@ Route::get('/profile', [UserController::class, 'showProfile']);
 Route::post('/profile/update', [UserController::class, 'updateProfile']);
 Route::post('/profile/updatePicture', [UserController::class, 'updatePicture']);
 Route::get('/recover', [UserController::class, 'recover']);
+Route::post('profile/update-picture', [UserController::class, 'updatePicture']);
 
 //PRODUCT CONTROLLER
 Route::get('/product/{product_id}', [ProductController::class, 'index'])->name('product.index');
