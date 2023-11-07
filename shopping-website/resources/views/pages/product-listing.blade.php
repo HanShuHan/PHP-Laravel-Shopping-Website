@@ -2,6 +2,7 @@
 <x-new-layout>
     <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
 
+
     @if (session('success'))
         <div class="container d-flex justify-content-center align-items-center mt-5">
             <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
@@ -11,6 +12,7 @@
         </div>
     @endif
     <div class="container-fluid mt-5 pt-5">
+
         <div class="row">
             <!-- Sidebar with product categories -->
             <div class="col-md-3">

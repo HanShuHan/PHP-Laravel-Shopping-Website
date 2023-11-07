@@ -8,8 +8,6 @@
             </div>
         </div>
     @endif
-
-    <x-searchbar></x-searchbar>
     <x-carousel></x-carousel>
 
     @foreach ([['title' => 'Under $20', 'products' => $under20],
@@ -28,6 +26,7 @@
                         itemId="{{$section['products'][$i]->id}}"
                         itemRating="{{$section['products'][$i]->rating}}"
                         itemRatingCount="{{$section['products'][$i]->rating_count}}"
+                        itemPhoto="{{$section['products'][$i]->photo}}"
                         test="Hello World!"
 
                     ></x-home-products>
