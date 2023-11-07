@@ -3,6 +3,7 @@
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,10 +32,8 @@ Route::get('/signup', function() {
     return view('pages.register');
 });
 
-Route::get('/test', function() {
-    return view('pages.test');
-});
-
+//SEARCH BAR 
+Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 //USER CONTROLLER
 Route::post('/logout', [UserController::class, 'logout']);
@@ -49,6 +48,8 @@ Route::post('profile/update-picture', [UserController::class, 'updatePicture']);
 //PRODUCT CONTROLLER
 Route::get('/product/{product_id}', [ProductController::class, 'index'])->name('product.index');
 Route::get('/products/{categoryName}', [ProductController::class, 'listItems'])->name('product.listItems');
+Route::get('/create/products', [ProductController::class, 'create'])->name('product.create');
+Route::post('/products', [ProductController::class, 'store'])->name('product.store');
 
 //CART CONTROLLER
 Route::post('/cart/add/{product_id}', [\App\Http\Controllers\ProductController::class, 'addToCart']);

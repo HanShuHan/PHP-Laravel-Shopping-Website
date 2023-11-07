@@ -7,6 +7,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -18,6 +19,8 @@ class UserController extends Controller
 
     public function showProfile(Request $request)
     {
+        $categories = DB::table('product_categories')->get();
+
         if (auth()->guest()) {
             return redirect('/signup');
         }
@@ -29,7 +32,8 @@ class UserController extends Controller
         $user = auth()->user();
         return view('pages/user-profile', [
             'user' => $user,
-            'cartItemsCount' => $cartItemsCount
+            'cartItemsCount' => $cartItemsCount,
+            'categories' => $categories
         ]);
     }
 

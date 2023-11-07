@@ -1,5 +1,5 @@
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}"></x-navbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
 
     @if (session('success'))
         <div class="container d-flex justify-content-center align-items-center mt-5">
@@ -13,7 +13,7 @@
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row my-auto">
             <div class="col-md-6 text-center">
-                <img src="/images/place-holder.png" class="img-fluid" alt="{{$product->name}}">
+                <img src="{{asset('storage/' . $product->photo)}}" class="img-fluid" alt="{{$product->name}}">
             </div>
 
             <div class="col-md-6">
@@ -34,7 +34,8 @@
                 @auth
                     <form action="/cart/add/{{$product->id}}" method="POST" class="d-inline-block">
                         @csrf
-                        <button type="submit" class="btn btn-dark d-flex justify-content-center align-items-center" style="width: 200px;">
+                        <button type="submit" class="btn btn-dark d-flex justify-content-center align-items-center"
+                                style="width: 200px;">
                             <span class="material-icons-sharp text-white me-2">
                                 shopping_cart
                             </span>
@@ -42,7 +43,8 @@
                         </button>
                     </form>
                 @else
-                    <a href="/login" class="btn btn-dark d-flex align-items-center justify-content-center" style="width: 200px;">
+                    <a href="/login" class="btn btn-dark d-flex align-items-center justify-content-center"
+                       style="width: 200px;">
                         <span class="material-icons-sharp text-white me-2">
                             shopping_cart
                         </span>

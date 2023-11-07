@@ -1,6 +1,6 @@
 {{--WRITTEN BY DAVID CURREY, MODIFIED FOR LARAVEL BY MICHAEL BOISVENU-LANDRY--}}
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}"></x-navbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
 
     @if (session('success'))
         <div class="container d-flex justify-content-center align-items-center mt-5">
@@ -16,9 +16,12 @@
             <div class="col-md-3">
                 <div class="list-group">
                     <h2 class="menu-header">Categories</h2>
-                    <a href="{{ route('product.listItems', 'all') }}" class="list-group-item list-group-item-action category-link {{ request()->segment(2) == 'all' ? 'active-category' : '' }}">All Products</a>
+                    <a href="{{ route('product.listItems', 'all') }}"
+                       class="list-group-item list-group-item-action category-link {{ request()->segment(2) == 'all' ? 'active-category' : '' }}">All
+                        Products</a>
                     @foreach($categories as $category)
-                        <a href="{{ route('product.listItems', $category->name) }}" class="list-group-item list-group-item-action category-link {{ request()->segment(2) == $category->name ? 'active-category' : '' }}">{{ $category->name }}</a>
+                        <a href="{{ route('product.listItems', $category->name) }}"
+                           class="list-group-item list-group-item-action category-link {{ request()->segment(2) == $category->name ? 'active-category' : '' }}">{{ $category->name }}</a>
                     @endforeach
                 </div>
             </div>
@@ -33,9 +36,10 @@
                             description="{{ $product->description }}"
                             rating="{{ $product->rating }}"
                             ratingCount="{{ $product->rating_count }}"
-                            price="{{ $product->price }}"></x-product-card>
+                            price="{{ $product->price }}"
+                            photo="{{ $product->photo }}">
+                            </x-product-card>
                     @endforeach
-
 
 
                 </div>
