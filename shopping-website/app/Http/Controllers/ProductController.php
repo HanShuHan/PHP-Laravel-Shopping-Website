@@ -35,7 +35,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function index($product_id) {
+    public function index($product_id, $searching_category, $page) {
         $product = DB::table('products')->where('id', '=', $product_id)->first();
         $categories = DB::table('product_categories')->get();
         $category = DB::table('product_categories')->where('id', '=', $product->category_id)->value('name');
@@ -48,7 +48,8 @@ class ProductController extends Controller
             'product' => $product,
             'categories' => $categories,
             'category' => $category,
-            'cartItemsCount' => $cartItemsCount
+            'cartItemsCount' => $cartItemsCount,
+            'backURL' => 'products/' . $searching_category . '?page=' . $page
         ]);
     }
 

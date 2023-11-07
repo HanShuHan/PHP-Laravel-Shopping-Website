@@ -32,7 +32,7 @@ Route::get('/signup', function() {
     return view('pages.register');
 });
 
-//SEARCH BAR 
+//SEARCH BAR
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 //USER CONTROLLER
@@ -46,7 +46,7 @@ Route::get('/recover', [UserController::class, 'recover']);
 Route::post('profile/update-picture', [UserController::class, 'updatePicture']);
 
 //PRODUCT CONTROLLER
-Route::get('/product/{product_id}', [ProductController::class, 'index'])->name('product.index');
+Route::get('/product/{product_id}/{searching_category}/{page}', [ProductController::class, 'index'])->name('product.index');
 Route::get('/products/{categoryName}', [ProductController::class, 'listItems'])->name('product.listItems');
 Route::get('/create/products', [ProductController::class, 'create'])->name('product.create');
 Route::post('/products', [ProductController::class, 'store'])->name('product.store');

@@ -39,8 +39,9 @@
                             rating="{{ $product->rating }}"
                             ratingCount="{{ $product->rating_count }}"
                             price="{{ $product->price }}"
-                            photo="{{ $product->photo }}">
-                            </x-product-card>
+                            photo="{{ $product->photo }}"
+                            page="{{ $products->currentPage() }}">
+                        </x-product-card>
                     @endforeach
 
 
