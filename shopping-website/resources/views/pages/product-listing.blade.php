@@ -1,7 +1,7 @@
 {{--WRITTEN BY DAVID CURREY, MODIFIED FOR LARAVEL BY MICHAEL BOISVENU-LANDRY--}}
 <x-new-layout>
     <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
-
+1
     @if (session('success'))
         <div class="container d-flex justify-content-center align-items-center mt-5">
             <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
