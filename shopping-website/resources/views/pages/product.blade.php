@@ -13,11 +13,11 @@
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row my-auto">
             <div class="col-md-6 text-center">
-                <img src="{{asset('storage/' . $product->photo)}}" class="img-fluid" alt="{{$product->name}}">
+                <img src="{{ '../images/' . $product->photo }}" class="img-fluid" alt="{{$product->name}}">
             </div>
 
             <div class="col-md-6">
-                <h1>{{$product->name}}</h1>
+                <h1>{{html_entity_decode($product->name)}}</h1>
                 <p class="lead">${{$product->price}}</p>
                 <div class="mb-3 d-flex align-items-center">
                     @for($i = 1; $i <= 5; $i++)
@@ -29,7 +29,7 @@
                 </div>
 
                 <p>{{$category}}</p>
-                <p class="mt-3">{{$product->description}}</p>
+                <p class="mt-3">{{html_entity_decode($product->description)}}</p>
 
                 @auth
                     <form action="/cart/add/{{$product->id}}" method="POST" class="d-inline-block">

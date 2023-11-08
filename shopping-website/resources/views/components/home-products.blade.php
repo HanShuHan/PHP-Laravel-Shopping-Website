@@ -1,7 +1,7 @@
 <div class="product-card-small col-md-4 mb-5">
     <div class="card h-100 shadow-sm">
         <a href="/product/{{$itemId}}">
-            <img src="{{ asset('storage/' . $itemPhoto) }}" class="card-img-top my-img" alt="{{ $itemName }}" style="max-height: 150px;object-fit: cover;">
+            <img src="{{ 'images/' . $itemPhoto }}" class="card-img-top my-img" alt="{{ $itemName }}" style="max-height: 150px;object-fit: cover;">
         </a>
         <div class="card-body d-flex flex-column">
             <div class="card-title flex-grow-1">

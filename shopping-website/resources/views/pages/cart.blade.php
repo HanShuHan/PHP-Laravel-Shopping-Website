@@ -54,6 +54,7 @@
         <div class="d-flex justify-content-between mt-3">
             <h4>Total: $<span id="total">{{ $total }}</span></h4>
             <div>
+                <a href="/checkout" class="btn btn-success">Checkout</a>
                 <a href="/" class="btn btn-dark me-2">Continue Shopping</a>
                 <form action="/cart/clear" method="POST" class="d-inline">
                     @csrf
