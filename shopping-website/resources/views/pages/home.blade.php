@@ -17,7 +17,7 @@
               as $section)
         <div class="product-home-container container my-5">
             <h1 class="mb-4">{{ $section['title'] }}</h1>
-            <div class="product-container row">
+            <div id="{{ $section['title'] }}" class="product-container row">
                 @for($i = 0; $i < 6; $i++)
                     <x-home-products
                         itemPrice="{{$section['products'][$i]->price}}"
@@ -28,6 +28,7 @@
                         itemRatingCount="{{$section['products'][$i]->rating_count}}"
                         itemPhoto="{{$section['products'][$i]->photo}}"
                         itemOnSale="{{$section['products'][$i]->is_on_sale}}"
+                        itemTag="{{'/#' . $section['title'] }}"
 
                     ></x-home-products>
                 @endfor
