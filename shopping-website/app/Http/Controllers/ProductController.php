@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -42,9 +43,12 @@ class ProductController extends Controller
         $categories = DB::table('product_categories')->get();
         $category = DB::table('product_categories')->where('id', '=', $product->category_id)->value('name');
         $cartItemsCount = 0;
-        $backURL = (string) $request->input('url');
+        $backURL = (string)$request->input('url');
         if ($request->input('page')) {
-            $backURL = 'products/' . $request->input('searching_category') . '?page=' . $request->input('page');
+            $backURL = $request->input('searching_category') . '?page=' . $request->input('page');
+            if (!Str::contains($backURL, 'sales')) {
+                $backURL = '/products/' . $backURL;
+            }
         }
         if (session()->has('cart_id')) {
             $cartId = session('cart_id');
@@ -59,7 +63,8 @@ class ProductController extends Controller
         ]);
     }
 
-    public function addToCart($product_id)
+    public
+    function addToCart($product_id)
     {
         $cartId = Session::get('cart_id');
 
@@ -110,13 +115,15 @@ class ProductController extends Controller
         }
     }
 
-    public function create()
+    public
+    function create()
     {
         $categories = ProductCategory::all();
         return view('pages/product-create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required',

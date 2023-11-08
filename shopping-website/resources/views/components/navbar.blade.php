@@ -13,7 +13,7 @@
            <x-searchbar></x-searchbar>
            <div class="user-menu-controls">
                @auth
-                   <a href="/cart" class="menu-button"><span class="material-icons-sharp">shopping_cart</span>Cart <span class="cart-info-badge"> {{ $cartItemsCount }}</span></a>
+                   <a href="/cart" class="menu-button"><span class="material-icons-sharp">shopping_cart</span>Cart <span id="cart-items-count" class="cart-info-badge"> {{ $cartItemsCount }}</span></a>
                    <a href="/profile" class="menu-button"><span class="material-icons-sharp">account_circle</span>Profile</a>
                @else
                    <a href="/login" class="menu-button"><span class="material-icons-sharp">account_circle</span>Login</a>
