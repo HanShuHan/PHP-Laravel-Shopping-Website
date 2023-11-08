@@ -13,7 +13,7 @@
             <div class="card-text small mb-1 d-flex align-items-center">
                 @for ($i = 1; $i <= 5; $i++)
                     @if ($i <= $itemRating)
-                        <span class="material-icons-sharp text-dark" style="font-size: 1rem;">
+                        <span class="material-icons-sharp card-star" style="font-size: 1rem;">
                 star
             </span>
                     @else

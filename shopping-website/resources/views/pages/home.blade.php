@@ -12,8 +12,8 @@
 
     @foreach ([['title' => 'Under $20', 'products' => $under20],
               ['title' => 'Highest Rated', 'products' => $highestRated],
-              ['title' => 'Newest in Dry Goods', 'products' => $latestDryGoods],
-              ['title' => 'Newest Supplies', 'products' => $latestSupplies]]
+              ['title' => 'Newest in Cookies', 'products' => $latestDryGoods],
+              ['title' => 'Newest Soups', 'products' => $latestSupplies]]
               as $section)
         <div class="product-home-container container my-5">
             <h1 class="mb-4">{{ $section['title'] }}</h1>

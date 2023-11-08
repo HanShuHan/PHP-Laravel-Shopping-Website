@@ -1,7 +1,9 @@
 <x-new-layout>
-
-    <a href="/profile" class="btn btn-dark my-3 mx-3">Back</a>
-    <h3 class="mx-3">Order - #{{ $order->order_number }}</h3>
+    <x-navbar
+        cartItemsCount="{{$cartItemsCount}}"
+        :categories="$categories"/>
+    <a href="/profile" class="btn btn-dark card-btn my-3 mx-3">Back</a>
+    <h3 class="mx-3 green-text">Order - #{{ $order->order_number }}</h3>
     <table class="table table-striped mx-3">
         <thead>
             <tr>
@@ -43,7 +45,7 @@
                 <th>
                     <h2><strong>Total Cost:</strong></h2>
                 </th>
-                <th>${{ $order->total_cost }}</th>
+                <th><strong>${{ $order->total_cost }}</strong></th>
             </tr>
         </tbody>
     </table>

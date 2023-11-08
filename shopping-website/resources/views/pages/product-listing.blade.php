@@ -5,7 +5,7 @@
 
     @if (session('success'))
         <div class="container d-flex justify-content-center align-items-center mt-5">
-            <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+            <div class="alert alert-success alert-dismissible fade show mt-5 green" role="alert">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

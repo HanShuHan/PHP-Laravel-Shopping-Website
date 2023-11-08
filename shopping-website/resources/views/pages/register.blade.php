@@ -9,7 +9,7 @@
             <form action="/register" method="POST" id="registrationForm" class="text-dark">
                 @csrf
                 <div class="mb-3">
-                    <label for="username_register" class="form-label">Username:</label>
+                    <label for="username_register" class="form-label green-text">Username:</label>
                     <input type="text" placeholder="Username" name="user_name" id="username_register" class="form-control" value="{{old('user_name')}}"/>
                     @error('user_name')
                     <p class="validation-error text-danger">{{$message}}</p>
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="email_register" class="form-label">Email: </label>
+                    <label for="email_register" class="form-label green-text">Email: </label>
                     <input type="email" placeholder="Email" name="email" id="email_register" class="form-control" value="{{old('email')}}">
                     @error('email')
                     <p class="validation-error text-danger">{{$message}}</p>
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="pass_register" class="form-label">Password: </label>
+                    <label for="pass_register" class="form-label green-text">Password: </label>
                     <input type="password" placeholder="Password" name="password" id="pass_register" class="form-control">
                     @error('password')
                     <p class="validation-error text-danger">{{$message}}</p>
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="pass_confirm_register" class="form-label">Confirm Password: </label>
+                    <label for="pass_confirm_register" class="form-label green-text">Confirm Password: </label>
                     <input type="password" placeholder="Confirm Password" name="password_confirmation" id="pass_confirm_register" class="form-control">
                     @error('password_confirmation')
                     <p class="validation-error text-danger">{{$message}}</p>
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="first_name_register" class="form-label">First Name:</label>
+                    <label for="first_name_register" class="form-label green-text">First Name:</label>
                     <input type="text" name="first_name" placeholder="First Name" id="first_name_register" class="form-control" value="{{old('first_name')}}"/>
                     @error('first_name')
                     <p class="validation-error text-danger">{{$message}}</p>
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="last_name_register" class="form-label">Last Name:</label>
+                    <label for="last_name_register" class="form-label green-text">Last Name:</label>
                     <input type="text" name="last_name" placeholder="Last Name" id="last_name_register" class="form-control" value="{{old('last_name')}}"/>
                     @error('last_name')
                     <p class="validation-error text-danger">{{$message}}</p>

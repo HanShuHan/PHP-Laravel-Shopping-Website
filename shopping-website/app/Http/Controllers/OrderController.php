@@ -6,8 +6,10 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -16,7 +18,12 @@ class OrderController extends Controller
     public function showOrder(Request $request) {
         $cartId = Session::get('cart_id');
         $cartItems = CartItem::with('product')->where('cart_id', $cartId)->get();
-        return view('pages.checkout-summary', ['cartItems' => $cartItems]);
+        $categories = DB::table('product_categories')->get();
+        return view('pages.checkout-summary', [
+            'cartItems' => $cartItems,
+            'categories' => $categories,
+            'cartItemsCount' => $cartItems->sum('quantity')
+        ]);
     }
 
     public function viewPlacedOrder($orderId) {
@@ -24,9 +31,17 @@ class OrderController extends Controller
         $cart = Cart::where('id', $order->cart_id)->first();
         $cartItems = CartItem::where('cart_id', $cart->id)->with('product')->get();
 
+        $currentId = Session::get('cart_id');
+        $cartItemsCount = 0;
+
+        if($currentId)
+            $cartItemsCount = CartItem::where('cart_id', $currentId)->sum('quantity');
+
         return view('pages/order', [
             'order' => $order,
-            'items' => $cartItems
+            'items' => $cartItems,
+            'cartItemsCount' => $cartItemsCount,
+            'categories' => DB::table('product_categories')->get()
         ]);
     }
     public function processOrder(Request $request) {
