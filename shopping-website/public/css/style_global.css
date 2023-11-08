@@ -4,23 +4,55 @@ body {
     top: 0;
     left: 0;
     width: 100% !important;
+    background-color: #efefef !important;
 }
 
-.my-h1 {
-    color: green;
-}
 
-.my-h2 {
+.test-text {
     color: red;
 }
-
-.my-p1 {
-    color: blue;
+/* Navbar */
+nav.bg-dark {
+    background-color: #7FAD39!important;
 }
-
-.my-p2 {
-    color: #0c5460;
+@media screen and (min-width: 0) and (max-width: 782px) {
+    li.nav-item {
+        width: 20%!important;
+        transition: all .3s ease-in-out;
+        display: inline-block!important;
+        margin-bottom: 10px!important;
+    }    
 }
-
-
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: #7fad39 !important;
+    color: white !important;
+  }
+/* Login page */
+.login button[type="submit"],
+.register button[type="submit"] {
+    border: 1px solid #7FAD39;
+}
+.login button[type="submit"]:hover,
+.register button[type="submit"]:hover {
+    background-color: #7FAD39!important;
+    border: 1px solid #7FAD39;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+.login p a,
+.register p a {
+    color: #7FAD39!important;
+}
+.login a:active,
+.register a:active {
+    color: red!important
+}
+.login .form-parent,
+.register .form-parent {
+    box-shadow: 1px 0px 6px 2px #ddd;
+}
+.login span.note,
+.register span.note {
+    font-weight: bold;
+}
 

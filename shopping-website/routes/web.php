@@ -33,7 +33,7 @@ Route::get('/signup', function() {
     return view('pages.register');
 });
 
-//SEARCH BAR
+//SEARCH CONTROLLER
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 //USER CONTROLLER

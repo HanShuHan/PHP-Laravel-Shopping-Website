@@ -1,12 +1,12 @@
 <x-new-layout>
-    <div class="content d-flex justify-content-center align-items-center min-vh-100" style="background-color: #343a40;">
+    <div class="login content d-flex justify-content-center align-items-center min-vh-100">
 
         <a href="/" class="position-absolute top-0 start-0 p-4 text-white" style="font-size: 24px;">
             <span class="material-icons-sharp">
                 chevron_left
             </span>
         </a>
-        <div class="form-parent col center p-5 rounded" style="max-width: 500px; background-color: white;">
+        <div class="mt-4 mb-4 form-parent col center p-5 rounded" style="max-width: 500px; background-color: white;">
             @if (session('warning'))
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     {{ session('warning') }}
@@ -17,7 +17,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="username_login" class="form-label">Username:</label>
-                    <input type="text" name="user_name" id="username_login" class="form-control">
+                    <input type="text" name="user_name" id="username_login" class="form-control" placeholder="Username...">
                     @error('user_name')
                     <p class="validation-error text-danger">{{$message}}</p>
                     @enderror
@@ -25,10 +25,12 @@
 
                 <div class="mb-3">
                     <label for="password_login" class="form-label">Password:</label>
-                    <input type="password" name="password" id="password_login" class="form-control">
-                    @error('password')
+
+                    <input type="password" name="password" id="password_login" class="form-control" placeholder="Password...">
+                     @error('password')
                     <p class="validation-error text-danger">{{$message}}</p>
                     @enderror
+                    <input type="password" name="password" id="password_login" class="form-control">
                 </div>
 
                 <div class="d-grid gap-2 mb-3">
