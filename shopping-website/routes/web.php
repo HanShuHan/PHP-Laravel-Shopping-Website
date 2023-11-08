@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NavigationController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SearchController;
@@ -58,4 +59,6 @@ Route::post('/cart/edit/{product_id}', [\App\Http\Controllers\CartController::cl
 Route::post('/cart/remove/{item_id}', [\App\Http\Controllers\CartController::class, 'removeFromCart']);
 Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'clearCart']);
 
-
+//ORDER CONTROLLER
+Route::get('/checkout', [OrderController::class, 'showOrder']);
+Route::post('process-order', [OrderController::class, 'processOrder']);

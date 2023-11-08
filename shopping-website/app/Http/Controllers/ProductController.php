@@ -62,6 +62,7 @@ class ProductController extends Controller
     public function addToCart($product_id)
     {
         $cartId = Session::get('cart_id');
+
         if (!$cartId) {
             $cart = new Cart;
             $cart->id = fake()->uuid();
@@ -71,6 +72,16 @@ class ProductController extends Controller
             Session::put('cart_id', $cart->id);
         } else {
             $cart = Cart::find($cartId);
+        }
+
+        if (!$cart) {
+            // If the cart does not exist in the database, create a new cart and save it
+            $cart = new Cart;
+            $cart->id = fake()->uuid();
+            $cart->user_id = Auth::id();
+            $cart->total_cost = 0;
+            $cart->save();
+            Session::put('cart_id', $cart->id);
         }
 
         $cartItem = CartItem::where('cart_id', $cart->id)
