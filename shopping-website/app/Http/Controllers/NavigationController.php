@@ -13,7 +13,7 @@ class NavigationController extends Controller
         $categories = DB::table('product_categories')->get();
         $highestRate = DB::table('products')->where('rating', '>=', 4)->get();
         $latestDryGoods = DB::table('products')->where('category_id', '=', 2)->get();
-        $latestSupplies = DB::table('products')->whereIn('category_id', [3, 4])->get();
+        $latestSupplies = DB::table('products')->where('category_id', 3)->get();
         $under20 = DB::table('products')->where('price', '<=', 20)->get();
         $cartItemsCount = 0;
         if (session()->has('cart_id')) {

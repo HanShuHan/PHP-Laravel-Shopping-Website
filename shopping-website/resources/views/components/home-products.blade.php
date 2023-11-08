@@ -1,9 +1,11 @@
 <div class="product-card-small col-md-4 mb-5">
     <div class="card h-100 shadow-sm">
-        <a href="/product/{{$itemId}}"><img src="/images/place-holder.png" class="card-img-top" alt="{{ $itemName }}" style="max-height: 150px;object-fit: cover;"></a>
+        <a href="/product/{{$itemId}}">
+            <img src="{{ 'images/' . $itemPhoto }}" class="card-img-top my-img" alt="{{ $itemName }}" style="max-height: 150px;object-fit: cover;">
+        </a>
         <div class="card-body d-flex flex-column">
             <div class="card-title flex-grow-1">
-                <h6><a href="/product/{{$itemId}}" class="product-link text-decoration-none text-dark">{{ $itemName }}</a></h6>
+                <h6><a href="/product/{{$itemId}}" class="product-link text-decoration-none text-dark">{{ html_entity_decode($itemName) }}</a></h6>
             </div>
             <div class="card-text small mb-1">
                 <p>${{ $itemPrice }}</p>
