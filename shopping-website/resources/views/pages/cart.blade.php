@@ -1,16 +1,14 @@
-{{--Meta for Ajax--}}
-<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <x-new-layout>
     <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
 
     <div class="container mt-5 pt-5">
         <div class="text-left">
-            <h1 class="mt-4 mb-4">Your Cart</h1>
+            <h1 class="mt-4 mb-4 green-text">Your Cart</h1>
         </div>
 
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show green" role="alert">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -42,7 +40,7 @@
                         <td>
                             <form action="/cart/remove/{{$item->id}}" method="POST" class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-dark">Delete</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -54,8 +52,8 @@
         <div class="d-flex justify-content-between mt-3">
             <h4>Total: $<span id="total">{{ $total }}</span></h4>
             <div>
-                <a href="/checkout" class="btn btn-success">Checkout</a>
-                <a href="/" class="btn btn-dark me-2">Continue Shopping</a>
+                <a href="/checkout" class="btn btn-success card-btn">Checkout</a>
+                <a href="/" class="btn btn-dark me-2 card-btn">Continue Shopping</a>
                 <form action="/cart/clear" method="POST" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-danger">Clear Cart</button>

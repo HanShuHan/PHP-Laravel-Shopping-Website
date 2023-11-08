@@ -17,11 +17,11 @@
             </div>
 
             <div class="col-md-6">
-                <h1>{{html_entity_decode($product->name)}}</h1>
+                <h1 class="green-text">{{html_entity_decode($product->name)}}</h1>
                 <p class="lead">${{$product->price}}</p>
                 <div class="mb-3 d-flex align-items-center">
                     @for($i = 1; $i <= 5; $i++)
-                        <span class="material-icons-sharp {{ $product->rating >= $i ? 'text-dark' : '' }}">
+                        <span class="material-icons-sharp {{ $product->rating >= $i ? 'card-star' : '' }}">
                             {{ $product->rating >= $i ? 'star' : 'star_border' }}
                         </span>
                     @endfor
@@ -34,7 +34,7 @@
                 @auth
                     <form action="/cart/add/{{$product->id}}" method="POST" class="d-inline-block">
                         @csrf
-                        <button type="submit" class="btn btn-dark d-flex justify-content-center align-items-center"
+                        <button type="submit" class="btn btn-dark card-btn d-flex justify-content-center align-items-center"
                                 style="width: 200px;">
                             <span class="material-icons-sharp text-white me-2">
                                 shopping_cart
@@ -56,7 +56,7 @@
     </div>
 
     <a href="{{url($backURL)}}" class="position-absolute top-0 start-0 mt-5 ms-4 text-dark" style="transition: color 0.3s;">
-        <span class="material-icons-sharp mt-5 fs-1">
+        <span class="material-icons-sharp mt-5 fs-1 green-text">
             chevron_left
         </span>
     </a>

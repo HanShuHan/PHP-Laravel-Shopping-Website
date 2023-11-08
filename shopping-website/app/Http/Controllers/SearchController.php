@@ -27,7 +27,8 @@ class SearchController extends Controller
         return view('pages.search-results', [
             'products' => $products,
             'cartItemsCount' => $cartItemCount,
-            'categories' => $categories
+            'categories' => $categories,
+            'query' => $query
         ]);
     }
 }

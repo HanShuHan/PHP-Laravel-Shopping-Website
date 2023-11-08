@@ -2,7 +2,7 @@
     <div class="login content d-flex justify-content-center align-items-center min-vh-100">
 
         <a href="/" class="position-absolute top-0 start-0 p-4 text-white" style="font-size: 24px;">
-            <span class="material-icons-sharp">
+            <span class="material-icons-sharp hover-dark">
                 chevron_left
             </span>
         </a>
@@ -16,7 +16,7 @@
             <form action="/auth" class="form-container text-dark" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="username_login" class="form-label">Username:</label>
+                    <label for="username_login" class="form-label green-text">Username:</label>
                     <input type="text" name="user_name" id="username_login" class="form-control" placeholder="Username...">
                     @error('user_name')
                     <p class="validation-error text-danger">{{$message}}</p>
@@ -24,13 +24,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="password_login" class="form-label">Password:</label>
+                    <label for="password_login" class="form-label green-text">Password:</label>
 
                     <input type="password" name="password" id="password_login" class="form-control" placeholder="Password...">
                      @error('password')
                     <p class="validation-error text-danger">{{$message}}</p>
                     @enderror
-                    <input type="password" name="password" id="password_login" class="form-control">
+
                 </div>
 
                 <div class="d-grid gap-2 mb-3">
