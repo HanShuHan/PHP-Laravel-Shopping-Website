@@ -69,6 +69,17 @@
             margin-bottom: 2em;
             box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.1);
         }
+
+        .menu-item .menu-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease-in;
+        }
+
+        .menu-item .menu-link:hover {
+            color: var(--white400);
+            transition: color 0.3s ease-in;
+        }
         .menu-container {
             padding-top: 1em;
             background-color: var(--green500);

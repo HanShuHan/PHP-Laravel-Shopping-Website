@@ -4,6 +4,7 @@
            <ul>
                <li class="logo"><strong><em><a href="/">sHopper</a></em></strong></li>
                <li class="menu-item" id="contextActivator">Shop <span class="material-icons-sharp">expand_more</span></li>
+               <li class="menu-item"><a href="/sales" class="menu-link">On Sale</a></li>
                <li class="menu-item">Contact</li>
            </ul>
        </div>

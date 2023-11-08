@@ -6,7 +6,11 @@
             <p class="card-text mb-3" style="font-size: 0.6em;">{{ html_entity_decode($description) }}</p>
         </div>
         <div class="card-footer bg-white mt-auto">
-            <p class="price mb-1">Price: ${{ $price }}</p>
+            @if($onSale)
+                <p class="price mb-1"><del>Price: ${{ $price }}</del> <em>15% OFF! ${{$price - round($price * 0.15, 2, PHP_ROUND_HALF_UP)}}</em></p>
+            @else
+                <p class="price mb-1">Price: ${{ $price }}</p>
+            @endif
             <div class="card-text mb-3 d-flex justify-content-start">
                 @for ($i = 1; $i <= 5; $i++)
                     @if ($i <= $rating)

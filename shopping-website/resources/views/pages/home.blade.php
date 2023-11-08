@@ -27,7 +27,7 @@
                         itemRating="{{$section['products'][$i]->rating}}"
                         itemRatingCount="{{$section['products'][$i]->rating_count}}"
                         itemPhoto="{{$section['products'][$i]->photo}}"
-                        test="Hello World!"
+                        itemOnSale="{{$section['products'][$i]->is_on_sale}}"
 
                     ></x-home-products>
                 @endfor

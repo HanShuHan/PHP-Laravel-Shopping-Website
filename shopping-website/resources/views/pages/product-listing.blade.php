@@ -40,6 +40,7 @@
                             ratingCount="{{ $product->rating_count }}"
                             price="{{ $product->price }}"
                             photo="{{ $product->photo }}"
+                            onSale="{{ $product->is_on_sale }}"
                             page="{{ $products->currentPage() }}">
                         </x-product-card>
                     @endforeach
