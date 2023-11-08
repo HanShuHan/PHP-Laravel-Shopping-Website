@@ -35,7 +35,7 @@ Route::get('/signup', function() {
 
 //SEARCH CONTROLLER
 Route::get('/search', [SearchController::class, 'search'])->name('search');
-
+Route::get('/sales', [SearchController::class, 'listOnSale']);
 //USER CONTROLLER
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/register', [UserController::class, 'register']);

@@ -28,7 +28,22 @@ class SearchController extends Controller
             'products' => $products,
             'cartItemsCount' => $cartItemCount,
             'categories' => $categories,
-            'query' => $query
+            'query' => $query,
+            'onSale' => false
+        ]);
+    }
+
+    public function listOnSale() {
+        $cart = Cart::where('id', Session::get('cart_id'));
+        $products = Product::where('is_on_sale', true)->paginate(12);
+        $cartItemCount = CartItem::where('cart_id', $cart->value('id'))->sum('quantity');
+        $categories = DB::table('product_categories')->get();
+        return view('pages.search-results', [
+            'products' => $products,
+            'cartItemsCount' => $cartItemCount,
+            'categories' => $categories,
+            'onSale' => true
+
         ]);
     }
 }

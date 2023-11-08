@@ -2,7 +2,12 @@
 <x-new-layout>
     <x-navbar cartItemsCount="{{ $cartItemsCount }}" :categories="$categories"></x-navbar>
     <div class="container-fluid mt-5 pt-5 search-results">
-        <h3 class="green-text mb-5">Results for {{ strtolower($query) }}</h3>
+        @if($onSale)
+
+        @else
+            <h3 class="green-text mb-5">Results for {{ strtolower($query) }}</h3>
+        @endif
+
         <div class="row">
             <!-- Product container -->
             <div class="col-md-9">
@@ -16,7 +21,8 @@
                             ratingCount="{{ $product->rating_count }}"
                             price="{{ $product->price }}"
                             photo="{{ $product->photo }}"
-                            page="{{ $products->currentPage() }}">
+                            page="{{ $products->currentPage() }}"
+                            onSale="{{ $product->is_on_sale }}">
                         </x-product-card>
                     @empty
                         <div class="col-12">

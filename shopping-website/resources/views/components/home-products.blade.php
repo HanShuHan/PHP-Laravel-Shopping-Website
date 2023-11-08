@@ -8,7 +8,12 @@
                 <h6><a href="/product/{{$itemId}}" class="product-link text-decoration-none text-dark">{{ html_entity_decode($itemName) }}</a></h6>
             </div>
             <div class="card-text small mb-1">
-                <p>${{ $itemPrice }}</p>
+                @if($itemOnSale)
+                    <p><del>${{ $itemPrice }}</del> <em>15% OFF!</em> ${{$itemPrice - round($itemPrice * 0.15, 2, PHP_ROUND_HALF_UP)}}</p>
+                @else
+                    <p>${{ $itemPrice }}</p>
+                @endif
+
             </div>
             <div class="card-text small mb-1 d-flex align-items-center">
                 @for ($i = 1; $i <= 5; $i++)
