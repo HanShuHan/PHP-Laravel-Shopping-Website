@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Product;
@@ -18,6 +19,16 @@ class OrderController extends Controller
         return view('pages.checkout-summary', ['cartItems' => $cartItems]);
     }
 
+    public function viewPlacedOrder($orderId) {
+        $order = Order::where('id', $orderId)->first();
+        $cart = Cart::where('id', $order->cart_id)->first();
+        $cartItems = CartItem::where('cart_id', $cart->id)->with('product')->get();
+
+        return view('pages/order', [
+            'order' => $order,
+            'items' => $cartItems
+        ]);
+    }
     public function processOrder(Request $request) {
         $request->validate([
             'first_name' => 'required|string',

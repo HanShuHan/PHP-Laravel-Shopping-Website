@@ -163,6 +163,33 @@
                         <button type="submit" class="btn btn-danger">Logout</button>
                     </form>
                 </div>
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Order #</th>
+                                <th scope="col">Total ($)</th>
+                                <th scope="col">Placed On</th>
+                                <th scope="col">Delivery Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach($orders as $order)
+                                <tr>
+                                    <th scope="row">{{ $order->order_number }}</th>
+                                    <td>{{ $order->total_cost }}</td>
+                                    <td>{{ $order->created_at }}</td>
+                                    <td>{{ ($order->delivered) ? "Delivered" : "Out for delivery" }}</td>
+                                    <td>
+                                        <a href=" {{ "/order/" .$order->id }}">View Detail</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

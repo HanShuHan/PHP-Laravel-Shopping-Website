@@ -61,4 +61,5 @@ Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'clearC
 
 //ORDER CONTROLLER
 Route::get('/checkout', [OrderController::class, 'showOrder']);
-Route::post('process-order', [OrderController::class, 'processOrder']);
+Route::post('/process-order', [OrderController::class, 'processOrder']);
+Route::get('/order/{orderId}', [OrderController::class, 'viewPlacedOrder']);

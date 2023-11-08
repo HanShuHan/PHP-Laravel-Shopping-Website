@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+use App\Models\Order;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -30,10 +31,14 @@ class UserController extends Controller
             $cartItemsCount = CartItem::where('cart_id', $cartId)->sum('quantity');
         }
         $user = auth()->user();
+
+        $orders = Order::where('user_id', $user->id)->get();
+
         return view('pages/user-profile', [
             'user' => $user,
             'cartItemsCount' => $cartItemsCount,
-            'categories' => $categories
+            'categories' => $categories,
+            'orders' => $orders
         ]);
     }
 

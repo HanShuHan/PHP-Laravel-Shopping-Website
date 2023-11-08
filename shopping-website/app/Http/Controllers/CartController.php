@@ -18,6 +18,7 @@ class CartController extends Controller
         $cartItemsCount = CartItem::where('cart_id', $cartId)->sum('quantity');
 
         $total = 0;
+
         foreach ($cartItems as $item) {
             $itemPrice = DB::table('products')->where('id', '=', $item->product_id)->value('price');
             $total += $itemPrice * $item->quantity;
