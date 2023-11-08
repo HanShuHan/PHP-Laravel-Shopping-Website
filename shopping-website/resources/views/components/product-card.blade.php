@@ -1,6 +1,6 @@
 <div class="col-md-3 mb-4">
     <div class="card h-100 d-flex flex-column">
-        <img class="card-img-top" src="{{ asset('storage/' . $photo ) }}" alt="{{ $name }}">
+        <img class="card-img-top" src="{{ asset('storage/app/public/' . $photo ) }}" alt="{{ $name }}">
         <div class="card-body flex-grow-1">
             <h5 class="card-title">{{ html_entity_decode($name) }}</h5>
             <p class="card-text mb-3" style="font-size: 0.6em;">{{ html_entity_decode($description) }}</p>
