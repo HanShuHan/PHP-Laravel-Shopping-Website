@@ -1,8 +1,8 @@
 <x-new-layout>
 
-<x-navbar
-    cartItemsCount="{{$cartItemsCount}}"
-    :categories="$categories"></x-navbar>
+    <x-navbar
+        cartItemsCount="{{$cartItemsCount}}"
+        :categories="$categories"></x-navbar>
 
     <div class="container d-flex justify-content-center align-items-center mb-4">
 
@@ -14,7 +14,12 @@
                     <tbody>
                     @foreach($cartItems as $item)
                         <tr>
-                            <td><img src="{{ '/images/' . $item->product->photo }}" alt="" width="50px" height="50px" class="mx-2">{{ $item->product->name }}</td>
+                            <td>
+                                <a href="{{ route('product.index', ['product_id' => $item->product->id, 'url' => request()->getRequestUri() ]) }}">
+                                    <img src="{{ '/images/' . $item->product->photo }}" alt="" width="50px"
+                                         height="50px" class="mx-2">{{ $item->product->name }}
+                                </a>
+                            </td>
                             <td>x{{ $item->quantity }}</td>
                             <td>${{ $item->quantity * $item->product->price }}</td>
                         </tr>
@@ -30,7 +35,6 @@
                     @endphp
 
 
-
                     </tbody>
                 </table>
 
@@ -38,18 +42,18 @@
                     <tbody>
                     <tr>
                         <td></td>
-                        <td>Item Total: </td>
+                        <td>Item Total:</td>
                         <td>${{ $totalBeforeTax }}</td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>Tax: </td>
+                        <td>Tax:</td>
                         <td> {{ $tax }}</td>
                     </tr>
 
                     <tr>
                         <td></td>
-                        <td>Est Shipping: </td>
+                        <td>Est Shipping:</td>
                         <td> {{ $estShipping }}</td>
                     </tr>
 
@@ -72,7 +76,8 @@
                 <p class="validation-error text-danger">{{$message}}</p>
                 @enderror
                 <label for="first_name">First Name: </label>
-                <input class="my-3 mx-2" type="text" name="first_name" id="first_name" value="{{ auth()->user()->first_name }}">
+                <input class="my-3 mx-2" type="text" name="first_name" id="first_name"
+                       value="{{ auth()->user()->first_name }}">
 
                 @error('last_name')
                 <p class="validation-error text-danger">{{$message}}</p>
@@ -93,7 +98,8 @@
                     <p class="validation-error text-danger">{{$message}}</p>
                     @enderror
                     <label for="phone">Phone Number: </label>
-                    <input class="mx-3 my-2" type="tel" name="phone" id="phone" value="{{ auth()->user()->phone_number }}">
+                    <input class="mx-3 my-2" type="tel" name="phone" id="phone"
+                           value="{{ auth()->user()->phone_number }}">
                 </div>
 
                 <div>
@@ -101,7 +107,8 @@
                     <p class="validation-error text-danger">{{$message}}</p>
                     @enderror
                     <label for="address1">Address Line 1: </label>
-                    <input class="mx-3 my-2" type="text" name="address1" id="address1" value="{{ auth()->user()->address_line1 }}">
+                    <input class="mx-3 my-2" type="text" name="address1" id="address1"
+                           value="{{ auth()->user()->address_line1 }}">
                 </div>
 
                 <div>
@@ -109,7 +116,8 @@
                     <p class="validation-error text-danger">{{$message}}</p>
                     @enderror
                     <label for="address2">Address Line 2: </label>
-                    <input class="mx-3 my-2" type="text" name="address2" id="address2" value="{{ auth()->user()->address_line2 }}">
+                    <input class="mx-3 my-2" type="text" name="address2" id="address2"
+                           value="{{ auth()->user()->address_line2 }}">
                 </div>
 
                 <div>
@@ -123,14 +131,16 @@
                     <p class="validation-error text-danger">{{$message}}</p>
                     @enderror
                     <label for="province">Province: </label>
-                    <input class="mx-3 my-2" type="text" name="province" id="province" value="{{ auth()->user()->province }}">
+                    <input class="mx-3 my-2" type="text" name="province" id="province"
+                           value="{{ auth()->user()->province }}">
                 </div>
 
                 @error('postalCode')
                 <p class="validation-error text-danger">{{$message}}</p>
                 @enderror
                 <label for="postalCode">Postal Code: </label>
-                <input class="mx-3 my-2" type="text" name="postalCode" id="postalCode" value="{{ auth()->user()->postal_code }}">
+                <input class="mx-3 my-2" type="text" name="postalCode" id="postalCode"
+                       value="{{ auth()->user()->postal_code }}">
 
             </div>
             <h1 class="green-text">Billing Info:</h1>

@@ -1,4 +1,3 @@
-
 <x-new-layout>
     <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
 
@@ -27,7 +26,13 @@
                 <tbody>
                 @foreach($cartItems as $item)
                     <tr class="{{ $loop->iteration % 2 == 0 ? 'table-secondary' : '' }}">
-                        <td>{{$item->product->name}}</td>
+                        <td>
+                            <a href="{{ route('product.index', ['product_id' => $item->product->id, 'url' => request()->getRequestUri() ]) }}">
+                                <img src="{{ '/images/' . $item->product->photo }}" alt="" width="50px" height="50px"
+                                     class="mx-2">{{ $item->product->name }}
+                            </a>
+                        </td>
+                        <td>{{ $item->product->name }}</td>
                         <td>{{ $item->product->price }}</td>
                         <td>
                             <select class="item-quantity" data-product-id="{{ $item->product->id }}">
