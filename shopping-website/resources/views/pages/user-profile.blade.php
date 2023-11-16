@@ -2,7 +2,7 @@
     <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
     <div class="container rounded bg-white mt-5 mb-5">
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show mt-5 green" role="alert" style="top: 2rem; position: relative;">
+            <div class="alert alert-success alert-dismissible fade show mt-5 green`" role="alert" style="top: 2rem; position: relative;">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
