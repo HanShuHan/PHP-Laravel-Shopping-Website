@@ -26,7 +26,7 @@
             <div class="menu-right">
                 <div class="search-bar">
                     <input type="text" id="searchBar" placeholder="Search products...">
-                    <a href="/products/results.html" class="search-bar-button" id="searchButton"><span class="material-icons-sharp search-btn">search</span></a>
+                    <a href="/search" class="search-bar-button" id="searchButton"><span class="material-icons-sharp search-btn">search</span></a>
                 </div>
     
                 <div class="user-menu-controls">
@@ -49,32 +49,33 @@
     </nav>
     <!-- END OF NAV -->
 
-    <!-- Carousel -->
+    <div class="back-icon">&#9664;</div>
 
-    <div class="wrapper">
-        <ul class="slides">
-            <li><img src="image/slide1.jpg" alt=""></li>
-            <li><img src="image/slide2.jpg" alt=""></li>
-            <li><img src="image/slide3.jpg" alt=""></li>
-            <li><img src="image/slide4.jpg" alt=""></li>
-        </ul>
-        <ul class="dot">
-            <li id="1"></li>
-            <li id="2"></li>
-            <li id="3"></li>
-            <li id="4"></li>
-        </ul>
-        <div id="prevSlide" class="slide_btn">
-            <i class="fas fa-caret-left"></i>
-        </div>
-        <div id="nextSlide" class="slide_btn">
-            <i class="fas fa-caret-right"></i>
+    <div class="user-page-container">
+        <div class="form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" minlength="4" maxlength="20" required>
+                <div id="username-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength="6" required>
+                <div id="password-error" class="error-message"></div>
+            </div>
+    
+            <button type="button" onclick="loginValidateAndNavigate()" class="form-button">Sign In</button>
+    
+            <br><br>
+    
+            <p><a href="forgot_password.html" class="forgot-password">Forgot my password?</a></p>
+    
+            <p>Don't have an account? <a href="register.html" class="register-link">Register</a></p>
         </div>
     </div>
 
-    <!-- End of Carousel -->
-
-
+    
     <script src="js/jquery-3.6.0.min.js" defer></script>
     <script src="js/indexnew.js" defer></script>
 </body>

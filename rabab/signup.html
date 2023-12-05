@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet" />
+    
 </head>
 
 <body>
@@ -26,7 +27,7 @@
             <div class="menu-right">
                 <div class="search-bar">
                     <input type="text" id="searchBar" placeholder="Search products...">
-                    <a href="/products/results.html" class="search-bar-button" id="searchButton"><span class="material-icons-sharp search-btn">search</span></a>
+                    <a href="/search" class="search-bar-button" id="searchButton"><span class="material-icons-sharp search-btn">search</span></a>
                 </div>
     
                 <div class="user-menu-controls">
@@ -48,33 +49,54 @@
         </div>
     </nav>
     <!-- END OF NAV -->
+    <div class="back-icon">&#9664;</div>
 
-    <!-- Carousel -->
-
-    <div class="wrapper">
-        <ul class="slides">
-            <li><img src="image/slide1.jpg" alt=""></li>
-            <li><img src="image/slide2.jpg" alt=""></li>
-            <li><img src="image/slide3.jpg" alt=""></li>
-            <li><img src="image/slide4.jpg" alt=""></li>
-        </ul>
-        <ul class="dot">
-            <li id="1"></li>
-            <li id="2"></li>
-            <li id="3"></li>
-            <li id="4"></li>
-        </ul>
-        <div id="prevSlide" class="slide_btn">
-            <i class="fas fa-caret-left"></i>
-        </div>
-        <div id="nextSlide" class="slide_btn">
-            <i class="fas fa-caret-right"></i>
+    <div class="user-page-container">
+        <div class="form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" minlength="4" maxlength="20" required>
+                <div id="username-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <div id="email-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength="6" required>
+                <div id="password-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" minlength="6" required>
+                <div id="confirm-password-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name" required>
+                <div id="first-name-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last-name" required>
+                <div id="last-name-error" class="error-message"></div>
+            </div>
+    
+            <button type="button" onclick="registerValidateAndSubmit()" class="form-button">Register</button>
+    
+            <br><br>
+    
+            <p>Already have an account? <a href="login.html" class="login-link">Login</a></p>
         </div>
     </div>
-
-    <!-- End of Carousel -->
-
-
+    
     <script src="js/jquery-3.6.0.min.js" defer></script>
     <script src="js/indexnew.js" defer></script>
 </body>

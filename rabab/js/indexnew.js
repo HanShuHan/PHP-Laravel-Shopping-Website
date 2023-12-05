@@ -1,9 +1,34 @@
+let loggedIn = JSON.parse(localStorage.getItem('authStatus'));
+let activeUser = null;
 
-// Main 
 
+//#region Main function
+//AUTHORS: Shuhan Han and Michael Boisvenu-Landry
 $(function () {
     
-    userAuthContextHandler(true);
+    searchInit();
+    if(loggedIn === null) {
+         loggedIn = false;
+         localStorage.setItem('authStatus', JSON.stringify(loggedIn));
+    }
+    else {
+        if(loggedIn) {
+            activeUser = JSON.parse(localStorage.getItem('activeUser'));
+        }
+    }
+    
+    
+    //debug stuff - remove
+    console.log(localStorage.getItem('authStatus'));
+    const users = JSON.parse(localStorage.getItem('users'));
+    console.log(users);
+    if(activeUser === null) {
+        console.log("No adctive user")
+    }
+    else {
+        console.log(activeUser);
+    }
+    userAuthContextHandler(loggedIn);
 
     if (window.location.href.includes("index.html")) {
         play_carousel();
@@ -11,14 +36,685 @@ $(function () {
     }
 
     if(window.location.href.includes("product.html")) {
-        console.log('product page');
         loadProductInfo();
+        document.getElementById('successMessage').style.display = 'none';
+    }
+
+    if(window.location.href.includes('cart.html')) {
+        loadCartData();
+    }
+
+    if(window.location.href.includes('all.html')) {
+        document.getElementById('searchButton').href = '../products/results.html';
+        loadProducts('all');
+    }
+
+    if(window.location.href.includes('drinks.html')) {
+        document.getElementById('searchButton').href = '../products/results.html';
+        loadProducts('drinks');
+    }
+
+    if(window.location.href.includes('cookies.html')) {
+        document.getElementById('searchButton').href = '../products/results.html';
+        loadProducts('cookies');
+    }
+
+    if(window.location.href.includes('soups.html')) {
+        document.getElementById('searchButton').href = '../products/results.html';
+        loadProducts('soups');
+    }
+
+    if(window.location.href.includes('login.html')) {
+        if(loggedIn)
+            window.location.href = './index.html';
+        else {
+            document.getElementById('username').addEventListener('blur', validate);
+            document.getElementById('password').addEventListener('blur', validate);
+        }
+    }
+
+    if(window.location.href.includes('signup.html')) {
+        if(loggedIn)
+            window.location.href = './index.html';
+        else {
+            document.getElementById('username').addEventListener('blur', validate);
+            document.getElementById('email').addEventListener('blur', validate);
+            document.getElementById('password').addEventListener('blur', validate);
+            document.getElementById('confirm-password').addEventListener('blur', validate);
+            document.getElementById('first-name').addEventListener('blur', validate);
+            document.getElementById('last-name').addEventListener('blur', validate);
+        }
+    }
+
+    if(window.location.href.includes('profile.html')) {
+        loadUserProfile(activeUser);
+        
+    }
+
+    if(window.location.href.includes('results.html')) {
+        document.getElementById('searchButton').href = '../products/results.html';
+        searchProducts(getSearchTerm());
     }
     
 });
 
-// End of Main
+//#endregion
 
+//#region Search
+//AUTHOR: David Currey
+function searchInit() {
+        // Get a reference to the form and input element
+    const searchButton = document.getElementById('searchButton');
+    const searchInput = document.getElementById('searchBar');
+
+    // Add an event listener to the form's submit event
+    searchButton.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the form from actually submitting
+
+        // Get the user's input
+        const userInput = searchInput.value;
+
+        // Redirect to results.html with searchTerm as a query parameter
+        window.location.href = `./products/results.html?searchTerm=${encodeURIComponent(userInput)}`;
+    });
+}
+
+function getSearchTerm() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    return urlParams.get('searchTerm') || '';
+}
+
+function searchProducts(keyword) {
+    const categories = [drinks, cookies, soups];
+    const matchingProducts = [];
+
+    categories.forEach(category => {
+        category['product'].forEach(product => {
+            if(product['name'].toLowerCase().includes(keyword.toLowerCase()) 
+                || product['description'].toLowerCase().includes(keyword.toLowerCase())) {
+                    matchingProducts.push({...product, 'category': category})
+            }
+        });
+    });
+    createProductCards(matchingProducts);
+    document.getElementById('resultText').innerText = `Results for: "${keyword}"`;
+    document.getElementById('resultCount').innerText = (matchingProducts.length != 1) ? `${matchingProducts.length} results...` : `1 result...`;
+}
+//#endregion
+
+//#region User Profile
+//AUTHORS: Nnamdi Echegini and Michael Boisvenu-Landry
+function loadUserProfile(user) {
+    const noneText = 'None'
+    function fieldEmpty(property) {
+        return (property === '' || property === noneText)
+    }
+
+    if(user === null)
+        window.location.href = 'index.html';
+    else {
+        const allUsers = JSON.parse(localStorage.getItem('users'));
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            loggedIn = false;
+            localStorage.setItem('authStatus', JSON.stringify(loggedIn));
+            window.location.href = 'index.html';
+        });
+
+        const profilePicture = document.getElementById('profilePhoto');
+        profilePicture.src = user['profilePicture'];
+        profilePicture.alt = user['username'] + "'s Profile Picture";
+
+        document.getElementById('userNameDisplay').innerText = user['username'];
+        document.getElementById('emailDisplay').innerText = user['email'];
+
+        document.getElementById('firstname').value = (!fieldEmpty(user['firstName'])) ? user['firstName'] : noneText;
+        document.getElementById('lastname').value = (!fieldEmpty(user['lastName'])) ? user['lastName'] : noneText;
+        document.getElementById('username').value = (!fieldEmpty(user['username'])) ? user['username'] : noneText;
+        document.getElementById('email').value = (!fieldEmpty(user['email'])) ? user['email'] : noneText;
+        document.getElementById('mobileNumber').value = (!fieldEmpty(user['phoneNumber'])) ? user['phoneNumber'] : noneText;
+        document.getElementById('addressLine1').value = (!fieldEmpty(user['addressLine1'])) ? user['addressLine1'] : noneText;
+        document.getElementById('addressLine2').value = (!fieldEmpty(user['addressLine2'])) ? user['addressLine2'] : noneText;
+        document.getElementById('postalCode').value = (!fieldEmpty(user['postalCode'])) ? user['postalCode'] : noneText;
+        document.getElementById('province').value = (!fieldEmpty(user['province'])) ? user['province'] : noneText;
+        document.getElementById('city').value = (!fieldEmpty(user['city'])) ? user['city'] : noneText;
+
+        document.getElementById('dpButton').addEventListener('click', () => {
+            const uploadInput = document.createElement('input');
+            uploadInput.type = 'file';
+            uploadInput.accept = 'image/*';
+            uploadInput.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        profilePicture.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                    
+
+                }
+            });
+
+            uploadInput.click();
+        });
+        document.getElementById('submitProfileButton').addEventListener('click', () => {
+            let firstName = '';
+            let lastName = '';
+            let userName = '';
+            let email = '';
+            let mobileNumber = '';
+            let postalCode = '';
+            let province = '';
+            let city = '';
+
+            function validateFirstName() {
+                firstName = document.getElementById("firstname").value;
+                if (firstName.trim() === "" || firstName === noneText) {
+                    return "First Name is required.";
+                }
+                return "";
+            }
+            
+            function validateLastName() {
+                lastName = document.getElementById("lastname").value;
+                if (lastName.trim() === "" || lastName === noneText) {
+                    return "Last Name is required.";
+                }
+                return "";
+            }
+            
+            function validateUserName() {
+                userName = document.getElementById("username").value;
+                if (userName.trim() === "" || userName === noneText) {
+                    return "User Name is required.";
+                }
+                return "";
+            }
+            
+            function validateEmail() {
+                email = document.getElementById("email").value;
+               
+                if (email.trim() === "" || email === noneText) {
+                    return "Email is required.";
+                }
+                
+                function countSymbols(emailString, symbol) {
+                    let count = 0;
+                    for(let i = 0; i < emailString.length; i++)
+                        if(emailString[i] === symbol)
+                            count++;
+                    
+                    return count;
+                }
+
+                const dotCount = countSymbols(email, '.');
+                const atCount = countSymbols(email, '@');
+
+                if(atCount !== 1 || dotCount !== 1)
+                    return "Email is in an invalid format.";
+                
+                return "";
+            }
+            
+            function validateMobileNumber() {
+                mobileNumber = document.getElementById("mobileNumber").value;
+                
+
+                if(mobileNumber.length != 10) {
+                    return "Phone number must be 10 digits.";
+                }
+                
+                return "";
+            }
+            
+            function validatePostalCode() {
+                postalCode = document.getElementById("postalCode").value;
+                if (postalCode.trim() === "") {
+                    return "Postal Code is required.";
+                }
+
+                if(postalCode.trim().length !== 6) {
+                    return "Postal code must be 6 characters."
+                }
+                
+                return "";
+            }
+            
+            function validateProvince() {
+                province = document.getElementById("province").value;
+                if (province.trim() === "" || province === noneText) {
+                    return "Province is required.";
+                }
+                return "";
+            }
+            
+            function validateCity() {
+                city = document.getElementById("city").value;
+                if (city.trim() === "" || city === noneText) {
+                    return "City is required.";
+                }
+                return "";
+            }
+            
+            function clearError(errorSpan) {
+                if (errorSpan) {
+                    errorSpan.textContent = "";
+                }
+            }
+
+            // Validate First Name
+            let firstNameErrorSpan = document.getElementById("firstNameError");
+            let firstNameError = validateFirstName();
+            clearError(firstNameErrorSpan);
+            if (firstNameError !== "") {
+                firstNameErrorSpan.textContent = firstNameError;
+                return; // Stop submission if there's an error
+            }
+
+            // Validate Last Name
+            let lastNameErrorSpan = document.getElementById("lastNameError");
+            let lastNameError = validateLastName();
+            clearError(lastNameErrorSpan);
+            if (lastNameError !== "") {
+                lastNameErrorSpan.textContent = lastNameError;
+                return;
+            }
+
+            // Validate User Name
+            let userNameErrorSpan = document.getElementById("userNameError");
+            let userNameError = validateUserName();
+            clearError(userNameErrorSpan);
+            if (userNameError !== "") {
+                userNameErrorSpan.textContent = userNameError;
+                return;
+            }
+
+            // Validate Email
+            let emailErrorSpan = document.getElementById("emailError");
+            let emailError = validateEmail();
+            clearError(emailErrorSpan);
+            if (emailError !== "") {
+                emailErrorSpan.textContent = emailError;
+                return;
+            }
+            
+
+            // Validate Mobile Number
+            let mobileNumberErrorSpan = document.getElementById("mobileNumberError");
+            let mobileNumberError = validateMobileNumber();
+            clearError(mobileNumberErrorSpan);
+            if (mobileNumberError !== "") {
+                mobileNumberErrorSpan.textContent = mobileNumberError;
+                return;
+            }
+
+            // Validate Postal Code
+            let postalCodeErrorSpan = document.getElementById("postalCodeError");
+            let postalCodeError = validatePostalCode();
+            clearError(postalCodeErrorSpan);
+            if (postalCodeError !== "") {
+                postalCodeErrorSpan.textContent = postalCodeError;
+                return;
+            }
+
+            // Validate Province
+            let provinceErrorSpan = document.getElementById("provinceError");
+            let provinceError = validateProvince();
+            clearError(provinceErrorSpan);
+            if (provinceError !== "") {
+                provinceErrorSpan.textContent = provinceError;
+                return;
+            }
+
+            // Validate City
+            let cityErrorSpan = document.getElementById("cityError");
+            let cityError = validateCity();
+            clearError(cityErrorSpan);
+            if (cityError !== "") {
+                cityErrorSpan.textContent = cityError;
+                return;
+            }
+
+            const oldUser = allUsers.filter(u => u['username'] === user['username'])
+
+            user['firstName'] = firstName;
+            user['lastName'] = lastName;
+            user['username'] = userName;
+            user['email'] = email;
+            user['postalCode'] = postalCode;
+            user['phoneNumber'] = mobileNumber;
+            user['province'] = province;
+            user['city'] = city;
+            user['addressLine1'] = document.getElementById('addressLine1').value;
+            user['addressLine2'] = document.getElementById('addressLine2').value;
+            user['profilePicture'] = profilePicture.src;
+
+            if(oldUser !== null) {
+                const id = allUsers[oldUser['id']];
+                console.log(id);
+                localStorage.setItem('users', JSON.stringify(allUsers));
+                localStorage.setItem('activeUser', JSON.stringify(user));
+            }
+
+            alert('success');
+        });
+
+
+
+    }
+}
+//#endregion
+
+//#region User Form Validations
+//AUTHOR: Maha Fouda
+function registerValidate() {
+    var usernameInput = document.getElementById('username');
+    var emailInput = document.getElementById('email');
+    var passwordInput = document.getElementById('password');
+    var confirmPasswordInput = document.getElementById('confirm-password');
+    var firstNameInput = document.getElementById('first-name');
+    var lastNameInput = document.getElementById('last-name');
+
+    var usernameError = document.getElementById('username-error');
+    var emailError = document.getElementById('email-error');
+    var passwordError = document.getElementById('password-error');
+    var confirmPasswordError = document.getElementById('confirm-password-error');
+    var firstNameError = document.getElementById('first-name-error');
+    var lastNameError = document.getElementById('last-name-error');
+
+    // Reset error messages
+    usernameError.textContent = '';
+    emailError.textContent = '';
+    passwordError.textContent = '';
+    confirmPasswordError.textContent = '';
+    firstNameError.textContent = '';
+    lastNameError.textContent = '';
+
+    //Check if user exists
+    const users = JSON.parse(localStorage.getItem('users'));
+    if(users !== null) {
+        users.forEach((u) => {
+            if(u['username'].toLowerCase() === usernameInput.value.toLowerCase()) {
+                usernameError.textContent = 'User with that username already exists.'
+            }
+
+            if(u['email'].toLowerCase() === emailInput.value.toLowerCase()) {
+                emailError.textContent = 'Email is already being used';
+            }
+        });
+    }
+    // Validate username
+    if (usernameInput.value.length < 4 || usernameInput.value.length > 20) {
+        usernameError.textContent = 'Username must be between 4 and 20 characters.';
+    }
+
+    // Validate email
+    if (!isValidEmail(emailInput.value)) {
+        emailError.textContent = 'Invalid email address.';
+    }
+
+    // Validate password
+    if (passwordInput.value.length < 6) {
+        passwordError.textContent = 'Password must be at least 6 characters.';
+    }
+
+    // Validate confirm password
+    if (passwordInput.value !== confirmPasswordInput.value) {
+        confirmPasswordError.textContent = 'Passwords do not match.';
+    }
+
+    // Validate first name
+    if (firstNameInput.value.trim() === '') {
+        firstNameError.textContent = 'First name is required.';
+    }
+
+    // Validate last name
+    if (lastNameInput.value.trim() === '') {
+        lastNameError.textContent = 'Last name is required.';
+    }
+
+    // Check if there are any error messages
+    if (
+        usernameError.textContent !== '' ||
+        emailError.textContent !== '' ||
+        passwordError.textContent !== '' ||
+        confirmPasswordError.textContent !== '' ||
+        firstNameError.textContent !== '' ||
+        lastNameError.textContent !== ''
+    ) {
+        // Validation failed, do not submit
+        return false;
+    }
+
+    // Validation successful
+    return true;
+}
+
+function isValidEmail(email) {
+    // Basic email validation, you can enhance this based on your requirements
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function registerValidateAndSubmit() {
+    // Validate form
+    if (!registerValidate()) {
+        // Validation failed, do not submit
+        return;
+    }
+
+    const user = {
+        "id": 0,
+        "username": document.getElementById('username').value,
+        "password": document.getElementById('password').value,
+        "email": document.getElementById('email').value,
+        "firstName": document.getElementById('first-name').value,
+        "lastName": document.getElementById('last-name').value,
+        "phoneNumber": '',
+        "addressLine1": '',
+        "addressLine2": '',
+        "postalCode": '',
+        "province": '',
+        "city": '',
+        "profilePicture": 'https://i.pinimg.com/736x/7f/43/03/7f4303ad3716465ed058ed44a6f64369.jpg'
+    };
+
+    let users = JSON.parse(localStorage.getItem('users'));
+    if(users === null) {
+        users = [];
+    }
+    user['id'] = users.length;
+    users.push(user);
+    loggedIn = true;
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('activeUser', JSON.stringify(user));
+    localStorage.setItem('authStatus', JSON.stringify(loggedIn));
+    window.location.href = 'index.html'
+}
+
+function loginValidate() {
+    var usernameInput = document.getElementById('username');
+    var passwordInput = document.getElementById('password');
+
+    var usernameError = document.getElementById('username-error');
+    var passwordError = document.getElementById('password-error');
+    
+    // Reset error messages
+    usernameError.textContent = '';
+    passwordError.textContent = '';
+    const users = JSON.parse(localStorage.getItem('users'));
+    if (users !== null) {
+        let tempUser = null;
+        
+        users.forEach((u) => {
+            if(u['username'].toLowerCase() === usernameInput.value.toLowerCase())
+                tempUser = u;
+        });
+
+        if (tempUser !== null) {
+            if(tempUser['password'] === passwordInput.value) {
+                localStorage.setItem('activeUser', JSON.stringify(tempUser));
+            }
+            else {
+                passwordError.textContent = 'Password is incorrect.';
+            }
+        }
+        else {
+            usernameError.textContent = 'No user with that username exists.';
+        }
+    }
+
+    // Validate username
+    if (usernameInput.value.length < 4 || usernameInput.value.length > 20) {
+        usernameError.textContent = 'Username must be between 4 and 20 characters.';
+    }
+
+    // Validate password
+    if (passwordInput.value.length < 6) {
+        passwordError.textContent = 'Password must be at least 6 characters.';
+    }
+
+    // Check if there are any error messages
+    if (usernameError.textContent !== '' || passwordError.textContent !== '') {
+        // Validation failed, do not navigate
+        return false;
+    }
+
+    // Validation successful
+    return true;
+}
+
+function loginValidateAndNavigate() {
+    // Validate form
+    if (!loginValidate()) {
+        // Validation failed, do not navigate
+        return;
+    }
+    loggedIn = true;
+    localStorage.setItem('authStatus', loggedIn);
+
+    // Validation successful, navigate to home.html
+    window.location.href = 'index.html';
+}
+//#endregion
+
+function createProductCards(products) {
+    const categoryContainer = document.getElementById('productsContainer');
+    products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card-shopping-container');
+
+        const topDiv = document.createElement('div');
+        topDiv.classList.add('product-card-shopping-top');
+
+        const bottomDiv = document.createElement('div');
+        bottomDiv.classList.add('product-card-shopping-bottom');
+
+        const cardImage = document.createElement('img');
+        cardImage.classList.add('product-card-shopping-img');
+        cardImage.src = `../image/product/${getCategory(product)}/${product['photo']}`;
+
+        const cardTitle = document.createElement('h1');
+        cardTitle.innerText = product['name'];
+
+        const cardDescription = document.createElement('p');
+        cardDescription.innerText = product['description'];
+
+        const cardPriceContainer = document.createElement('div');
+        cardPriceContainer.classList.add('product-card-price-container')
+        const cardPrice = document.createElement('h2');
+        
+        const priceSpan = document.createElement('span');
+        priceSpan.classList.add('product-card-price');
+        priceSpan.innerText = product['price'];
+        cardPrice.innerHTML = "Price: $";
+        cardPrice.appendChild(priceSpan);
+
+        cardPriceContainer.appendChild(cardPrice);
+
+        //fix
+        if(product['discount'] > 0) {
+            priceSpan.classList.add('card-discount');
+
+            const newPrice = document.createElement('span');
+            const percentOff = document.createElement('span');
+
+            newPrice.classList.add('home-product-new-price', 'bolder');
+            percentOff.classList.add('percentage-off');
+
+            newPrice.innerText = (product['price'] * (1 - product['discount'])).toFixed(2);
+            percentOff.innerText = ((product['discount']) * 100).toFixed(0) + "% OFF";
+
+            cardPriceContainer.appendChild(newPrice);
+            cardPriceContainer.appendChild(percentOff);
+
+        }
+
+        
+        const cardRating = document.createElement('div');
+        cardRating.classList.add('home-product-rating');
+
+        cardRating.innerHTML = `${createStars(product['rating'])} <span class="product-rating-count">(${product['rating_count']})</span>`;
+
+        const cardButtons = document.createElement('div');
+        cardButtons.classList.add('card-button-container');
+        const moreInfoButton = document.createElement('p');
+        moreInfoButton.classList.add('button', 'more-info-button');
+        moreInfoButton.innerText = "View Product";
+        moreInfoButton.addEventListener('click', function() {
+            localStorage.setItem('selectedProduct', JSON.stringify(product));
+            window.location.href = "../product.html";
+        });
+
+        cardButtons.appendChild(moreInfoButton);
+
+        if(loggedIn) {
+            const addToCartButton = document.createElement('p');
+            addToCartButton.classList.add('button');
+            addToCartButton.innerHTML = `<span class="material-icons-sharp">shopping_cart</span> +`;
+            addToCartButton.addEventListener('click', function() {
+                addToCart(product);
+                window.location.href = "../products/" + productCategory + ".html";
+            });
+
+            cardButtons.appendChild(addToCartButton);
+        }
+
+        topDiv.appendChild(cardImage);
+        topDiv.appendChild(cardTitle);
+        topDiv.appendChild(cardDescription);
+
+        bottomDiv.appendChild(cardPriceContainer);
+        bottomDiv.appendChild(cardRating);
+        bottomDiv.appendChild(cardButtons);
+
+        productCard.appendChild(topDiv);
+        productCard.appendChild(bottomDiv);
+
+        categoryContainer.appendChild(productCard);
+    });
+}
+function loadProducts(productCategory) {
+
+    switch(productCategory.toLowerCase()) {
+        case 'all':
+            const allProducts = drinks['product'].concat(soups['product'], cookies['product']);
+            createProductCards(allProducts);
+            break;
+        case 'drinks':
+            createProductCards(drinks['product']);
+            break;
+        case 'soups':
+            createProductCards(soups['product']);
+            break;
+        case 'cookies':
+            createProductCards(cookies['product']);
+            break;
+
+
+    }
+}
 //Changes menu based on user auth
 function userAuthContextHandler(loggedIn) {
     let contextButtons = document.querySelectorAll('.menu-button');
@@ -37,6 +733,12 @@ function userAuthContextHandler(loggedIn) {
 
         document.getElementById('cartItemsCount').innerText = `${cartCount}`;
     }
+}
+
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    const cartCount = cart.length;
+    localStorage.setItem('cartCount', JSON.stringify(cartCount))
 }
 
 // Plays Carousel 
@@ -88,6 +790,11 @@ function play_carousel() {
 // End of Plays Carousel 
 
 //#region Creates product cards on page 
+function getCategory(product) {
+    if (product['category_id'] === 1) return "drink";
+    if (product['category_id'] === 2) return "cookie";
+    if (product['category_id'] === 3) return "soup";
+}
 
 function featured_products() {
     function setCatTitleHomePage(num) {
@@ -108,12 +815,6 @@ function featured_products() {
                 console.log("Default case hit in setCatTitleHomePage");
                 break;
         }
-    }
-
-    function getCategory(product) {
-        if (product['category_id'] === 1) return "drink";
-        if (product['category_id'] === 2) return "cookie";
-        if (product['category_id'] === 3) return "soup";
     }
 
     let catIndex = 0;
@@ -212,15 +913,51 @@ function createStars(rating) {
 
 //#region Handles product page
 function loadProductInfo() {
-    console.log('loading');
-        const storedProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+    const storedProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+    let productImage = document.getElementById('productPageImage');
+    let productName = document.getElementById('productPageName');
+    let productPrice = document.getElementById('productPagePrice');
+    let productRating = document.getElementById('productPageRating');
+    let productCategory = document.getElementById('productPageCategory');
+    let productDescription = document.getElementById('productPageDescription');
+    let cartButton = document.getElementById('addToCartButton');
 
-        if(storedProduct === null) {
-            console.log('local storage was null');
-        }
-        else {
-            console.log(storedProduct['name']);
-        }
+    productImage.src = `image/product/${getCategory(storedProduct)}/${storedProduct['photo']}`;
+    productName.innerText = storedProduct['name'];
+    console.log(storedProduct['price']);
+    productPrice.innerText = '$' + storedProduct['price'];
+    let cardRating = `<div class="home-product-rating">${createStars(storedProduct['rating'])} <span class="product-rating-count">(${storedProduct['rating_count']})</span></div>`;
+    productRating.innerHTML = cardRating;
+    let category = getCategory(storedProduct);
+    category = category.charAt(0).toUpperCase() + category.slice(1);
+    productCategory.innerText = category;
+    productDescription.innerText = storedProduct['description'];
+    cartButton.innerHTML = '<span class="material-icons-sharp">shopping_cart</span> ' + ((document.querySelectorAll('.menu-button')[0].style.display === 'flex') ? 'Add To Cart' : 'Login to Shop');
+    cartButton.addEventListener('click', function() {
+        addToCart(storedProduct);
+        window.location.href = "product.html";
+    })
+        
+}
+
+function addToCart(product) {
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    if(cart === null) {
+        cart.push('cart', JSON.stringify(cart));
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    else {
+        cart.push(product);
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    updateCartCount();
+    //successMessage();
+}
+
+function successMessage() {
+    
+    document.getElementById('successMessage').style.display = 'block';
 }
 //#endregion
 
@@ -236,6 +973,117 @@ contextActivator.addEventListener('click', () => {
 
 });
 //#endregion
+
+//#region Cart
+function loadCartData() {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    const cartHtml = document.getElementById('cartBody');
+    let total = 0;
+    const productMap = new Map();
+    console.log(cart);
+    if (cart !== null) {
+        // Clear previous content in the cart body
+        cartHtml.innerHTML = '';
+
+        // Iterate over each product in the cart
+        cart.forEach(product => {
+            // Check if the product name is already in the map
+            if (productMap.has(product['name'])) {
+                // If yes, increment the quantity
+                const existingProduct = productMap.get(product['name']);
+                existingProduct.quantity++;
+            } else {
+                // If no, add the product to the map with quantity 1
+                productMap.set(product['name'], { ...product, quantity: 1 });
+            }
+        });
+
+        // Iterate over the product map to create table rows
+        productMap.forEach(product => {
+            const row = document.createElement('tr');
+
+            const nameCell = document.createElement('td');
+            nameCell.classList.add('cart-item');
+            const prodImage = document.createElement('img');
+            const prodName = document.createElement('p');
+            prodName.classList.add('cart-item-name');
+            prodImage.width = 75;
+            prodImage.height = 75;
+            prodImage.src = `image/product/${getCategory(product)}/${product['photo']}`
+            prodName.textContent = product['name'];
+            nameCell.appendChild(prodImage);
+            nameCell.appendChild(prodName);
+
+            const quantityCell = document.createElement('td');
+            const quantityDropdown = document.createElement('select');
+            for(let i = 1; i < 19; i++) {
+                const selectItem = document.createElement('option');
+                selectItem.value = i;
+                selectItem.text = i;
+                quantityDropdown.appendChild(selectItem);
+            }
+            quantityDropdown.selectedIndex = product.quantity - 1;
+            quantityCell.appendChild(quantityDropdown);
+
+            quantityDropdown.addEventListener('selectionchange', () => {
+                product.quantity = quantityDropdown.selectedIndex;
+                console.log(product.quantity);
+                updateCartCount();
+            })
+
+            const priceCell = document.createElement('td');
+            const price = parseFloat(product['price']);
+            priceCell.textContent = '$' + (price * product.quantity).toFixed(2);
+
+            const actionCell = document.createElement('td');
+            const deleteButton = document.createElement('p');
+            deleteButton.classList.add('button', 'box-shadow');
+            deleteButton.textContent = 'Delete'
+            actionCell.appendChild(deleteButton);
+
+            row.appendChild(nameCell);
+            row.appendChild(priceCell);
+            row.appendChild(quantityCell);
+            row.appendChild(actionCell);
+
+            cartHtml.appendChild(row);
+
+            // Add the total for this product to the overall total
+            total += price * product.quantity;
+
+            deleteButton.addEventListener('click', () => {
+                // Get the product name associated with the delete button
+                const productName = product['name'];
+
+                // Find and remove all instances of the product from the cart array
+                const updatedCart = cart.filter(item => item['name'] !== productName);
+
+                // Update the localStorage with the modified cart data
+                 localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+                // Reload cart data and update the cart count in the UI
+                loadCartData();
+                updateCartCount();
+                
+            });
+        });
+    }
+
+    // Display the total
+    document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+    document.getElementById('clearCart').addEventListener('click', () => {
+        localStorage.setItem('cart', JSON.stringify([]));
+        loadCartData();
+        updateCartCount();
+    });
+
+    
+
+
+}
+
+//#endregion
+
 // Drinks
 
 const drinks = {

@@ -27,29 +27,62 @@
             <div class="menu-right">
                 <div class="search-bar">
                     <input type="text" id="searchBar" placeholder="Search products...">
-                    <a href="/search" class="search-bar-button"><span class="material-icons-sharp search-btn">search</span></a>
+                    <a href="/search" class="search-bar-button" id="searchButton"><span class="material-icons-sharp search-btn">search</span></a>
                 </div>
     
                 <div class="user-menu-controls">
-                    <a href="/cart" class="menu-button" id="cartMenuButton" style="display: none;"><span class="material-icons-sharp">shopping_cart</span>Cart <span id="cartItemsCount" class="cart-info-badge">0</span></a>
-                    <a href="/profile" class="menu-button" id="accountMenuButton" style="display: none;"><span class="material-icons-sharp">account_circle</span>Profile</a>
-                    <a href="/login" class="menu-button" id="loginMenuButton"><span class="material-icons-sharp">account_circle</span>Login</a>
-                    <a href="/signup" class="menu-button" id="registerMenuButton"><span class="material-icons-sharp">person_add</span>Register</a>
+                    <a href="/cart.html" class="menu-button" id="cartMenuButton" style="display: none;"><span class="material-icons-sharp">shopping_cart</span>Cart <span id="cartItemsCount" class="cart-info-badge">0</span></a>
+                    <a href="/profile.html" class="menu-button" id="accountMenuButton" style="display: none;"><span class="material-icons-sharp">account_circle</span>Profile</a>
+                    <a href="/login.html" class="menu-button" id="loginMenuButton"><span class="material-icons-sharp">account_circle</span>Login</a>
+                    <a href="/signup.html" class="menu-button" id="registerMenuButton"><span class="material-icons-sharp">person_add</span>Register</a>
                 </div>
             </div>
         </div>
 
         <div class="menu-context" id="menuContext">
             <ul>
-                <li><a href="/products/all">All Products</a></li>
-                <li><a href="/products/drinks">Drinks</a></li>
-                <li><a href="/products/cookies">Cookies</a></li>
-                <li><a href="/products/drinks">Drinks</a></li>
+                <li><a href="/products/all.html">All Products</a></li>
+                <li><a href="/products/drinks.html">Drinks</a></li>
+                <li><a href="/products/cookies.html">Cookies</a></li>
+                <li><a href="/products/drinks.html">Drinks</a></li>
             </ul>
         </div>
     </nav>
     <!-- END OF NAV -->
+    <a href="/" class="back-button">
+        <span class="material-icons-sharp">chevron_left</span>
+    </a>
 
+
+    <!-- PRODUCT DISPLAY -->
+    <div class="product-page-container">
+
+        
+
+        <div class="product-page-image">
+            <img src="" alt="" id="productPageImage">
+        </div>
+
+        <div class="product-page-info">
+            <h1 id="productPageName">Product Name</h1>
+            <p id="productPagePrice">$0.00</p>
+            <div class="product-page-rating" id="productPageRating">
+
+            
+            </div>
+            <p id="productPageCategory">Category</p>
+            <p id="productPageDescription">Description</p>
+
+            <div class="button-container">
+                <p class="button" id="addToCartButton">Button</p>
+            </div>
+        </div>
+
+        
+    </div>
+
+    
+    <!-- END OF PRODUCT DISPLAY -->
     <script src="js/jquery-3.6.0.min.js" defer></script>
     <script src="js/indexnew.js" defer></script>
 </body>
