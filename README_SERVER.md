@@ -1,6 +1,6 @@
 # Shopping Website (Server Version)
 ## Authors: Shuhan Han, Maha Fouda, Nnamdi Echegini, David Currey & Michaël Boisvenu-Landry
----
+
 Build a fully functional demonstration shopping website with dynamic front-end and back-end.
 
 ### Features
