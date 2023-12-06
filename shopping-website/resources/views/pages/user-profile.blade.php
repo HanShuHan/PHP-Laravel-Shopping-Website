@@ -1,9 +1,8 @@
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}">
-    </x-navbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
     <div class="container rounded bg-white mt-5 mb-5">
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show mt-5" role="alert">
+            <div class="alert alert-success alert-dismissible fade show mt-5 green`" role="alert" style="top: 2rem; position: relative;">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -11,11 +10,17 @@
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img class="rounded-circle mt-5" width="150px" src="https://i.pinimg.com/736x/7f/43/03/7f4303ad3716465ed058ed44a6f64369.jpg">
-                    <span class="font-weight-bold">{{ $user->first_name }}:</span>
+                    <img class="rounded-circle mt-5" width="150px" height="150px" src="{{ $user->profile_picture ? 'data:image/png;base64,' . base64_encode($user->profile_picture) : 'https://i.pinimg.com/736x/7f/43/03/7f4303ad3716465ed058ed44a6f64369.jpg' }}" id="profile-picture-preview">
+                    <span class="font-weight-bold green-text">{{ $user->user_name }}:</span>
                     <span class="text-black-50">{{ $user->email }}</span>
-                    <form action="/profile/updatePicture" method="POST">
-                        <button type="submit" class="btn btn-dark mt-3">Edit Profile Picture</button>
+                    <form action="/profile/update-picture" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center; justify-content: center;" class="mt-3">
+                        @csrf
+                        <input type="file" name="profile_picture" id="profile_picture" class="custom-file-input" accept="image/*" style="display: none;">
+                        <label for="profile_picture" class="btn btn-dark card-btn" id="file-label" style="margin-bottom: -0.25em;">Choose File...</label>
+                        @error('profile_picture')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <button type="submit" class="btn btn-dark mt-3 card-btn">Save Profile Picture</button>
                     </form>
                     <span> </span>
                 </div>
@@ -23,7 +28,7 @@
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Profile Settings</h4>
+                        <h4 class="text-right green-text">Profile Settings</h4>
                     </div>
                     <form action="/profile/update" method="POST">
                         @csrf
@@ -148,18 +153,54 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 d-flex justify-content-between mb-3">
+                        <div class="mt-4 d-flex justify-content-between mb-2">
                             <!-- Submit Button -->
-                            <button class="btn btn-dark" type="submit">Save Profile</button>
+                            <button class="btn btn-dark card-btn" type="submit">Save Profile</button>
                         </div>
                     </form>
                     <form action="/logout" method="POST">
                         @csrf
-                        <button type="submit" class="btn btn-danger">Logout</button>
+                        <button type="submit" class="btn btn-danger card-btn">Logout</button>
                     </form>
+                </div>
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Order #</th>
+                                <th scope="col">Total ($)</th>
+                                <th scope="col">Placed On</th>
+                                <th scope="col">Delivery Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach($orders as $order)
+                                <tr>
+                                    <th scope="row" class="green-text">{{ $order->order_number }}</th>
+                                    <td>{{ $order->total_cost }}</td>
+                                    <td>{{ $order->created_at }}</td>
+                                    <td>{{ ($order->delivered) ? "Delivered" : "Out for delivery" }}</td>
+                                    <td>
+                                        <a href=" {{ "/order/" .$order->id }}" class="btn btn-dark card-btn">View Details</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('profile_picture').addEventListener('change', function() {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profile-picture-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+    </script>
 </x-new-layout>
 

@@ -77,5 +77,3 @@ body {
     border-color: var(--orange-400);
     transition: background-color 200ms ease-in, border-color 200ms ease-in;
 }
-
-

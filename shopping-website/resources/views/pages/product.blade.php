@@ -1,5 +1,5 @@
 <x-new-layout>
-    <x-navbar cartItemsCount="{{$cartItemsCount}}"></x-navbar>
+    <x-navbar cartItemsCount="{{$cartItemsCount}}" :categories="$categories"></x-navbar>
 
     @if (session('success'))
         <div class="container d-flex justify-content-center align-items-center mt-5">
@@ -13,15 +13,15 @@
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row my-auto">
             <div class="col-md-6 text-center">
-                <img src="/images/place-holder.png" class="img-fluid" alt="{{$product->name}}">
+                <img src="{{ '../images/' . $product->photo }}" class="img-fluid" alt="{{$product->name}}">
             </div>
 
             <div class="col-md-6">
-                <h1>{{$product->name}}</h1>
+                <h1 class="green-text">{{html_entity_decode($product->name)}}</h1>
                 <p class="lead">${{$product->price}}</p>
                 <div class="mb-3 d-flex align-items-center">
                     @for($i = 1; $i <= 5; $i++)
-                        <span class="material-icons-sharp {{ $product->rating >= $i ? 'text-dark' : '' }}">
+                        <span class="material-icons-sharp {{ $product->rating >= $i ? 'card-star' : '' }}">
                             {{ $product->rating >= $i ? 'star' : 'star_border' }}
                         </span>
                     @endfor
@@ -29,12 +29,13 @@
                 </div>
 
                 <p>{{$category}}</p>
-                <p class="mt-3">{{$product->description}}</p>
+                <p class="mt-3">{{html_entity_decode($product->description)}}</p>
 
                 @auth
                     <form action="/cart/add/{{$product->id}}" method="POST" class="d-inline-block">
                         @csrf
-                        <button type="submit" class="btn btn-dark d-flex justify-content-center align-items-center" style="width: 200px;">
+                        <button type="submit" class="btn btn-dark card-btn d-flex justify-content-center align-items-center"
+                                style="width: 200px;">
                             <span class="material-icons-sharp text-white me-2">
                                 shopping_cart
                             </span>
@@ -42,7 +43,8 @@
                         </button>
                     </form>
                 @else
-                    <a href="/login" class="btn btn-dark d-flex align-items-center justify-content-center" style="width: 200px;">
+                    <a href="/login" class="btn btn-dark d-flex align-items-center justify-content-center"
+                       style="width: 200px;">
                         <span class="material-icons-sharp text-white me-2">
                             shopping_cart
                         </span>
@@ -53,8 +55,8 @@
         </div>
     </div>
 
-    <a href="/" class="position-absolute top-0 start-0 mt-5 ms-4 text-dark" style="transition: color 0.3s;">
-        <span class="material-icons-sharp mt-5 fs-1">
+    <a href="{{url($backURL)}}" class="position-absolute top-0 start-0 mt-5 ms-4 text-dark" style="transition: color 0.3s;">
+        <span class="material-icons-sharp mt-5 fs-1 green-text">
             chevron_left
         </span>
     </a>

@@ -1,33 +1,3 @@
-<style>
-    .carousel-control-prev, .carousel-control-next {
-        color: #343a40; /* Bootstrap 5's .text-dark color */
-    }
-
-    .carousel-control-prev-icon, .carousel-control-next-icon {
-        filter: invert(1); /* Invert the colors of the icons */
-    }
-    .carousel-indicators button {
-        background-color: #798794; /* Bootstrap 5's .bg-dark color */
-        border-color: #798794; /* Bootstrap 5's .bg-dark color */
-        width: 12px;
-        height: 8px;
-
-    }
-
-    .carousel-indicators .active {
-        background-color: white; /* Bootstrap 5's .bg-warning color */
-        /* Bootstrap 5's .bg-warning color */
-    }
-
-    .carousel-inner .carousel-item img {
-        height: 400px;
-        width: auto;
-    }
-
-    .carousel-caption {
-        color: #343a40; /* Bootstrap 5's .text-dark color */
-    }
-</style>
 
 <div id="carousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
@@ -40,8 +10,17 @@
             <img src="/images/place-holder.png" class="mx-auto d-block" alt="...">
             <div class="carousel-caption d-flex align-items-center justify-content-center" style="background-color: #343a40; color: white;">
                 <div>
-                    <h5>NEW KITCHEN ITEMS</h5>
-                    <p>Check out our new collection of things for your kitchen!</p>
+                    <h5>New In Stock!</h5>
+                    <p>Check out our newly received items! Gear up your pantry today!</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="images/photos/8BK0L27tgxsdzJVTW5w7DsUfMY7LbdBAlYBIIOnM.webp" class="mx-auto d-block" alt="...">
+            <div class="carousel-caption d-flex h-25 align-items-center justify-content-center" style="background-color: #343a40; color: white;">
+                <div>
+                    <h5>15% off Pepsi Products</h5>
+                    <p>Sale ends next week, don't miss out!</p>
                 </div>
             </div>
         </div>
@@ -49,16 +28,7 @@
             <img src="/images/place-holder.png" class="mx-auto d-block" alt="...">
             <div class="carousel-caption d-flex h-25 align-items-center justify-content-center" style="background-color: #343a40; color: white;">
                 <div>
-                    <h5>15% OFF WOMEN'S WINTER WEAR</h5>
-                    <p>Don't miss out on this flash sale!</p>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="/images/place-holder.png" class="mx-auto d-block" alt="...">
-            <div class="carousel-caption d-flex h-25 align-items-center justify-content-center" style="background-color: #343a40; color: white;">
-                <div>
-                    <h5>FREE SHIPPING ON ORDERS ABOVE $300</h5>
+                    <h5>Free shipping on orders over $80!</h5>
                     <p>Buy in bulk and save!</p>
                 </div>
             </div>
