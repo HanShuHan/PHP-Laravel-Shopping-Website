@@ -238,6 +238,7 @@ function loadUserProfile(user) {
             loggedIn = false;
             localStorage.setItem('authStatus', JSON.stringify(loggedIn));
             setStatus(USER_LOGOUT, true);
+            setStatus(USER_REGISTER, false);
             window.location.href = 'index.html';
         });
 
@@ -939,11 +940,16 @@ function loadProductInfo() {
     productCategory.innerText = category;
     productDescription.innerText = storedProduct['description'];
     cartButton.innerHTML = '<span class="material-icons-sharp">shopping_cart</span> ' + ((document.querySelectorAll('.menu-button')[0].style.display === 'flex') ? 'Add To Cart' : 'Login to Shop');
-    cartButton.addEventListener('click', function () {
-        addToCart(storedProduct);
-        window.location.href = "product.html";
-    })
-
+    if (loggedIn) {
+        cartButton.addEventListener('click', function () {
+            addToCart(storedProduct);
+            window.location.href = "product.html";
+        })
+    } else{
+        cartButton.addEventListener('click', function () {
+            window.location.href = "login.html";
+        })
+    }
 }
 
 function addToCart(product) {
