@@ -14,7 +14,7 @@ const USER_REGISTER = 'userRegister';
 //#region Main function
 //AUTHORS: Shuhan Han and Michael Boisvenu-Landry
 $(function () {
-    // localStorage.clear();
+
     searchInit();
     //loadSuccessStatuses();
 
@@ -150,9 +150,9 @@ $(function () {
     }
 
     if (window.location.href.includes('profile.html')) {
-        // if (!loggedIn) {
-        //     window.location.href = './login.html';
-        // }
+        if (!loggedIn) {
+            window.location.href = './login.html';
+        }
 
         loadUserProfile(activeUser);
 
