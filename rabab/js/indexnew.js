@@ -51,6 +51,7 @@ $(function () {
 
         if(loadStatus(USER_REGISTER)) {
             displayMessage(`Welcome to sHopper ${activeUser['username']}!`);
+            setStatus(USER_REGISTER, false);
         }
     }
 
