@@ -1,12 +1,23 @@
 let loggedIn = JSON.parse(localStorage.getItem('authStatus'));
 let activeUser = null;
 
+const ITEM_ADD_TO_CART = 'itemAddedToCart';
+const ITEM_DELETE_FROM_CART = 'itemDeletedFromCart';
+const CLEAR_CART = 'clearCart';
+const CHECKOUT = 'checkout';
+const USER_UPDATED = 'userUpdated';
+const USER_PHOTO_UPDATED = 'pictureUpdated';
+const USER_LOGIN = 'userLogin';
+const USER_LOGOUT = 'userLogout';
+const USER_REGISTER = 'userRegister';
 
 //#region Main function
 //AUTHORS: Shuhan Han and Michael Boisvenu-Landry
 $(function () {
     
     searchInit();
+    //loadSuccessStatuses();
+    
     if(loggedIn === null) {
          loggedIn = false;
          localStorage.setItem('authStatus', JSON.stringify(loggedIn));
@@ -17,50 +28,96 @@ $(function () {
         }
     }
     
-    
-    //debug stuff - remove
-    console.log(localStorage.getItem('authStatus'));
-    const users = JSON.parse(localStorage.getItem('users'));
-    console.log(users);
-    if(activeUser === null) {
-        console.log("No adctive user")
-    }
-    else {
-        console.log(activeUser);
-    }
     userAuthContextHandler(loggedIn);
 
     if (window.location.href.includes("index.html")) {
         play_carousel();
         featured_products();
+
+        if(loadStatus(CHECKOUT)) {
+            displayMessage('Thanks for your order!');
+            setStatus(CHECKOUT, false);
+        }
+
+        if(loadStatus(USER_LOGOUT)) {
+            displayMessage('Succesfully logged out.');
+            setStatus(USER_LOGOUT, false);
+        }
+
+        if(loadStatus(USER_LOGIN)) {
+            displayMessage(`Welcome back ${activeUser['username']}!`);
+            setStatus(USER_LOGIN, false);
+        }
+
+        if(loadStatus(USER_REGISTER)) {
+            displayMessage(`Welcome to sHopper ${activeUser['username']}!`);
+        }
     }
 
     if(window.location.href.includes("product.html")) {
         loadProductInfo();
-        document.getElementById('successMessage').style.display = 'none';
+
+        if(loadStatus(ITEM_ADD_TO_CART)) {
+            displayMessage("Item added to cart succesfully");
+            setStatus(ITEM_ADD_TO_CART, false);
+        }
     }
 
     if(window.location.href.includes('cart.html')) {
+        if(!loggedIn) {
+            window.location.href = './login.html'
+        }
+
         loadCartData();
+
+        if(loadStatus(ITEM_DELETE_FROM_CART)) {
+            displayMessage("Item removed succesfully.");
+            setStatus(ITEM_DELETE_FROM_CART, false);
+        }
+
+        if(loadStatus(CLEAR_CART)) {
+            displayMessage('Cart succesfully cleared.');
+            setStatus(CLEAR_CART, false);
+        }
     }
 
     if(window.location.href.includes('all.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
+
+        if(loadStatus(ITEM_ADD_TO_CART)) {
+            displayMessage('Item added to cart sucesfully.');
+            setStatus(ITEM_ADD_TO_CART, false);
+        }
         loadProducts('all');
     }
 
     if(window.location.href.includes('drinks.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
+
+        if(loadStatus(ITEM_ADD_TO_CART)) {
+            displayMessage('Item added to cart sucesfully.');
+            setStatus(ITEM_ADD_TO_CART, false);
+        }
         loadProducts('drinks');
     }
 
     if(window.location.href.includes('cookies.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
+
+        if(loadStatus(ITEM_ADD_TO_CART)) {
+            displayMessage('Item added to cart sucesfully.');
+            setStatus(ITEM_ADD_TO_CART, false);
+        }
         loadProducts('cookies');
     }
 
     if(window.location.href.includes('soups.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
+
+        if(loadStatus(ITEM_ADD_TO_CART)) {
+            displayMessage('Item added to cart sucesfully.');
+            setStatus(ITEM_ADD_TO_CART, false);
+        }
         loadProducts('soups');
     }
 
@@ -87,7 +144,17 @@ $(function () {
     }
 
     if(window.location.href.includes('profile.html')) {
+        if(!loggedIn) {
+            window.location.href = './login.html';
+        }
+
         loadUserProfile(activeUser);
+
+        if(loadStatus(USER_UPDATED)) {
+            displayMessage('Profile succesfully updated.');
+            setStatus(USER_UPDATED, false);
+        }
+
         
     }
 
@@ -158,6 +225,7 @@ function loadUserProfile(user) {
         document.getElementById('logoutButton').addEventListener('click', () => {
             loggedIn = false;
             localStorage.setItem('authStatus', JSON.stringify(loggedIn));
+            setStatus(USER_LOGOUT, true);
             window.location.href = 'index.html';
         });
 
@@ -197,7 +265,9 @@ function loadUserProfile(user) {
             });
 
             uploadInput.click();
+
         });
+
         document.getElementById('submitProfileButton').addEventListener('click', () => {
             let firstName = '';
             let lastName = '';
@@ -397,7 +467,8 @@ function loadUserProfile(user) {
                 localStorage.setItem('activeUser', JSON.stringify(user));
             }
 
-            alert('success');
+            setStatus(USER_UPDATED, true);
+            window.location.href = './profile.html';
         });
 
 
@@ -530,6 +601,7 @@ function registerValidateAndSubmit() {
     localStorage.setItem('users', JSON.stringify(users));
     localStorage.setItem('activeUser', JSON.stringify(user));
     localStorage.setItem('authStatus', JSON.stringify(loggedIn));
+    setStatus(USER_REGISTER, true);
     window.location.href = 'index.html'
 }
 
@@ -593,129 +665,52 @@ function loginValidateAndNavigate() {
     }
     loggedIn = true;
     localStorage.setItem('authStatus', loggedIn);
-
+    setStatus(USER_LOGIN, true);
     // Validation successful, navigate to home.html
     window.location.href = 'index.html';
 }
 //#endregion
 
-function createProductCards(products) {
-    const categoryContainer = document.getElementById('productsContainer');
-    products.forEach((product) => {
-        const productCard = document.createElement('div');
-        productCard.classList.add('product-card-shopping-container');
+//#region Misc
+//Author: Michael Boisvenu-Landry
 
-        const topDiv = document.createElement('div');
-        topDiv.classList.add('product-card-shopping-top');
+function loadStatus(statusKey) {
+    let value = JSON.parse(localStorage.getItem(statusKey));
+    if(value === null) {
+        setStatus(statusKey, false);
+        return false;
+    }
 
-        const bottomDiv = document.createElement('div');
-        bottomDiv.classList.add('product-card-shopping-bottom');
+    console.log(`LOAD STATUS VALUE: ${value}`);
+    return value;
+}
 
-        const cardImage = document.createElement('img');
-        cardImage.classList.add('product-card-shopping-img');
-        cardImage.src = `../image/product/${getCategory(product)}/${product['photo']}`;
+function setStatus(statusKey, value) {
+    localStorage.setItem(statusKey, JSON.stringify(value));
+}
 
-        const cardTitle = document.createElement('h1');
-        cardTitle.innerText = product['name'];
+function displayMessage(message) {
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-container');
 
-        const cardDescription = document.createElement('p');
-        cardDescription.innerText = product['description'];
+    const messageText = document.createElement('h1');
+    messageText.classList.add('message-message');
+    messageText.innerText = message;
 
-        const cardPriceContainer = document.createElement('div');
-        cardPriceContainer.classList.add('product-card-price-container')
-        const cardPrice = document.createElement('h2');
-        
-        const priceSpan = document.createElement('span');
-        priceSpan.classList.add('product-card-price');
-        priceSpan.innerText = product['price'];
-        cardPrice.innerHTML = "Price: $";
-        cardPrice.appendChild(priceSpan);
+    const closeButton = document.createElement('p');
+    closeButton.classList.add('message-close');
+    closeButton.innerText = 'X';
+    
+    messageContainer.appendChild(messageText);
+    messageContainer.appendChild(closeButton);
 
-        cardPriceContainer.appendChild(cardPrice);
+    document.querySelector('body').appendChild(messageContainer);
 
-        //fix
-        if(product['discount'] > 0) {
-            priceSpan.classList.add('card-discount');
-
-            const newPrice = document.createElement('span');
-            const percentOff = document.createElement('span');
-
-            newPrice.classList.add('home-product-new-price', 'bolder');
-            percentOff.classList.add('percentage-off');
-
-            newPrice.innerText = (product['price'] * (1 - product['discount'])).toFixed(2);
-            percentOff.innerText = ((product['discount']) * 100).toFixed(0) + "% OFF";
-
-            cardPriceContainer.appendChild(newPrice);
-            cardPriceContainer.appendChild(percentOff);
-
-        }
-
-        
-        const cardRating = document.createElement('div');
-        cardRating.classList.add('home-product-rating');
-
-        cardRating.innerHTML = `${createStars(product['rating'])} <span class="product-rating-count">(${product['rating_count']})</span>`;
-
-        const cardButtons = document.createElement('div');
-        cardButtons.classList.add('card-button-container');
-        const moreInfoButton = document.createElement('p');
-        moreInfoButton.classList.add('button', 'more-info-button');
-        moreInfoButton.innerText = "View Product";
-        moreInfoButton.addEventListener('click', function() {
-            localStorage.setItem('selectedProduct', JSON.stringify(product));
-            window.location.href = "../product.html";
-        });
-
-        cardButtons.appendChild(moreInfoButton);
-
-        if(loggedIn) {
-            const addToCartButton = document.createElement('p');
-            addToCartButton.classList.add('button');
-            addToCartButton.innerHTML = `<span class="material-icons-sharp">shopping_cart</span> +`;
-            addToCartButton.addEventListener('click', function() {
-                addToCart(product);
-                window.location.href = "../products/" + productCategory + ".html";
-            });
-
-            cardButtons.appendChild(addToCartButton);
-        }
-
-        topDiv.appendChild(cardImage);
-        topDiv.appendChild(cardTitle);
-        topDiv.appendChild(cardDescription);
-
-        bottomDiv.appendChild(cardPriceContainer);
-        bottomDiv.appendChild(cardRating);
-        bottomDiv.appendChild(cardButtons);
-
-        productCard.appendChild(topDiv);
-        productCard.appendChild(bottomDiv);
-
-        categoryContainer.appendChild(productCard);
+    closeButton.addEventListener('click', () => {
+        messageContainer.style.display = 'none';
     });
 }
-function loadProducts(productCategory) {
 
-    switch(productCategory.toLowerCase()) {
-        case 'all':
-            const allProducts = drinks['product'].concat(soups['product'], cookies['product']);
-            createProductCards(allProducts);
-            break;
-        case 'drinks':
-            createProductCards(drinks['product']);
-            break;
-        case 'soups':
-            createProductCards(soups['product']);
-            break;
-        case 'cookies':
-            createProductCards(cookies['product']);
-            break;
-
-
-    }
-}
-//Changes menu based on user auth
 function userAuthContextHandler(loggedIn) {
     let contextButtons = document.querySelectorAll('.menu-button');
     contextButtons[0].style.display = (loggedIn) ? 'flex' : 'none'
@@ -734,15 +729,8 @@ function userAuthContextHandler(loggedIn) {
         document.getElementById('cartItemsCount').innerText = `${cartCount}`;
     }
 }
-
-function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    const cartCount = cart.length;
-    localStorage.setItem('cartCount', JSON.stringify(cartCount))
-}
-
-// Plays Carousel 
-
+ 
+// Author: Shuhan Han
 function play_carousel() {
     let slideNum = 0;
     let slideCount = $(".slides li").length;
@@ -788,14 +776,17 @@ function play_carousel() {
 }
 
 // End of Plays Carousel 
+//#endregion
 
 //#region Creates product cards on page 
+//Author: Michael Boisvenu-Landry
 function getCategory(product) {
     if (product['category_id'] === 1) return "drink";
     if (product['category_id'] === 2) return "cookie";
     if (product['category_id'] === 3) return "soup";
 }
 
+//Author: Shuhan Han with modifications by Michael Boisvenu-Landry
 function featured_products() {
     function setCatTitleHomePage(num) {
         let prepend = `<h1 class="home-product-category-title">`;
@@ -897,6 +888,7 @@ function featured_products() {
        
 }
 
+//Author: Shuhan Han
 function createStars(rating) {
     const full_rating = 5;
     const emptyStars = full_rating - rating;
@@ -952,16 +944,14 @@ function addToCart(product) {
     }
 
     updateCartCount();
+    setStatus(ITEM_ADD_TO_CART, true);
     //successMessage();
 }
 
-function successMessage() {
-    
-    document.getElementById('successMessage').style.display = 'block';
-}
 //#endregion
 
 //#region Nav Context Menu
+//Author: Michael Boisvenu-Landry
 let menuContext = null;
 let contextActivator = null;
 let menuOpen = false;
@@ -975,30 +965,29 @@ contextActivator.addEventListener('click', () => {
 //#endregion
 
 //#region Cart
+//Author: Michael Boisvenu-Landry
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    const cartCount = cart.length;
+    localStorage.setItem('cartCount', JSON.stringify(cartCount))
+}
+
 function loadCartData() {
     const cart = JSON.parse(localStorage.getItem('cart'));
     const cartHtml = document.getElementById('cartBody');
     let total = 0;
     const productMap = new Map();
-    console.log(cart);
     if (cart !== null) {
-        // Clear previous content in the cart body
         cartHtml.innerHTML = '';
-
-        // Iterate over each product in the cart
         cart.forEach(product => {
-            // Check if the product name is already in the map
             if (productMap.has(product['name'])) {
-                // If yes, increment the quantity
                 const existingProduct = productMap.get(product['name']);
                 existingProduct.quantity++;
             } else {
-                // If no, add the product to the map with quantity 1
                 productMap.set(product['name'], { ...product, quantity: 1 });
             }
         });
 
-        // Iterate over the product map to create table rows
         productMap.forEach(product => {
             const row = document.createElement('tr');
 
@@ -1062,10 +1051,12 @@ function loadCartData() {
                  localStorage.setItem('cart', JSON.stringify(updatedCart));
 
                 // Reload cart data and update the cart count in the UI
-                loadCartData();
+                setStatus(ITEM_DELETE_FROM_CART, true);
+                window.location.href = './cart.html';
                 updateCartCount();
                 
             });
+
         });
     }
 
@@ -1073,7 +1064,15 @@ function loadCartData() {
     document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
     document.getElementById('clearCart').addEventListener('click', () => {
         localStorage.setItem('cart', JSON.stringify([]));
-        loadCartData();
+        setStatus(CLEAR_CART, true);
+        window.location.href = './cart.html';
+        updateCartCount();
+    });
+
+    document.getElementById('checkout').addEventListener('click', () => {
+        localStorage.setItem('cart', JSON.stringify([]));
+        setStatus(CHECKOUT, true);
+        window.location.href = './index.html';
         updateCartCount();
     });
 
@@ -1084,7 +1083,131 @@ function loadCartData() {
 
 //#endregion
 
-// Drinks
+//#region Product Card
+function createProductCards(products) {
+    const categoryContainer = document.getElementById('productsContainer');
+    products.forEach((product) => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card-shopping-container');
+
+        const topDiv = document.createElement('div');
+        topDiv.classList.add('product-card-shopping-top');
+
+        const bottomDiv = document.createElement('div');
+        bottomDiv.classList.add('product-card-shopping-bottom');
+
+        const cardImage = document.createElement('img');
+        cardImage.classList.add('product-card-shopping-img');
+        cardImage.src = `../image/product/${getCategory(product)}/${product['photo']}`;
+
+        const cardTitle = document.createElement('h1');
+        cardTitle.innerText = product['name'];
+
+        const cardDescription = document.createElement('p');
+        cardDescription.innerText = product['description'];
+
+        const cardPriceContainer = document.createElement('div');
+        cardPriceContainer.classList.add('product-card-price-container')
+        const cardPrice = document.createElement('h2');
+        
+        const priceSpan = document.createElement('span');
+        priceSpan.classList.add('product-card-price');
+        priceSpan.innerText = product['price'];
+        cardPrice.innerHTML = "Price: $";
+        cardPrice.appendChild(priceSpan);
+
+        cardPriceContainer.appendChild(cardPrice);
+
+        //fix
+        if(product['discount'] > 0) {
+            priceSpan.classList.add('card-discount');
+
+            const newPrice = document.createElement('span');
+            const percentOff = document.createElement('span');
+
+            newPrice.classList.add('home-product-new-price', 'bolder');
+            percentOff.classList.add('percentage-off');
+
+            newPrice.innerText = (product['price'] * (1 - product['discount'])).toFixed(2);
+            percentOff.innerText = ((product['discount']) * 100).toFixed(0) + "% OFF";
+
+            cardPriceContainer.appendChild(newPrice);
+            cardPriceContainer.appendChild(percentOff);
+
+        }
+
+        
+        const cardRating = document.createElement('div');
+        cardRating.classList.add('home-product-rating');
+
+        cardRating.innerHTML = `${createStars(product['rating'])} <span class="product-rating-count">(${product['rating_count']})</span>`;
+
+        const cardButtons = document.createElement('div');
+        cardButtons.classList.add('card-button-container');
+        const moreInfoButton = document.createElement('p');
+        moreInfoButton.classList.add('button', 'more-info-button');
+        moreInfoButton.innerText = "View Product";
+        moreInfoButton.addEventListener('click', function() {
+            localStorage.setItem('selectedProduct', JSON.stringify(product));
+            window.location.href = "../product.html";
+        });
+
+        cardButtons.appendChild(moreInfoButton);
+
+        if(loggedIn) {
+            const addToCartButton = document.createElement('p');
+            addToCartButton.classList.add('button');
+            addToCartButton.innerHTML = `<span class="material-icons-sharp">shopping_cart</span> +`;
+            addToCartButton.addEventListener('click', function() {
+                addToCart(product);
+                updateCartCount();
+                console.log('added');
+                window.location.href = `${getCategory(product)}s.html`;
+            });
+
+            cardButtons.appendChild(addToCartButton);
+        }
+
+        topDiv.appendChild(cardImage);
+        topDiv.appendChild(cardTitle);
+        topDiv.appendChild(cardDescription);
+
+        bottomDiv.appendChild(cardPriceContainer);
+        bottomDiv.appendChild(cardRating);
+        bottomDiv.appendChild(cardButtons);
+
+        productCard.appendChild(topDiv);
+        productCard.appendChild(bottomDiv);
+
+        categoryContainer.appendChild(productCard);
+    });
+}
+
+//Author: Michael Boisvenu-Landry
+function loadProducts(productCategory) {
+
+    switch(productCategory.toLowerCase()) {
+        case 'all':
+            const allProducts = drinks['product'].concat(soups['product'], cookies['product']);
+            createProductCards(allProducts);
+            break;
+        case 'drinks':
+            createProductCards(drinks['product']);
+            break;
+        case 'soups':
+            createProductCards(soups['product']);
+            break;
+        case 'cookies':
+            createProductCards(cookies['product']);
+            break;
+
+
+    }
+}
+//#endregion
+
+//#region Dummy Data
+//Author: Shuhan Han
 
 const drinks = {
     "name": "drinks",
@@ -2491,5 +2614,5 @@ const soups = {
         }
     ]
 }
-
 // End of Soups
+//#endregion
