@@ -14,115 +14,121 @@ const USER_REGISTER = 'userRegister';
 //#region Main function
 //AUTHORS: Shuhan Han and Michael Boisvenu-Landry
 $(function () {
-    
+    // localStorage.clear();
     searchInit();
     //loadSuccessStatuses();
-    
-    if(loggedIn === null) {
-         loggedIn = false;
-         localStorage.setItem('authStatus', JSON.stringify(loggedIn));
-    }
-    else {
-        if(loggedIn) {
+
+    if (loggedIn === null) {
+        loggedIn = false;
+        localStorage.setItem('authStatus', JSON.stringify(loggedIn));
+    } else {
+        if (loggedIn) {
             activeUser = JSON.parse(localStorage.getItem('activeUser'));
         }
     }
-    
+
     userAuthContextHandler(loggedIn);
 
     if (window.location.href.includes("index.html")) {
         play_carousel();
         featured_products();
 
-        if(loadStatus(CHECKOUT)) {
+        if (loadStatus(CHECKOUT)) {
             displayMessage('Thanks for your order!');
             setStatus(CHECKOUT, false);
         }
 
-        if(loadStatus(USER_LOGOUT)) {
+        if (loadStatus(USER_LOGOUT)) {
             displayMessage('Succesfully logged out.');
             setStatus(USER_LOGOUT, false);
         }
 
-        if(loadStatus(USER_LOGIN)) {
+        if (loadStatus(USER_LOGIN)) {
             displayMessage(`Welcome back ${activeUser['username']}!`);
             setStatus(USER_LOGIN, false);
         }
 
-        if(loadStatus(USER_REGISTER)) {
+        if (loadStatus(USER_REGISTER)) {
             displayMessage(`Welcome to sHopper ${activeUser['username']}!`);
         }
     }
 
-    if(window.location.href.includes("product.html")) {
-        loadProductInfo();
-
-        if(loadStatus(ITEM_ADD_TO_CART)) {
+    if (window.location.href.includes("?searchTerm")) {
+        if (loadStatus(ITEM_ADD_TO_CART)) {
             displayMessage("Item added to cart succesfully");
             setStatus(ITEM_ADD_TO_CART, false);
         }
     }
 
-    if(window.location.href.includes('cart.html')) {
-        if(!loggedIn) {
+    if (window.location.href.includes("product.html")) {
+        loadProductInfo();
+
+        if (loadStatus(ITEM_ADD_TO_CART)) {
+            displayMessage("Item added to cart succesfully");
+            setStatus(ITEM_ADD_TO_CART, false);
+        }
+    }
+
+    if (window.location.href.includes('cart.html')) {
+        if (!loggedIn) {
             window.location.href = './login.html'
         }
 
         loadCartData();
 
-        if(loadStatus(ITEM_DELETE_FROM_CART)) {
+        if (loadStatus(ITEM_DELETE_FROM_CART)) {
             displayMessage("Item removed succesfully.");
             setStatus(ITEM_DELETE_FROM_CART, false);
         }
 
-        if(loadStatus(CLEAR_CART)) {
+        if (loadStatus(CLEAR_CART)) {
             displayMessage('Cart succesfully cleared.');
             setStatus(CLEAR_CART, false);
         }
     }
 
-    if(window.location.href.includes('all.html')) {
+    if (window.location.href.includes('all.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
 
-        if(loadStatus(ITEM_ADD_TO_CART)) {
+        if (loadStatus(ITEM_ADD_TO_CART)) {
             displayMessage('Item added to cart sucesfully.');
             setStatus(ITEM_ADD_TO_CART, false);
         }
         loadProducts('all');
     }
 
-    if(window.location.href.includes('drinks.html')) {
+    if (window.location.href.includes('drinks.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
 
-        if(loadStatus(ITEM_ADD_TO_CART)) {
+        if (loadStatus(ITEM_ADD_TO_CART)) {
             displayMessage('Item added to cart sucesfully.');
             setStatus(ITEM_ADD_TO_CART, false);
         }
         loadProducts('drinks');
     }
 
-    if(window.location.href.includes('cookies.html')) {
+    if (window.location.href.includes('cookies.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
 
-        if(loadStatus(ITEM_ADD_TO_CART)) {
+        if (loadStatus(ITEM_ADD_TO_CART)) {
             displayMessage('Item added to cart sucesfully.');
             setStatus(ITEM_ADD_TO_CART, false);
         }
         loadProducts('cookies');
     }
 
-    if(window.location.href.includes('soups.html')) {
+    if (window.location.href.includes('soups.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
 
-        if(loadStatus(ITEM_ADD_TO_CART)) {
+        if (loadStatus(ITEM_ADD_TO_CART)) {
             displayMessage('Item added to cart sucesfully.');
             setStatus(ITEM_ADD_TO_CART, false);
         }
         loadProducts('soups');
     }
 
-    if(window.location.href.includes('login.html')) {
-        if(loggedIn)
+    if (window.location.href.includes('login.html')) {
+        if (loggedIn)
             window.location.href = './index.html';
         else {
             document.getElementById('username').addEventListener('blur', validate);
@@ -130,8 +136,8 @@ $(function () {
         }
     }
 
-    if(window.location.href.includes('signup.html')) {
-        if(loggedIn)
+    if (window.location.href.includes('signup.html')) {
+        if (loggedIn)
             window.location.href = './index.html';
         else {
             document.getElementById('username').addEventListener('blur', validate);
@@ -143,26 +149,26 @@ $(function () {
         }
     }
 
-    if(window.location.href.includes('profile.html')) {
-        if(!loggedIn) {
-            window.location.href = './login.html';
-        }
+    if (window.location.href.includes('profile.html')) {
+        // if (!loggedIn) {
+        //     window.location.href = './login.html';
+        // }
 
         loadUserProfile(activeUser);
 
-        if(loadStatus(USER_UPDATED)) {
+        if (loadStatus(USER_UPDATED)) {
             displayMessage('Profile succesfully updated.');
             setStatus(USER_UPDATED, false);
         }
 
-        
+
     }
 
-    if(window.location.href.includes('results.html')) {
+    if (window.location.href.includes('results.html')) {
         document.getElementById('searchButton').href = '../products/results.html';
         searchProducts(getSearchTerm());
     }
-    
+
 });
 
 //#endregion
@@ -170,7 +176,7 @@ $(function () {
 //#region Search
 //AUTHOR: David Currey
 function searchInit() {
-        // Get a reference to the form and input element
+    // Get a reference to the form and input element
     const searchButton = document.getElementById('searchButton');
     const searchInput = document.getElementById('searchBar');
 
@@ -182,7 +188,11 @@ function searchInit() {
         const userInput = searchInput.value;
 
         // Redirect to results.html with searchTerm as a query parameter
-        window.location.href = `./products/results.html?searchTerm=${encodeURIComponent(userInput)}`;
+        let url = `./products/results.html?searchTerm=${encodeURIComponent(userInput)}`;
+        if (window.location.href.includes('/products')) {
+            url = `./results.html?searchTerm=${encodeURIComponent(userInput)}`;
+        }
+        window.location.href = url;
     });
 }
 
@@ -198,9 +208,9 @@ function searchProducts(keyword) {
 
     categories.forEach(category => {
         category['product'].forEach(product => {
-            if(product['name'].toLowerCase().includes(keyword.toLowerCase()) 
+            if (product['name'].toLowerCase().includes(keyword.toLowerCase())
                 || product['description'].toLowerCase().includes(keyword.toLowerCase())) {
-                    matchingProducts.push({...product, 'category': category})
+                matchingProducts.push({...product, 'category': category})
             }
         });
     });
@@ -208,17 +218,19 @@ function searchProducts(keyword) {
     document.getElementById('resultText').innerText = `Results for: "${keyword}"`;
     document.getElementById('resultCount').innerText = (matchingProducts.length != 1) ? `${matchingProducts.length} results...` : `1 result...`;
 }
+
 //#endregion
 
 //#region User Profile
 //AUTHORS: Nnamdi Echegini and Michael Boisvenu-Landry
 function loadUserProfile(user) {
     const noneText = 'None'
+
     function fieldEmpty(property) {
         return (property === '' || property === noneText)
     }
 
-    if(user === null)
+    if (user === null)
         window.location.href = 'index.html';
     else {
         const allUsers = JSON.parse(localStorage.getItem('users'));
@@ -259,7 +271,7 @@ function loadUserProfile(user) {
                         profilePicture.src = e.target.result;
                     };
                     reader.readAsDataURL(file);
-                    
+
 
                 }
             });
@@ -285,7 +297,7 @@ function loadUserProfile(user) {
                 }
                 return "";
             }
-            
+
             function validateLastName() {
                 lastName = document.getElementById("lastname").value;
                 if (lastName.trim() === "" || lastName === noneText) {
@@ -293,7 +305,7 @@ function loadUserProfile(user) {
                 }
                 return "";
             }
-            
+
             function validateUserName() {
                 userName = document.getElementById("username").value;
                 if (userName.trim() === "" || userName === noneText) {
@@ -301,56 +313,56 @@ function loadUserProfile(user) {
                 }
                 return "";
             }
-            
+
             function validateEmail() {
                 email = document.getElementById("email").value;
-               
+
                 if (email.trim() === "" || email === noneText) {
                     return "Email is required.";
                 }
-                
+
                 function countSymbols(emailString, symbol) {
                     let count = 0;
-                    for(let i = 0; i < emailString.length; i++)
-                        if(emailString[i] === symbol)
+                    for (let i = 0; i < emailString.length; i++)
+                        if (emailString[i] === symbol)
                             count++;
-                    
+
                     return count;
                 }
 
                 const dotCount = countSymbols(email, '.');
                 const atCount = countSymbols(email, '@');
 
-                if(atCount !== 1 || dotCount !== 1)
+                if (atCount !== 1 || dotCount !== 1)
                     return "Email is in an invalid format.";
-                
+
                 return "";
             }
-            
+
             function validateMobileNumber() {
                 mobileNumber = document.getElementById("mobileNumber").value;
-                
 
-                if(mobileNumber.length != 10) {
+
+                if (mobileNumber.length != 10) {
                     return "Phone number must be 10 digits.";
                 }
-                
+
                 return "";
             }
-            
+
             function validatePostalCode() {
                 postalCode = document.getElementById("postalCode").value;
                 if (postalCode.trim() === "") {
                     return "Postal Code is required.";
                 }
 
-                if(postalCode.trim().length !== 6) {
+                if (postalCode.trim().length !== 6) {
                     return "Postal code must be 6 characters."
                 }
-                
+
                 return "";
             }
-            
+
             function validateProvince() {
                 province = document.getElementById("province").value;
                 if (province.trim() === "" || province === noneText) {
@@ -358,7 +370,7 @@ function loadUserProfile(user) {
                 }
                 return "";
             }
-            
+
             function validateCity() {
                 city = document.getElementById("city").value;
                 if (city.trim() === "" || city === noneText) {
@@ -366,7 +378,7 @@ function loadUserProfile(user) {
                 }
                 return "";
             }
-            
+
             function clearError(errorSpan) {
                 if (errorSpan) {
                     errorSpan.textContent = "";
@@ -408,7 +420,7 @@ function loadUserProfile(user) {
                 emailErrorSpan.textContent = emailError;
                 return;
             }
-            
+
 
             // Validate Mobile Number
             let mobileNumberErrorSpan = document.getElementById("mobileNumberError");
@@ -460,7 +472,7 @@ function loadUserProfile(user) {
             user['addressLine2'] = document.getElementById('addressLine2').value;
             user['profilePicture'] = profilePicture.src;
 
-            if(oldUser !== null) {
+            if (oldUser !== null) {
                 const id = allUsers[oldUser['id']];
                 console.log(id);
                 localStorage.setItem('users', JSON.stringify(allUsers));
@@ -472,9 +484,9 @@ function loadUserProfile(user) {
         });
 
 
-
     }
 }
+
 //#endregion
 
 //#region User Form Validations
@@ -504,13 +516,13 @@ function registerValidate() {
 
     //Check if user exists
     const users = JSON.parse(localStorage.getItem('users'));
-    if(users !== null) {
+    if (users !== null) {
         users.forEach((u) => {
-            if(u['username'].toLowerCase() === usernameInput.value.toLowerCase()) {
+            if (u['username'].toLowerCase() === usernameInput.value.toLowerCase()) {
                 usernameError.textContent = 'User with that username already exists.'
             }
 
-            if(u['email'].toLowerCase() === emailInput.value.toLowerCase()) {
+            if (u['email'].toLowerCase() === emailInput.value.toLowerCase()) {
                 emailError.textContent = 'Email is already being used';
             }
         });
@@ -592,7 +604,7 @@ function registerValidateAndSubmit() {
     };
 
     let users = JSON.parse(localStorage.getItem('users'));
-    if(users === null) {
+    if (users === null) {
         users = [];
     }
     user['id'] = users.length;
@@ -611,28 +623,26 @@ function loginValidate() {
 
     var usernameError = document.getElementById('username-error');
     var passwordError = document.getElementById('password-error');
-    
+
     // Reset error messages
     usernameError.textContent = '';
     passwordError.textContent = '';
     const users = JSON.parse(localStorage.getItem('users'));
     if (users !== null) {
         let tempUser = null;
-        
+
         users.forEach((u) => {
-            if(u['username'].toLowerCase() === usernameInput.value.toLowerCase())
+            if (u['username'].toLowerCase() === usernameInput.value.toLowerCase())
                 tempUser = u;
         });
 
         if (tempUser !== null) {
-            if(tempUser['password'] === passwordInput.value) {
+            if (tempUser['password'] === passwordInput.value) {
                 localStorage.setItem('activeUser', JSON.stringify(tempUser));
-            }
-            else {
+            } else {
                 passwordError.textContent = 'Password is incorrect.';
             }
-        }
-        else {
+        } else {
             usernameError.textContent = 'No user with that username exists.';
         }
     }
@@ -669,6 +679,7 @@ function loginValidateAndNavigate() {
     // Validation successful, navigate to home.html
     window.location.href = 'index.html';
 }
+
 //#endregion
 
 //#region Misc
@@ -676,7 +687,7 @@ function loginValidateAndNavigate() {
 
 function loadStatus(statusKey) {
     let value = JSON.parse(localStorage.getItem(statusKey));
-    if(value === null) {
+    if (value === null) {
         setStatus(statusKey, false);
         return false;
     }
@@ -700,7 +711,7 @@ function displayMessage(message) {
     const closeButton = document.createElement('p');
     closeButton.classList.add('message-close');
     closeButton.innerText = 'X';
-    
+
     messageContainer.appendChild(messageText);
     messageContainer.appendChild(closeButton);
 
@@ -718,7 +729,7 @@ function userAuthContextHandler(loggedIn) {
     contextButtons[2].style.display = (loggedIn) ? 'none' : 'flex'
     contextButtons[3].style.display = (loggedIn) ? 'none' : 'flex'
 
-    if(loggedIn) {
+    if (loggedIn) {
         let cartCount = JSON.parse(localStorage.getItem('cartCount'));
         if (cartCount === null) {
             console.log('cart count was null, initializing');
@@ -729,7 +740,7 @@ function userAuthContextHandler(loggedIn) {
         document.getElementById('cartItemsCount').innerText = `${cartCount}`;
     }
 }
- 
+
 // Author: Shuhan Han
 function play_carousel() {
     let slideNum = 0;
@@ -740,12 +751,14 @@ function play_carousel() {
     function carousel() {
         interval = setInterval(moveRight, "2000");
     };
+
     function show() {
         $(".dot li").eq(slideNum).css("background-color", "white")
             .siblings().css("background-color", "transparent");
 
         $("ul.slides").css("left", -800 * slideNum);
     }
+
     function moveRight() {
         slideNum++;
         if (slideNum > lastIndex)
@@ -833,7 +846,7 @@ function featured_products() {
             let img = $('<img class="home-product-img">').attr({
                 src: `image/product/${getCategory(product)}/${product['photo']}`,
                 alt: product['name'],
-                
+
             });
             // card content
             let cardContent = $('<div class="home-product-card-content">');
@@ -853,7 +866,7 @@ function featured_products() {
                 cardPrice.append(cardDiscountPrice);
                 cardPrice.append(cardDiscountPercent);
             }
-            
+
             let cardRating = `<div class="home-product-rating">${createStars(product['rating'])} <span class="product-rating-count">(${product['rating_count']})</span></div>`;
             // Append elements to the card-price
             cardPrice.prepend(cardOriginalPrice);
@@ -867,10 +880,10 @@ function featured_products() {
             $('body').append(title, container);
         }
     }
-    // Function to create stars based on the rating
-    
 
-    
+    // Function to create stars based on the rating
+
+
     create_category_products(under20, 6);
     create_category_products(highestRated, 6);
     create_category_products(drinksByDate, 6);
@@ -885,7 +898,7 @@ function featured_products() {
         console.log(localStorage.getItem('selectedProduct'))
         window.location.href = "product.html";
     }));
-       
+
 }
 
 //Author: Shuhan Han
@@ -901,6 +914,7 @@ function createStars(rating) {
     }
     return stars;
 }
+
 //#endregion
 
 //#region Handles product page
@@ -925,20 +939,19 @@ function loadProductInfo() {
     productCategory.innerText = category;
     productDescription.innerText = storedProduct['description'];
     cartButton.innerHTML = '<span class="material-icons-sharp">shopping_cart</span> ' + ((document.querySelectorAll('.menu-button')[0].style.display === 'flex') ? 'Add To Cart' : 'Login to Shop');
-    cartButton.addEventListener('click', function() {
+    cartButton.addEventListener('click', function () {
         addToCart(storedProduct);
         window.location.href = "product.html";
     })
-        
+
 }
 
 function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart'));
-    if(cart === null) {
+    if (cart === null) {
         cart.push('cart', JSON.stringify(cart));
         localStorage.setItem('cart', JSON.stringify(cart));
-    }
-    else {
+    } else {
         cart.push(product);
         localStorage.setItem('cart', JSON.stringify(cart));
     }
@@ -984,7 +997,7 @@ function loadCartData() {
                 const existingProduct = productMap.get(product['name']);
                 existingProduct.quantity++;
             } else {
-                productMap.set(product['name'], { ...product, quantity: 1 });
+                productMap.set(product['name'], {...product, quantity: 1});
             }
         });
 
@@ -1005,7 +1018,7 @@ function loadCartData() {
 
             const quantityCell = document.createElement('td');
             const quantityDropdown = document.createElement('select');
-            for(let i = 1; i < 19; i++) {
+            for (let i = 1; i < 19; i++) {
                 const selectItem = document.createElement('option');
                 selectItem.value = i;
                 selectItem.text = i;
@@ -1048,13 +1061,13 @@ function loadCartData() {
                 const updatedCart = cart.filter(item => item['name'] !== productName);
 
                 // Update the localStorage with the modified cart data
-                 localStorage.setItem('cart', JSON.stringify(updatedCart));
+                localStorage.setItem('cart', JSON.stringify(updatedCart));
 
                 // Reload cart data and update the cart count in the UI
                 setStatus(ITEM_DELETE_FROM_CART, true);
                 window.location.href = './cart.html';
                 updateCartCount();
-                
+
             });
 
         });
@@ -1075,8 +1088,6 @@ function loadCartData() {
         window.location.href = './index.html';
         updateCartCount();
     });
-
-    
 
 
 }
@@ -1109,7 +1120,7 @@ function createProductCards(products) {
         const cardPriceContainer = document.createElement('div');
         cardPriceContainer.classList.add('product-card-price-container')
         const cardPrice = document.createElement('h2');
-        
+
         const priceSpan = document.createElement('span');
         priceSpan.classList.add('product-card-price');
         priceSpan.innerText = product['price'];
@@ -1119,7 +1130,7 @@ function createProductCards(products) {
         cardPriceContainer.appendChild(cardPrice);
 
         //fix
-        if(product['discount'] > 0) {
+        if (product['discount'] > 0) {
             priceSpan.classList.add('card-discount');
 
             const newPrice = document.createElement('span');
@@ -1136,7 +1147,7 @@ function createProductCards(products) {
 
         }
 
-        
+
         const cardRating = document.createElement('div');
         cardRating.classList.add('home-product-rating');
 
@@ -1147,22 +1158,23 @@ function createProductCards(products) {
         const moreInfoButton = document.createElement('p');
         moreInfoButton.classList.add('button', 'more-info-button');
         moreInfoButton.innerText = "View Product";
-        moreInfoButton.addEventListener('click', function() {
+        moreInfoButton.addEventListener('click', function () {
             localStorage.setItem('selectedProduct', JSON.stringify(product));
             window.location.href = "../product.html";
         });
 
         cardButtons.appendChild(moreInfoButton);
 
-        if(loggedIn) {
+        if (loggedIn) {
             const addToCartButton = document.createElement('p');
             addToCartButton.classList.add('button');
             addToCartButton.innerHTML = `<span class="material-icons-sharp">shopping_cart</span> +`;
-            addToCartButton.addEventListener('click', function() {
+            addToCartButton.addEventListener('click', function () {
                 addToCart(product);
                 updateCartCount();
                 console.log('added');
-                window.location.href = `${getCategory(product)}s.html`;
+                location.reload();
+                // window.location.href = `${getCategory(product)}s.html`;
             });
 
             cardButtons.appendChild(addToCartButton);
@@ -1186,7 +1198,7 @@ function createProductCards(products) {
 //Author: Michael Boisvenu-Landry
 function loadProducts(productCategory) {
 
-    switch(productCategory.toLowerCase()) {
+    switch (productCategory.toLowerCase()) {
         case 'all':
             const allProducts = drinks['product'].concat(soups['product'], cookies['product']);
             createProductCards(allProducts);
@@ -1204,6 +1216,7 @@ function loadProducts(productCategory) {
 
     }
 }
+
 //#endregion
 
 //#region Dummy Data
