@@ -601,7 +601,8 @@ function registerValidateAndSubmit() {
         "postalCode": '',
         "province": '',
         "city": '',
-        "profilePicture": 'https://i.pinimg.com/736x/7f/43/03/7f4303ad3716465ed058ed44a6f64369.jpg'
+        "profilePicture": 'https://i.pinimg.com/736x/7f/43/03/7f4303ad3716465ed058ed44a6f64369.jpg',
+        'cart': ''
     };
 
     let users = JSON.parse(localStorage.getItem('users'));
