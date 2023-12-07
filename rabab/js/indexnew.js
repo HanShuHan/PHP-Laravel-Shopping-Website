@@ -936,13 +936,10 @@ function loadProductInfo() {
 function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart'));
     if(cart === null) {
-        cart.push('cart', JSON.stringify(cart));
-        localStorage.setItem('cart', JSON.stringify(cart));
+        cart = [];
     }
-    else {
-        cart.push(product);
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
 
     updateCartCount();
     setStatus(ITEM_ADD_TO_CART, true);
