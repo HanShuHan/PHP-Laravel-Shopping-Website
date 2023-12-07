@@ -50,6 +50,7 @@ $(function () {
 
         if (loadStatus(USER_REGISTER)) {
             displayMessage(`Welcome to sHopper ${activeUser['username']}!`);
+            setStatus(USER_REGISTER, false);
         }
     }
 
@@ -955,7 +956,7 @@ function loadProductInfo() {
 
 function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart'));
-    if (cart === null) {
+    if(cart === null) {
         cart = [];
     }
     cart.push(product);
