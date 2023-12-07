@@ -74,6 +74,15 @@ $(function () {
         if (!loggedIn) {
             window.location.href = './login.html'
         }
+        else {
+            // let updated_cart = JSON.parse(localStorage.getItem('updated_cart'));
+            let updated_cart = localStorage.getItem('updated_cart');
+            if (updated_cart !== null) {
+                localStorage.setItem('cart', updated_cart);
+                localStorage.removeItem('updated_cart');
+                updateCartCount();
+            }
+        }
 
         loadCartData();
 
@@ -211,7 +220,7 @@ function searchProducts(keyword) {
         category['product'].forEach(product => {
             if (product['name'].toLowerCase().includes(keyword.toLowerCase())
                 || product['description'].toLowerCase().includes(keyword.toLowerCase())) {
-                matchingProducts.push({...product, 'category': category})
+                matchingProducts.push({ ...product, 'category': category })
             }
         });
     });
@@ -648,6 +657,9 @@ function loginValidate() {
         } else {
             usernameError.textContent = 'No user with that username exists.';
         }
+    } else {
+        usernameError.textContent = 'No user with that username exists.';
+        return false;
     }
 
     // Validate username
@@ -733,13 +745,12 @@ function userAuthContextHandler(loggedIn) {
     contextButtons[3].style.display = (loggedIn) ? 'none' : 'flex'
 
     if (loggedIn) {
-        let cartCount = JSON.parse(localStorage.getItem('cartCount'));
+        cartCount = localStorage.getItem('cartCount');
         if (cartCount === null) {
             console.log('cart count was null, initializing');
             cartCount = 0;
             localStorage.setItem('cartCount', JSON.stringify(cartCount));
         }
-
         document.getElementById('cartItemsCount').innerText = `${cartCount}`;
     }
 }
@@ -947,7 +958,7 @@ function loadProductInfo() {
             addToCart(storedProduct);
             window.location.href = "product.html";
         })
-    } else{
+    } else {
         cartButton.addEventListener('click', function () {
             window.location.href = "login.html";
         })
@@ -955,13 +966,27 @@ function loadProductInfo() {
 }
 
 function addToCart(product) {
+    // localStorage.clear();
     let cart = JSON.parse(localStorage.getItem('cart'));
-    if(cart === null) {
-        cart = [];
+    if (cart === null) {
+        product.quantity++;
+        cart = [product];
+    } else {
+        let product_exists = false; // 
+        cart.forEach(p => {
+            if (p.id === product.id) {
+                p.quantity++;
+                product_exists = true;
+                return;
+            }
+        });
+        if (!product_exists) {
+            product.quantity++;
+            cart.push(product);
+        }
     }
-    cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
-
+    //
     updateCartCount();
     setStatus(ITEM_ADD_TO_CART, true);
     //successMessage();
@@ -986,9 +1011,15 @@ contextActivator.addEventListener('click', () => {
 //#region Cart
 //Author: Michael Boisvenu-Landry
 function updateCartCount() {
+    count = 0;
     const cart = JSON.parse(localStorage.getItem('cart'));
-    const cartCount = cart.length;
-    localStorage.setItem('cartCount', JSON.stringify(cartCount))
+    if (cart !== null) {
+        cart.forEach(product => {
+            count += product.quantity;
+        });
+    }
+    localStorage.setItem('cartCount', JSON.stringify(count));
+    document.getElementById('cartItemsCount').innerText = `${count}`;
 }
 
 function loadCartData() {
@@ -998,16 +1029,15 @@ function loadCartData() {
     const productMap = new Map();
     if (cart !== null) {
         cartHtml.innerHTML = '';
-        cart.forEach(product => {
-            if (productMap.has(product['name'])) {
-                const existingProduct = productMap.get(product['name']);
-                existingProduct.quantity++;
-            } else {
-                productMap.set(product['name'], {...product, quantity: 1});
-            }
-        });
+        // cart.forEach(product => {
+        //     if (product.quantity === null) {
+        //         productMap.set(product['name'], product.qu);
+        //     } else {
+        //         productMap.set(product['name'], { ...product, quantity: 1 });
+        //     }
+        // });
 
-        productMap.forEach(product => {
+        cart.forEach(product => {
             const row = document.createElement('tr');
 
             const nameCell = document.createElement('td');
@@ -1031,17 +1061,29 @@ function loadCartData() {
                 quantityDropdown.appendChild(selectItem);
             }
             quantityDropdown.selectedIndex = product.quantity - 1;
+            quantityDropdown.addEventListener('change', () => {
+                product.quantity = quantityDropdown.selectedIndex + 1;
+                console.log(product.quantity);
+                // Update 
+                let updated_cart = JSON.parse(localStorage.getItem('cart'));
+                for (let i = 0; i < updated_cart.length; i++) {
+                    if (updated_cart[i].id === product.id) {
+                        updated_cart[i].quantity = product.quantity;
+                    }
+                }
+                console.log(updated_cart);
+                localStorage.setItem('updated_cart', JSON.stringify(cart));
+                location.reload();
+                // 
+                // updateCartCount();
+            })
             quantityCell.appendChild(quantityDropdown);
 
-            quantityDropdown.addEventListener('selectionchange', () => {
-                product.quantity = quantityDropdown.selectedIndex;
-                console.log(product.quantity);
-                updateCartCount();
-            })
 
             const priceCell = document.createElement('td');
             const price = parseFloat(product['price']);
-            priceCell.textContent = '$' + (price * product.quantity).toFixed(2);
+            // priceCell.textContent = '$' + (price * product.quantity).toFixed(2);
+            priceCell.textContent = '$' + price.toFixed(2);
 
             const actionCell = document.createElement('td');
             const deleteButton = document.createElement('p');
@@ -1236,7 +1278,7 @@ const drinks = {
             "id": "9a8cff74-e01c-43ab-a07f-69bda03d67cc",
             "name": "Monster Energy Punch, Aussie Style Lemonade",
             "description": "473mL Cans, Pack of 12",
-            "price": "23.31",
+            "quantity": 0, "price": "23.31",
             "discount": 0.15,
             "rating": 5,
             "rating_count": 42,
@@ -1253,7 +1295,7 @@ const drinks = {
             "id": "9a8cffc6-70bf-468d-a958-75a656801fdd",
             "name": "Reign Energy, Orange Dreamsicle",
             "description": "473mL Cans, Pack of 12",
-            "price": "28.99",
+            "quantity": 0, "price": "28.99",
             "discount": 0,
             "rating": 5,
             "rating_count": 165,
@@ -1270,7 +1312,7 @@ const drinks = {
             "id": "9a8d001a-6c33-4293-b9f8-8a42c79870de",
             "name": "Monster Energy Java, 300 French Vanilla",
             "description": "444mL Cans, Pack of 12",
-            "price": "23.49",
+            "quantity": 0, "price": "23.49",
             "discount": 0.25,
             "rating": 4,
             "rating_count": 283,
@@ -1287,7 +1329,7 @@ const drinks = {
             "id": "9a8d006d-a85f-4f25-818a-d3c4129004a4",
             "name": "Monster Energy, Ultra Peachy Keen",
             "description": "473mL Cans, Pack of 12",
-            "price": "23.49",
+            "quantity": 0, "price": "23.49",
             "discount": 0,
             "rating": 5,
             "rating_count": 128,
@@ -1304,7 +1346,7 @@ const drinks = {
             "id": "9a8d00e3-5f03-4c9d-94b2-731c98ee4ea6",
             "name": "Country Time Lemonade Liquid Drink Mix",
             "description": "48ml",
-            "price": "2.99",
+            "quantity": 0, "price": "2.99",
             "discount": 0.50,
             "rating": 4,
             "rating_count": 1463,
@@ -1321,7 +1363,7 @@ const drinks = {
             "id": "9a8d0135-5daf-4166-8437-c81137e835ac",
             "name": "Rockstar Energy Drink Punched",
             "description": "Rockstar Energy Drink Punched",
-            "price": "24.99",
+            "quantity": 0, "price": "24.99",
             "discount": 0,
             "rating": 5,
             "rating_count": 424,
@@ -1338,7 +1380,7 @@ const drinks = {
             "id": "9a8d0179-3973-4e5f-bd24-980edf8b0d8a",
             "name": "Bai Antioxidant Infusion Flavoured Water Beverage",
             "description": "Costa Rica Clementine, 530 mL, 12-Count",
-            "price": "28.49",
+            "quantity": 0, "price": "28.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 666,
@@ -1355,7 +1397,7 @@ const drinks = {
             "id": "9a8d01de-f9b8-4291-a58c-80969458e393",
             "name": "Starbucks Double Shot Vanilla",
             "description": "444 mL Cans, 12 Pack",
-            "price": "39.36",
+            "quantity": 0, "price": "39.36",
             "discount": 0,
             "rating": 4,
             "rating_count": 780,
@@ -1372,7 +1414,7 @@ const drinks = {
             "id": "9a8d0287-187f-4a50-ae43-00eea6dcd67a",
             "name": "Red Bull Energy Drink, Sugar Fre",
             "description": "473ml (12 pack)",
-            "price": "43.59",
+            "quantity": 0, "price": "43.59",
             "discount": 0,
             "rating": 4,
             "rating_count": 2956,
@@ -1389,7 +1431,7 @@ const drinks = {
             "id": "9a8d02a3-1610-43e7-aeac-60d11641ec2c",
             "name": "Red Bull Energy Drink, Zero",
             "description": "473ml (12 pack)",
-            "price": "63.48",
+            "quantity": 0, "price": "63.48",
             "discount": 0,
             "rating": 4,
             "rating_count": 2956,
@@ -1406,7 +1448,7 @@ const drinks = {
             "id": "9a8d02d3-3c80-4b44-9b72-c617ee318a60",
             "name": "GURU Organic Energy Drink - New Theanine Fruit Punch",
             "description": "Power Up your Mind - Healthy Energy - Plant Based ingredients - Low Sugar - Only 50 calories - The ultimate Brain Booster - 355 ml (Pack of 24)",
-            "price": "66.95",
+            "quantity": 0, "price": "66.95",
             "discount": 0,
             "rating": 5,
             "rating_count": 96,
@@ -1423,7 +1465,7 @@ const drinks = {
             "id": "9a8d030b-3e0f-42b9-9240-7b8d62f6f2b8",
             "name": "Juvee Rejuvenating Energy Drink. Kiwi Strawberry.",
             "description": "Sugar Free Energy Drinks. Taurine, Vitamin B12, Vitamin B6. 128 Mg Of Caffeine. L-Theanine For Mood Support. Panax Ginseng For Focus. Vitamin C For Immune Support. Gluten Free 12 fl oz (Pack of 12)",
-            "price": "37.99",
+            "quantity": 0, "price": "37.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 64,
@@ -1440,7 +1482,7 @@ const drinks = {
             "id": "9a8d0402-5a1a-46dc-86f9-0fb26af3a7c7",
             "name": "Monster Energy Rehab, Peach Tea",
             "description": "458mL Cans, Pack of 12",
-            "price": "28.99",
+            "quantity": 0, "price": "28.99",
             "discount": 0,
             "rating": 5,
             "rating_count": 169,
@@ -1457,7 +1499,7 @@ const drinks = {
             "id": "9a8d0447-5ad6-4a5a-acdf-f18ec4837db8",
             "name": "Monster Energy Rehab, Tea + Lemonade",
             "description": "458mL Cans, Pack of 12",
-            "price": "28.99",
+            "quantity": 0, "price": "28.99",
             "discount": 0,
             "rating": 5,
             "rating_count": 113,
@@ -1474,7 +1516,7 @@ const drinks = {
             "id": "9a8d04b2-f278-42fe-af96-22326d91df34",
             "name": "Monster Energy Rehab, Ultra Blue",
             "description": "458mL Cans, Pack of 12",
-            "price": "23.49",
+            "quantity": 0, "price": "23.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 804,
@@ -1491,7 +1533,7 @@ const drinks = {
             "id": "9a8d0627-a546-400f-b22a-03c739a556ff",
             "name": "Monster Energy, Zero Ultra",
             "description": "458mL Cans, Pack of 12",
-            "price": "23.31",
+            "quantity": 0, "price": "23.31",
             "discount": 0,
             "rating": 5,
             "rating_count": 804,
@@ -1508,7 +1550,7 @@ const drinks = {
             "id": "9a8d068b-2ea9-43f1-8a4d-155e94bbe21b",
             "name": "Monster Energy, Ultra Gold",
             "description": "473mL Cans, Pack of 12",
-            "price": "23.49",
+            "quantity": 0, "price": "23.49",
             "discount": 0,
             "rating": 5,
             "rating_count": 188,
@@ -1525,7 +1567,7 @@ const drinks = {
             "id": "9a8ca249-d251-4915-89c6-3121964698e9",
             "name": "CHI FOREST Sparkling Water White Peach Flavor",
             "description": "0 sugar, 0 calories, 100% flavor, 11.15 fl oz Cans(pack of 24)\u2026",
-            "price": "25.49",
+            "quantity": 0, "price": "25.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 736,
@@ -1542,7 +1584,7 @@ const drinks = {
             "id": "9a8ca4ad-0c27-40b3-95e7-f1690c6eddc3",
             "name": "Pepsi cola",
             "description": "355 ml (Pack of 12)",
-            "price": "6.97",
+            "quantity": 0, "price": "6.97",
             "discount": 0,
             "rating": 4,
             "rating_count": 27,
@@ -1559,7 +1601,7 @@ const drinks = {
             "id": "9a8ca519-5e3a-4e16-9982-34e7b606f49b",
             "name": "Snapple Naturally Flavoured Fruit Beverage Kiwi- Strawberry",
             "description": "473mL, 12-Count",
-            "price": "11.99",
+            "quantity": 0, "price": "11.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 302,
@@ -1576,7 +1618,7 @@ const drinks = {
             "id": "9a8ca5ab-8395-4ca8-bc89-bd6ffbe20c13",
             "name": "7UP Soft Drink",
             "description": "355 mL/12 fl. oz., Cans, 12 Pack",
-            "price": "6.97",
+            "quantity": 0, "price": "6.97",
             "discount": 0,
             "rating": 4,
             "rating_count": 944,
@@ -1593,7 +1635,7 @@ const drinks = {
             "id": "9a8ca8fd-bdea-43e9-a7f8-31caad170c0b",
             "name": "Gatorade Orange Sports Drink",
             "description": "355mL, 12 Pack",
-            "price": "27.88",
+            "quantity": 0, "price": "27.88",
             "discount": 0,
             "rating": 5,
             "rating_count": 510,
@@ -1610,7 +1652,7 @@ const drinks = {
             "id": "9a8ca950-0281-4632-87b8-f51739675446",
             "name": "Gatorade Frost Glacier Freeze Sports Drink",
             "description": "591 mL Bottles, 4 x 6 Pack",
-            "price": "27.96",
+            "quantity": 0, "price": "27.96",
             "discount": 0,
             "rating": 5,
             "rating_count": 180,
@@ -1627,7 +1669,7 @@ const drinks = {
             "id": "9a8caa4c-b618-41e7-908d-991ab70afca6",
             "name": "Coca-Cola Coke Classic",
             "description": "355mL Cans, Pack of 12",
-            "price": "6.49",
+            "quantity": 0, "price": "6.49",
             "discount": 0,
             "rating": 5,
             "rating_count": 791,
@@ -1644,7 +1686,7 @@ const drinks = {
             "id": "9a8caac4-acf2-4b2a-8b80-4f3ce3109e2d",
             "name": "Dr Pepper",
             "description": "355 mL Cans, 12 Pack (Packaging May Vary)",
-            "price": "6.79",
+            "quantity": 0, "price": "6.79",
             "discount": 0,
             "rating": 5,
             "rating_count": 848,
@@ -1661,7 +1703,7 @@ const drinks = {
             "id": "9a8cab6a-99d7-43b7-8175-31e6ce73465f",
             "name": "Crystal Light On the Go, 60 Ct.",
             "description": "Variety Pack (Lemonade, Fruit Punch, Raspberry Lemonade, Wild Strawberry) 178g",
-            "price": "24.0",
+            "quantity": 0, "price": "24.0",
             "discount": 0,
             "rating": 5,
             "rating_count": 1723,
@@ -1678,7 +1720,7 @@ const drinks = {
             "id": "9a8ce525-e2c3-45ef-9a6d-b685115c71aa",
             "name": "Lipton Lemon Iced Tea",
             "description": "340 ml Cans, 12 Pack",
-            "price": "6.99",
+            "quantity": 0, "price": "6.99",
             "discount": 0,
             "rating": 5,
             "rating_count": 572,
@@ -1706,7 +1748,7 @@ const cookies = {
             "id": "9a8ce61d-99af-4f5f-b5b3-4fed0f3cd5e4",
             "name": "Lotus Biscoff Cookies \u2013 Caramelized Biscuit Cookies",
             "description": "300 Cookies Individually Wrapped \u2013 Vegan,0.2 Ounce (Pack of 300)",
-            "price": "31.99",
+            "quantity": 0, "price": "31.99",
             "discount": 0,
             "rating": 5,
             "rating_count": 18897,
@@ -1723,7 +1765,7 @@ const cookies = {
             "id": "9a8ce974-9cfb-4b5d-a174-08afc2cdfda0",
             "name": "Lady Sarah Assorted Biscuits Family Pack",
             "description": "Chocolate Cream Cookies & Custard Cream Cookies 400G - Individual Packs",
-            "price": "2.99",
+            "quantity": 0, "price": "2.99",
             "discount": 0.23,
             "rating": 4,
             "rating_count": 421,
@@ -1740,7 +1782,7 @@ const cookies = {
             "id": "9a8ceb3a-edce-4a24-9e38-5cac6cb71edd",
             "name": "OREO Original Chocolate Sandwich Cookies",
             "description": "School Snacks, Family Size, 439g (Pack of 1)",
-            "price": "3.79",
+            "quantity": 0, "price": "3.79",
             "discount": 0,
             "rating": 5,
             "rating_count": 942,
@@ -1757,7 +1799,7 @@ const cookies = {
             "id": "9a8ceb75-e914-424e-acf9-a244c1765938",
             "name": "Peek Freans Shortcake Biscuits/Cookies",
             "description": "350 Grams/10.6 Ounces",
-            "price": "3.78",
+            "quantity": 0, "price": "3.78",
             "discount": 0.39,
             "rating": 5,
             "rating_count": 1116,
@@ -1774,7 +1816,7 @@ const cookies = {
             "id": "9a8cebc3-0fbb-48f5-8856-b7fa9e96b690",
             "name": "Nature's Garden Healthy Trail Mix Snack Packs",
             "description": "Mixed Nuts, Heart Healthy Nuts, Omega-3 Rich, Cranberries, Pumpkin Seeds, Perfect For The Entire Family \u2013 816g Bag (24 Individual Servings)",
-            "price": "30.49",
+            "quantity": 0, "price": "30.49",
             "discount": 0,
             "rating": 5,
             "rating_count": 10280,
@@ -1791,7 +1833,7 @@ const cookies = {
             "id": "9a8cec1e-578a-413e-90a6-ea4a271f1eb4",
             "name": "Oreo Golden Sandwich Cookies",
             "description": "270g",
-            "price": "5.99",
+            "quantity": 0, "price": "5.99",
             "discount": 0.87,
             "rating": 5,
             "rating_count": 618,
@@ -1808,7 +1850,7 @@ const cookies = {
             "id": "9a8cec73-4f82-4ccf-9c08-bcf21ae4433a",
             "name": "Oreo Chocolate Peanut Butter Pie Cookies",
             "description": "Family Size 482g",
-            "price": "4.79",
+            "quantity": 0, "price": "4.79",
             "discount": 0,
             "rating": 5,
             "rating_count": 3131,
@@ -1825,7 +1867,7 @@ const cookies = {
             "id": "9a8cecd9-2b1a-464e-89a6-658fb3b4ecb5",
             "name": "Royal Dansk - Danish Butter Cookies",
             "description": "340g",
-            "price": "11.99",
+            "quantity": 0, "price": "11.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 38378,
@@ -1842,7 +1884,7 @@ const cookies = {
             "id": "9a8ced2e-d7b3-4e3d-9691-ad9624c28814",
             "name": "Lady Sarah Individually Wrapped Nice Sugar Sprinkled Coconut Cookies",
             "description": "400G",
-            "price": "2.69",
+            "quantity": 0, "price": "2.69",
             "discount": 0,
             "rating": 4,
             "rating_count": 112,
@@ -1859,7 +1901,7 @@ const cookies = {
             "id": "9a8cedaa-9bf1-4c2a-9373-75375c9c9251",
             "name": "Lady Sarah Sandwich Cookies",
             "description": "Vanilla Cream Cookies Snacks 300g",
-            "price": "2.19",
+            "quantity": 0, "price": "2.19",
             "discount": 0,
             "rating": 4,
             "rating_count": 401,
@@ -1876,7 +1918,7 @@ const cookies = {
             "id": "9a8cee29-90e7-4963-a91e-0bcd332a242e",
             "name": "OREO & Chips Ahoy! & Teddy Graham Mini Cookie Ultimate School Snack Variety",
             "description": "6-Pack, 1.35kg",
-            "price": "19.99",
+            "quantity": 0, "price": "19.99",
             "discount": 0,
             "rating": 5,
             "rating_count": 493,
@@ -1893,7 +1935,7 @@ const cookies = {
             "id": "9a8cee62-9c64-45ac-8790-8479134790af",
             "name": "ShaSha Pumpkin Spice Snap Cookies",
             "description": "250 Gram",
-            "price": "4.99",
+            "quantity": 0, "price": "4.99",
             "discount": 0,
             "rating": 3,
             "rating_count": 107,
@@ -1910,7 +1952,7 @@ const cookies = {
             "id": "9a8ceec3-e81c-4a17-9288-ce8141cc6c44",
             "name": "VACHON 1/2 Lune Moon Vanilla Flavour Cakes with Creamy Filling",
             "description": "Contains 6 Cakes, Individually Wrapped, 282 Gram",
-            "price": "3.0",
+            "quantity": 0, "price": "3.0",
             "discount": 0,
             "rating": 5,
             "rating_count": 592,
@@ -1927,7 +1969,7 @@ const cookies = {
             "id": "9a8cef23-223a-4997-ac8d-56beb13ccd16",
             "name": "Lady Sarah Social Tea Biscuits",
             "description": "Individually Wrapped Tea Cookies 400G - Family Pack",
-            "price": "2.99",
+            "quantity": 0, "price": "2.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 817,
@@ -1944,7 +1986,7 @@ const cookies = {
             "id": "9a8cef58-75c7-4026-bd3b-40fe2cbc60fd",
             "name": "Loacker Premium Italian Milk Wafers",
             "description": "45g/1.59oz, Milk, 540 Grams",
-            "price": "18.99",
+            "quantity": 0, "price": "18.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 5,
@@ -1961,7 +2003,7 @@ const cookies = {
             "id": "9a8cefaa-e82b-4876-8fbf-2df39326ab81",
             "name": "Kirkland Signature European cookies",
             "description": "49.4 oz (3.09 LBS)",
-            "price": "40.91",
+            "quantity": 0, "price": "40.91",
             "discount": 0,
             "rating": 4,
             "rating_count": 262,
@@ -1978,7 +2020,7 @@ const cookies = {
             "id": "9a8cfad5-46b0-48b6-bb25-1d0ca70504bb",
             "name": "Kellogg's\u00ae Rice Krispies Squares\u00ae Homestyle Original Bars",
             "description": "198 g, 6 Bars",
-            "price": "2.97",
+            "quantity": 0, "price": "2.97",
             "discount": 0,
             "rating": 5,
             "rating_count": 53,
@@ -1995,7 +2037,7 @@ const cookies = {
             "id": "9a8cfb15-acf8-4d65-b4ba-babc67689ada",
             "name": "Betty Crocker Chocolate Chip Cookie",
             "description": "496 Gram",
-            "price": "3.97",
+            "quantity": 0, "price": "3.97",
             "discount": 0,
             "rating": 5,
             "rating_count": 909,
@@ -2012,7 +2054,7 @@ const cookies = {
             "id": "9a8cfb65-f43d-436e-800f-e63b9e1d881a",
             "name": "Loacker Quadratini Premium Italian Hazelnut Wafer Cookies",
             "description": "250g/8.82oz, Hazelnut, 250 Grams",
-            "price": "7.06",
+            "quantity": 0, "price": "7.06",
             "discount": 0,
             "rating": 4,
             "rating_count": 2948,
@@ -2029,7 +2071,7 @@ const cookies = {
             "id": "9a8cfbc3-edad-4301-885c-7e1aa8c1c145",
             "name": "Oreo Double Stuf Gluten Free Sandwich Cookies Chocolate",
             "description": "353G, (Pack of 1)",
-            "price": "7.99",
+            "quantity": 0, "price": "7.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 1941,
@@ -2046,7 +2088,7 @@ const cookies = {
             "id": "9a8cfc29-859d-4400-8007-50eff0d731be",
             "name": "Lady Sarah Sandwich Cookies - Chocolate Cream Cookies Snacks",
             "description": "300G",
-            "price": "2.19",
+            "quantity": 0, "price": "2.19",
             "discount": 0,
             "rating": 4,
             "rating_count": 226,
@@ -2063,7 +2105,7 @@ const cookies = {
             "id": "9a8cfc72-05ea-4365-adad-37e5d0a5fcda",
             "name": "MARY MACLEOD'S SHORTBREAD 1 Quart Cookie Jar of Assorted Shortbread Cookies",
             "description": "320 Grams",
-            "price": "50.0",
+            "quantity": 0, "price": "50.0",
             "discount": 0,
             "rating": 5,
             "rating_count": 1,
@@ -2080,7 +2122,7 @@ const cookies = {
             "id": "9a8cfcaa-9f5a-41c1-8c0a-fc12fe3e6749",
             "name": "Chocolate and Vanilla Duplex Sandwich Cookies",
             "description": "Bulk Snacks 720g, Rich and Creamy Cream Biscuits | Premium Quality Grocery Food | Ideal School Snacks for Kids | Indulge in the Taste of Adoro Groceries",
-            "price": "4.49",
+            "quantity": 0, "price": "4.49",
             "discount": 0,
             "rating": 5,
             "rating_count": 4,
@@ -2097,7 +2139,7 @@ const cookies = {
             "id": "9a8cfd14-a11a-4f17-a54c-a8cbb54b819f",
             "name": "Vachon Ah Caramel! The Original Cakes with Caramel",
             "description": "Creamy Filling and Chocolatey Coating, Delicious Dessert and Snack, Contains 12 Twin-Wrapped Cakes, 336 Grams, Packaging may vary",
-            "price": "3.97",
+            "quantity": 0, "price": "3.97",
             "discount": 0,
             "rating": 5,
             "rating_count": 2177,
@@ -2114,7 +2156,7 @@ const cookies = {
             "id": "9a8cfd7c-5411-415a-bdb3-3e8bec16bd73",
             "name": "Hostess Chocolate Flavour Cupcakes Contains 6 Cupcakes",
             "description": "Hostess Chocolate Flavour Cupcakes Contains 6 Cupcakes",
-            "price": "3.17",
+            "quantity": 0, "price": "3.17",
             "discount": 0,
             "rating": 4,
             "rating_count": 2417,
@@ -2131,7 +2173,7 @@ const cookies = {
             "id": "9a8cfdf1-599e-4e50-8726-2abdfab58a39",
             "name": "Pillsbury Softbake S'Mores Flavour Bars",
             "description": "6 Bars",
-            "price": "3.88",
+            "quantity": 0, "price": "3.88",
             "discount": 0,
             "rating": 4,
             "rating_count": 1857,
@@ -2148,7 +2190,7 @@ const cookies = {
             "id": "9a8cefe9-0e43-4db7-9391-61e32a6dc795",
             "name": "Misura Dolcesenza, Biscuits Made With Yogurt",
             "description": "No Sugar Added, Non GMO, 400g",
-            "price": "5.49",
+            "quantity": 0, "price": "5.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 191,
@@ -2176,7 +2218,7 @@ const soups = {
             "id": "9a8cf0a3-11aa-473b-9f7a-7dccf8d3fdb8",
             "name": "Campbell's Condensed Tomato Soup",
             "description": "284 mL, 4 Count",
-            "price": "14.23",
+            "quantity": 0, "price": "14.23",
             "discount": 0.13,
             "rating": 5,
             "rating_count": 418,
@@ -2193,7 +2235,7 @@ const soups = {
             "id": "9a8cf0fe-cc91-4697-a617-1edb5495c94e",
             "name": "Tim Hortons Chicken & Rice Soup",
             "description": "540mL Can",
-            "price": "6.99",
+            "quantity": 0, "price": "6.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 2493,
@@ -2210,7 +2252,7 @@ const soups = {
             "id": "9a8cf14c-249e-4a8b-8b95-ff8d3a971ad2",
             "name": "Campbell's Broccoli Cheese Soup",
             "description": "284 mL",
-            "price": "1.99",
+            "quantity": 0, "price": "1.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 1119,
@@ -2227,7 +2269,7 @@ const soups = {
             "id": "9a8cf19a-14c8-48e0-b759-78633719c600",
             "name": "Campbell's Low Fat Cream of Chicken Soup",
             "description": "284 mL",
-            "price": "2.79",
+            "quantity": 0, "price": "2.79",
             "discount": 0,
             "rating": 4,
             "rating_count": 390,
@@ -2244,7 +2286,7 @@ const soups = {
             "id": "9a8cf1d9-7f04-4859-b02d-eb6dbba0432a",
             "name": "Amy'S Kitchen Organic Vegetable Barley Soup",
             "description": "398 ml",
-            "price": "4.49",
+            "quantity": 0, "price": "4.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 622,
@@ -2261,7 +2303,7 @@ const soups = {
             "id": "9a8cf20b-6977-41c3-b3e7-7f005b96b942",
             "name": "Amy's Kitchen Soup-Hearty French, Country Vegetable",
             "description": "398 ml",
-            "price": "4.19",
+            "quantity": 0, "price": "4.19",
             "discount": 0.24,
             "rating": 4,
             "rating_count": 196,
@@ -2278,7 +2320,7 @@ const soups = {
             "id": "9a8cf260-51b0-440f-bb70-e1853fa9daad",
             "name": "Lipton Soup Mix Noodle with Chicken Vegetable",
             "description": "117 GR 24 Count",
-            "price": "54.96",
+            "quantity": 0, "price": "54.96",
             "discount": 0,
             "rating": 4,
             "rating_count": 55,
@@ -2295,7 +2337,7 @@ const soups = {
             "id": "9a8cf2a7-c148-4f46-939c-b8b6743ff125",
             "name": "Heinz Tomato Soup",
             "description": "Heinz Tomato Soup",
-            "price": "39.75",
+            "quantity": 0, "price": "39.75",
             "discount": 0,
             "rating": 5,
             "rating_count": 580,
@@ -2312,7 +2354,7 @@ const soups = {
             "id": "9a8cf2f1-95aa-4758-9ea8-f462e79b17a8",
             "name": "THAI KITCHEN Thai Bangkok Curry Instant Rice Noodle Soup",
             "description": "45 Gram",
-            "price": "1.79",
+            "quantity": 0, "price": "1.79",
             "discount": 0,
             "rating": 4,
             "rating_count": 473,
@@ -2329,7 +2371,7 @@ const soups = {
             "id": "9a8cf397-bb6b-4abf-a582-5bd8bd48b895",
             "name": "Amy's Organic Quinoa, Kale & Red Lentil soup (Vegan)",
             "description": "398ml 398 milliliter",
-            "price": "5.49",
+            "quantity": 0, "price": "5.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 105,
@@ -2346,7 +2388,7 @@ const soups = {
             "id": "9a8cf405-6608-4df0-badc-1dfdf3d87612",
             "name": "Lipton Soup Mix for an Easy Classic Soup Tomato Vegetable",
             "description": "No Artificial Flavours and Low Fat 145 g 24-Count",
-            "price": "54.96",
+            "quantity": 0, "price": "54.96",
             "discount": 0,
             "rating": 5,
             "rating_count": 100,
@@ -2363,7 +2405,7 @@ const soups = {
             "id": "9a8cf44d-7cde-49ba-965f-39eb73ec6932",
             "name": "Knorr Cream of Mushroom Soup",
             "description": "71g (4 Serves)",
-            "price": "2.49",
+            "quantity": 0, "price": "2.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 396,
@@ -2380,7 +2422,7 @@ const soups = {
             "id": "9a8cf498-e421-41ed-a892-acf0b08b5d32",
             "name": "Batchelors Cup a Soup with Croutons Tomato & Vegetable",
             "description": "(4 per Pack - 104g)",
-            "price": "17.99",
+            "quantity": 0, "price": "17.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 143,
@@ -2397,7 +2439,7 @@ const soups = {
             "id": "9a8cf4e4-7702-4b0f-b4c1-610784488982",
             "name": "Tim Hortons Homestyle Beef Chili, Ready-to-Serve",
             "description": "Tim Hortons Homestyle Beef Chili, Ready-to-Serve",
-            "price": "3.67",
+            "quantity": 0, "price": "3.67",
             "discount": 0,
             "rating": 4,
             "rating_count": 2074,
@@ -2414,7 +2456,7 @@ const soups = {
             "id": "9a8cf51b-a9ec-4dd5-b063-472e6931714c",
             "name": "Pacific Foods Organic Condensed Cream of Mushroom Soup",
             "description": "284ml",
-            "price": "3.99",
+            "quantity": 0, "price": "3.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 173,
@@ -2431,7 +2473,7 @@ const soups = {
             "id": "9a8cf55e-2576-4b3a-875b-a0be6b835186",
             "name": "Amy'S Kitchen Organic Cream Of Tomato Soup",
             "description": "398 ml",
-            "price": "5.49",
+            "quantity": 0, "price": "5.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 43,
@@ -2448,7 +2490,7 @@ const soups = {
             "id": "9a8cf5af-dfe4-4248-8737-d0932bda01df",
             "name": "Amy'S Kitchen Organic Light In Sodium Split Pea Soup",
             "description": "398 ml",
-            "price": "5.49",
+            "quantity": 0, "price": "5.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 293,
@@ -2465,7 +2507,7 @@ const soups = {
             "id": "9a8cf5de-301c-4654-832b-11f77f1bf55a",
             "name": "Campbell's Reduced Sodium Tomato Soup",
             "description": "284 mL",
-            "price": "2.99",
+            "quantity": 0, "price": "2.99",
             "discount": 0,
             "rating": 4,
             "rating_count": 176,
@@ -2482,7 +2524,7 @@ const soups = {
             "id": "9a8cf634-1f98-4610-82dc-2aee1d673c6d",
             "name": "Edward & Sons Miso-Cup-Traditional with Tofu",
             "description": "36 g",
-            "price": "7.79",
+            "quantity": 0, "price": "7.79",
             "discount": 0,
             "rating": 4,
             "rating_count": 1830,
@@ -2499,7 +2541,7 @@ const soups = {
             "id": "9a8cf745-6b94-45c7-9651-42d084702aa8",
             "name": "Amy'S Kitchen Organic Alphabet Soup",
             "description": "398 ml",
-            "price": "5.49",
+            "quantity": 0, "price": "5.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 81,
@@ -2516,7 +2558,7 @@ const soups = {
             "id": "9a8cf7a2-17c9-4b8b-9a7e-ceaf03c1ea3b",
             "name": "Campbell's Cream of Mushroom Soup",
             "description": "284 ml (Pack of 12)",
-            "price": "34.22",
+            "quantity": 0, "price": "34.22",
             "discount": 0,
             "rating": 4,
             "rating_count": 81,
@@ -2533,7 +2575,7 @@ const soups = {
             "id": "9a8cf7f5-6f09-40c1-8ac4-a8db05f00899",
             "name": "San Remo Organic Vegetable Barley Soup",
             "description": "398ml",
-            "price": "3.99",
+            "quantity": 0, "price": "3.99",
             "discount": 0,
             "rating": 2,
             "rating_count": 2,
@@ -2550,7 +2592,7 @@ const soups = {
             "id": "9a8cf84b-bf02-4777-97c5-57264e1067e5",
             "name": "Hikari Awase Instant Miso Soup Variety Pack",
             "description": "20 Servings",
-            "price": "23.32",
+            "quantity": 0, "price": "23.32",
             "discount": 0,
             "rating": 5,
             "rating_count": 448,
@@ -2567,7 +2609,7 @@ const soups = {
             "id": "9a8cf8a4-d26e-48ba-8144-5b2de184ed8c",
             "name": "Eat Wholesome Organic Lentil & Zucchini Soup",
             "description": "398ml",
-            "price": "4.19",
+            "quantity": 0, "price": "4.19",
             "discount": 0,
             "rating": 4,
             "rating_count": 7,
@@ -2584,7 +2626,7 @@ const soups = {
             "id": "9a8cf8ef-9dab-4174-9026-0eec287e51cd",
             "name": "Amy's Organic Carrot Ginger (Non BPA Lining) soup",
             "description": "398ml 398 milliliter",
-            "price": "5.49",
+            "quantity": 0, "price": "5.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 36,
@@ -2601,7 +2643,7 @@ const soups = {
             "id": "9a8cf965-2f7a-4f11-94fa-b095a8910225",
             "name": "Miso Soup, with Vegetables, Haiku, Instant Soup Cup",
             "description": "Authentic Japanese Ingredients, 14g",
-            "price": "4.49",
+            "quantity": 0, "price": "4.49",
             "discount": 0,
             "rating": 4,
             "rating_count": 27,
@@ -2618,7 +2660,7 @@ const soups = {
             "id": "9a8cf9e7-53e6-4bc2-92fd-1685fb981581",
             "name": "Campbell's Chunky Creamy Chicken & Dumplings Soup",
             "description": "18.8 Ounce (Pack of 12)",
-            "price": "94.01",
+            "quantity": 0, "price": "94.01",
             "discount": 0,
             "rating": 5,
             "rating_count": 5806,
