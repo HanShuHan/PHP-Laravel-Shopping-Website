@@ -14,7 +14,7 @@ const USER_REGISTER = 'userRegister';
 //#region Main function
 //AUTHORS: Shuhan Han and Michael Boisvenu-Landry
 $(function () {
-
+    // localStorage.clear();
     searchInit();
     //loadSuccessStatuses();
 
