@@ -404,7 +404,6 @@ function loadUserProfile(user) {
             clearError(firstNameErrorSpan);
             if (firstNameError !== "") {
                 firstNameErrorSpan.textContent = firstNameError;
-                return; // Stop submission if there's an error
             }
 
             // Validate Last Name
@@ -413,7 +412,6 @@ function loadUserProfile(user) {
             clearError(lastNameErrorSpan);
             if (lastNameError !== "") {
                 lastNameErrorSpan.textContent = lastNameError;
-                return;
             }
 
             // Validate User Name
@@ -422,7 +420,6 @@ function loadUserProfile(user) {
             clearError(userNameErrorSpan);
             if (userNameError !== "") {
                 userNameErrorSpan.textContent = userNameError;
-                return;
             }
 
             // Validate Email
@@ -431,7 +428,6 @@ function loadUserProfile(user) {
             clearError(emailErrorSpan);
             if (emailError !== "") {
                 emailErrorSpan.textContent = emailError;
-                return;
             }
 
 
@@ -441,7 +437,6 @@ function loadUserProfile(user) {
             clearError(mobileNumberErrorSpan);
             if (mobileNumberError !== "") {
                 mobileNumberErrorSpan.textContent = mobileNumberError;
-                return;
             }
 
             // Validate Postal Code
@@ -450,7 +445,6 @@ function loadUserProfile(user) {
             clearError(postalCodeErrorSpan);
             if (postalCodeError !== "") {
                 postalCodeErrorSpan.textContent = postalCodeError;
-                return;
             }
 
             // Validate Province
@@ -459,7 +453,6 @@ function loadUserProfile(user) {
             clearError(provinceErrorSpan);
             if (provinceError !== "") {
                 provinceErrorSpan.textContent = provinceError;
-                return;
             }
 
             // Validate City
@@ -468,7 +461,6 @@ function loadUserProfile(user) {
             clearError(cityErrorSpan);
             if (cityError !== "") {
                 cityErrorSpan.textContent = cityError;
-                return;
             }
 
             // If no input errors.
@@ -501,7 +493,7 @@ function loadUserProfile(user) {
                     allUsers.push(user);
                 }
                 localStorage.setItem('users', JSON.stringify(allUsers));
-                
+
                 setStatus(USER_UPDATED, true);
                 window.location.href = './profile.html';
             }
