@@ -291,7 +291,9 @@ function loadUserProfile(user) {
 
         });
 
-        document.getElementById('submitProfileButton').addEventListener('click', () => {
+        document.getElementById('submitProfileButton').addEventListener('click', (e) => {
+            e.preventDefault();
+
             let firstName = '';
             let lastName = '';
             let userName = '';
@@ -469,29 +471,40 @@ function loadUserProfile(user) {
                 return;
             }
 
-            const oldUser = allUsers.filter(u => u['username'] === user['username'])
-
-            user['firstName'] = firstName;
-            user['lastName'] = lastName;
-            user['username'] = userName;
-            user['email'] = email;
-            user['postalCode'] = postalCode;
-            user['phoneNumber'] = mobileNumber;
-            user['province'] = province;
-            user['city'] = city;
-            user['addressLine1'] = document.getElementById('addressLine1').value;
-            user['addressLine2'] = document.getElementById('addressLine2').value;
-            user['profilePicture'] = profilePicture.src;
-
-            if (oldUser !== null) {
-                const id = allUsers[oldUser['id']];
-                console.log(id);
-                localStorage.setItem('users', JSON.stringify(allUsers));
+            // If no input errors.
+            let no_err = firstNameError === '' && lastNameError === '' && userNameError === '' && emailError === '' && mobileNumberError === '' && postalCodeError === '' && provinceError === '' && cityError === '';
+            if (no_err) {
+                // Updates the user.
+                user['firstName'] = firstName;
+                user['lastName'] = lastName;
+                user['username'] = userName;
+                user['email'] = email;
+                user['postalCode'] = postalCode;
+                user['phoneNumber'] = mobileNumber;
+                user['province'] = province;
+                user['city'] = city;
+                user['addressLine1'] = document.getElementById('addressLine1').value;
+                user['addressLine2'] = document.getElementById('addressLine2').value;
+                user['profilePicture'] = profilePicture.src;
                 localStorage.setItem('activeUser', JSON.stringify(user));
-            }
 
-            setStatus(USER_UPDATED, true);
-            window.location.href = './profile.html';
+                // Updates the user list.
+                let has_user = false;
+                allUsers.forEach((u, idx, users) => {
+                    if (u.username === user.username) {
+                        users[idx] = user;
+                        has_user = true;
+                        return;
+                    }
+                });
+                if (!has_user) {
+                    allUsers.push(user);
+                }
+                localStorage.setItem('users', JSON.stringify(allUsers));
+                
+                setStatus(USER_UPDATED, true);
+                window.location.href = './profile.html';
+            }
         });
 
 
